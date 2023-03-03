@@ -1,0 +1,5 @@
+# Build Artifacts
+.exe
+
+# Other
+.vscode/

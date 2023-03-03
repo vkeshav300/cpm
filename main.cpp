@@ -1,8 +1,19 @@
+#include "src/commands.h"
+
 #include <iostream>
 
-int main()
+int main(int argc, char *argv[])
 {
-    std::cout << "Hello World!\n";
+    unsigned int success = commands::process(argv[1], argv[2]);
 
-    return 0;
+    if (success == 0)
+    {
+        std::cout << "Finished task \"" << argv[1] << "\" with argument \"" << argv[2] << "\" successfully [" << success << "]" << std::endl;
+    }
+    else
+    {
+        std::cout << "Finished task \"" << argv[1] << "\" with argument \"" << argv[2] << "\" unsuccessfully [" << success << "]" << std::endl;
+    }
+
+    return success;
 }

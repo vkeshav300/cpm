@@ -2,11 +2,11 @@
 
 namespace directory
 {
-    bool hasFile(const char *dir, const char *name);
+    bool hasFile(const char *dir, const char *filename);
 
-    bool hasFolder(const char *dir, const char *name);
+    bool hasFolder(const char *dir, const char *foldername);
 
-    bool createFile(const char *dir, const char *name);
+    void createFile(const char *dir, const char *filename);
 
-    bool createFolder(const char *dir, const char *name);
+    void createFolder(const char *dir, const char *foldername);
 };

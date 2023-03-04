@@ -6,53 +6,35 @@
 #include <string.h>
 #include <sys/stat.h>
 
-bool directory::hasFile(const char *dir, const char *filename)
+bool directory::hasFile(std::string dir, std::string filename)
 {
-    // ? Full directory
-    char buffer[sizeof(dir) + sizeof(filename) - 2];
-
-    strncpy(buffer, dir, sizeof(buffer));
-    strncpy(buffer, filename, sizeof(buffer));
-
     // ? Checking to see if file exists
     struct stat metadata;
 
-    if (stat(buffer, &metadata) == 0 && !(metadata.st_mode & S_IFDIR))
+    if (stat((dir + filename).data(), &metadata) == 0 && !(metadata.st_mode & S_IFDIR))
         return true;
 
     return false;
 }
 
-bool directory::hasFolder(const char *dir, const char *foldername)
+bool directory::hasFolder(std::string dir, std::string foldername)
 {
-    // ? Full directory
-    char buffer[sizeof(dir) + sizeof(foldername) - 2];
-
-    strncpy(buffer, dir, sizeof(buffer));
-    strncpy(buffer, foldername, sizeof(buffer));
-
     // ? Checking to see if file exists
     struct stat metadata;
 
-    if (stat(buffer, &metadata) == 0 && !(metadata.st_mode & S_IFDIR))
+    if (stat((dir + foldername).data(), &metadata) == 0 && !(metadata.st_mode & S_IFDIR))
         return true;
 
     return false;
 }
 
-void directory::createFile(const char *dir, const char *filename)
+void directory::createFile(std::string dir, std::string filename)
 {
     // ! Checking to see if the file already exists
     if (hasFile(dir, filename))
         return;
 
-    // ? Full directory
-    char buffer[sizeof(dir) + sizeof(filename) - 2];
-
-    strncpy(buffer, dir, sizeof(buffer));
-    strncpy(buffer, filename, sizeof(buffer));
-
-    std::ofstream file(filename);
+    std::ofstream file(dir + filename);
     file.close();
 
     // ! Checking to see if folder creation worked
@@ -60,20 +42,14 @@ void directory::createFile(const char *dir, const char *filename)
         std::cerr << "Error: " << strerror(errno) << "\n";
 }
 
-void directory::createFolder(const char *dir, const char *foldername)
+void directory::createFolder(std::string dir, std::string foldername)
 {
     // ! Checking to see if the folder already exists
     if (hasFolder(dir, foldername))
         return;
 
-    // ? Full directory
-    char buffer[sizeof(dir) + sizeof(foldername) - 2];
-
-    strncpy(buffer, dir, sizeof(buffer));
-    strncpy(buffer, foldername, sizeof(buffer));
-
     // ? Creating folder
-    int success = mkdir(buffer);
+    int success = mkdir((dir + foldername).data());
 
     // ! Checking to see if folder creation worked
     if (success == -1)

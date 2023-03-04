@@ -1,7 +1,7 @@
 #include "commands.h"
 #include "directory.h"
 
-void commands::init(const char *language)
+void commands::init(std::string language)
 {
     
 }

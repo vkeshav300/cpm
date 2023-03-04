@@ -1,12 +1,14 @@
 #pragma once
 
+#include <string>
+
 namespace directory
 {
-    bool hasFile(const char *dir, const char *filename);
+    bool hasFile(std::string , std::string filename);
 
-    bool hasFolder(const char *dir, const char *foldername);
+    bool hasFolder(std::string , std::string foldername);
 
-    void createFile(const char *dir, const char *filename);
+    void createFile(std::string , std::string filename);
 
-    void createFolder(const char *dir, const char *foldername);
+    void createFolder(std::string , std::string foldername);
 };

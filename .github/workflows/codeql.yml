@@ -31,7 +31,7 @@ jobs:
     - name: Set up MinGW
       uses: egor-tensin/setup-mingw@v2
       with:
-        platform: x32
+        platform: x86
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2

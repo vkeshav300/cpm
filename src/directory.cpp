@@ -34,6 +34,7 @@ void directory::createFile(std::string dir, std::string filename)
     if (hasFile(dir, filename))
         return;
 
+    // ? Creating file
     std::ofstream file(dir + filename);
     file.close();
 

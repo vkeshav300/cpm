@@ -4,11 +4,11 @@
 
 namespace directory
 {
-    bool hasFile(std::string , std::string filename);
+    bool hasFile(std::string dir, std::string filename);
 
-    bool hasFolder(std::string , std::string foldername);
+    bool hasFolder(std::string dir, std::string foldername);
 
-    void createFile(std::string , std::string filename);
+    void createFile(std::string dir, std::string filename);
 
-    void createFolder(std::string , std::string foldername);
+    void createFolder(std::string dir, std::string foldername);
 };

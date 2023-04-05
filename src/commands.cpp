@@ -3,18 +3,17 @@
 
 #include <iostream>
 #include <fstream>
+#include <string>
 
 void commands::init(std::string language)
 {
     std::string default_folders[4] = {"assets", "src", "src/include", "src/lib"};
-    std::string default_files[5] = {".gitignore", "Makefile", "README.md", "LICENSE", "cpm.data"};
+    std::string default_files[5] = {".gitignore", "Makefile", "README.md", "LICENSE", "cpm"};
 
-    for (std::string folder : default_folders)
+    for (auto &folder : default_folders)
         directory::createFolder("./", folder);
-    
-    std::cout << "Created folders\n";
-    
-    for (std::string file : default_files)
+
+    for (auto &file : default_files)
         directory::createFile("./", file);
 
     if (language == "c")
@@ -52,13 +51,9 @@ void commands::init(std::string language)
     }
     
     else
-        std::cerr << "Error: \'" << language << "\' is a unsupported programming language.\n";
-
-    std::cout << "Created files\n";
+        std::cerr << "\x1b[0;31m" << "Error: \'" << language << "\' is a unsupported programming language.\n" << "\x1b[0m";
 
     std::ofstream file_ignore("./.gitignore");
     file_ignore << "# Build Artifacts\n.exe\n\n# Other\n.vscode/";
     file_ignore.close();
-    
-    std::cout << "Written files\n";
 }

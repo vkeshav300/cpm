@@ -1,58 +1,47 @@
 #include "directory.h"
 
-#include <fstream>
 #include <iostream>
-#include <direct.h>
-#include <string.h>
-#include <sys/stat.h>
+#include <string>
+#include <fstream>
+#include <filesystem>
 
 bool directory::hasFile(std::string dir, std::string filename)
 {
-    // ? Checking to see if file exists
-    struct stat metadata;
-
-    if (stat((dir + filename).data(), &metadata) == 0 && !(metadata.st_mode & S_IFDIR))
-        return true;
-
-    return false;
+    std::string filepath = dir + filename;
+    std::cout << std::filesystem::exists(filepath) << ":" std::filesystem::is_regular_file(filepath) << "\n";
+    return std::filesystem::exists(filepath) && std::filesystem::is_regular_file(std::filesystem::status(filepath));
 }
 
 bool directory::hasFolder(std::string dir, std::string foldername)
 {
-    // ? Checking to see if file exists
-    struct stat metadata;
+    std::string folderpath = dir + foldername;
 
-    if (stat((dir + foldername).data(), &metadata) == 0 && !(metadata.st_mode & S_IFDIR))
-        return true;
-
-    return false;
+    return std::filesystem::exists(folderpath) && std::filesystem::is_directory(folderpath);
 }
 
 void directory::createFile(std::string dir, std::string filename)
 {
-    // ! Checking to see if the file already exists
+    std::string filepath = dir + filename;
+
     if (hasFile(dir, filename))
         return;
 
-    // ? Creating file
-    std::ofstream file(dir + filename);
+    std::fstream file(filepath);
     file.close();
 
-    // ! Checking to see if folder creation worked
-    if (hasFile(dir, filename) == false)
-        std::cerr << "Error: " << strerror(errno) << "\n";
+    if (!hasFile(dir, filename))
+        std::cerr << "\x1b[0;31m" << "Error: failed to create file" << "\n" << "\x1b[0m";
 }
 
 void directory::createFolder(std::string dir, std::string foldername)
 {
-    // ! Checking to see if the folder already exists
+    std::string folderpath = dir + foldername;
+
     if (hasFolder(dir, foldername))
         return;
 
-    // ? Creating folder
-    int success = mkdir((dir + foldername).data());
+    std::filesystem::create_directory(folderpath);
 
-    // ! Checking to see if folder creation worked
-    if (success == -1)
-        std::cerr << "Error: " << strerror(errno) << "\n";
+    if (!hasFolder(dir, foldername))
+        std::cerr << "\x1b[0;31m" << "Error: failed to create folder" << "\n" << "\x1b[0m";
 }

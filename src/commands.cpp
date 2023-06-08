@@ -6,17 +6,20 @@
 #include <string>
 #include <cstddef>
 
-void commands::init(std::string language)
+int commands::init(std::string language)
 {
+    // * All folders and files to be created
     std::string default_folders[4] = {"assets", "src", "src/include", "src/lib"};
     std::string default_files[5] = {".gitignore", "Makefile", "README.md", "LICENSE", ".cpm"};
 
+    // * Creates folders and files
     for (auto &folder : default_folders)
         directory::createFolder("./", folder);
 
     for (auto &file : default_files)
         directory::createFile("./", file);
 
+    // * Fills files with default code
     if (language == "c")
     {
         directory::createFile("./", "main.c");
@@ -52,56 +55,68 @@ void commands::init(std::string language)
     }
 
     else
+    {
         std::cerr << "\x1b[0;31m"
                   << "Error: \'" << language << "\' is a unsupported programming language\n"
                   << "\x1b[0m";
+
+        return 1;
+    }
 
     std::ofstream file_ignore("./.gitignore");
     file_ignore << "# Build Artifacts\n.exe\n\n# Other\n.vscode/";
     file_ignore.close();
 
     std::cout << "\x1b[0;33m"
-              << "Note: To edit the name of the executable (typically .exe) file, go into the Makefile and change the placeholder that reads \'executable_name\'.\n"
+              << "Note: To edit the name of the executable [.exe file], go into the Makefile and change the placeholder that reads \'executable_name\'.\n"
               << "\x1b[0m";
+
+    return 0;
 }
 
 bool commands::verify_init()
 {
+    // * Verifies init has been run
     if (directory::hasFile("./", ".cpm"))
         return true;
 
     return false;
 }
 
-int commands::install(std::string link)
+int commands::install(std::string link, std::string tags)
 {
-    // * Verifies src/include and src/lib have been created (if not creates them)
+    // * Verifies src/include and src/lib have been created
     if (!directory::hasFolder("./", "src/include"))
         directory::createFolder("./", "src/include");
 
     if (!directory::hasFolder("./", "src/lib"))
         directory::createFolder("./", "src/lib");
 
-    // * Verifies makefile has -Isrc/Include -Lsrc/lib (if not adds them)
+    // * Verifies makefile has -Isrc/Include -Lsrc/lib
     if (!directory::hasFile("./", "Makefile"))
-        return 1;
+    {
+        std::cerr << "\x1b[0;31m"
+                  << "Error: Current directory does not contain a Makefile\n"
+                  << "\x1b[0m";
 
-    std::ifstream *mf;
-    mf->open("./Makefile");
+        return 1;
+    }
+
+    std::ifstream file_make;
+    file_make.open("./Makefile");
 
     std::string *mf_contents;
-    directory::slurp(*mf, mf_contents);
+    directory::slurp(file_make, mf_contents);
+
+    file_make.close();
 
     if (!directory::hasContents(*mf_contents, "-Isrc/Include -Lsrc/lib") && !directory::hasContents(*mf_contents, "-Lsrc/lib -Isrc/Include"))
     {
-        
+        std::ofstream file_make;
+        file_make.open("./Makefile");
+        file_make << " -Isrc/Include -Lsrc/lib";
+        file_make.close();
     }
-
-    // TODO --> Verifies github link is valid (if not throws an error)
-
-    std::cout << "\x1b[0;32m"
-              << "Checks completed\n"
-              << "\x1b[0m";
     // TODO --> Copies files from github link
     // TODO --> Gets library name
     // TODO --> Verifies library doesn't already exist (if not "uninstall" files)

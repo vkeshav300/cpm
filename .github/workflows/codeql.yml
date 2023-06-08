@@ -39,7 +39,7 @@ jobs:
         languages: ${{ matrix.language }}
 
     - name: Builds Project
-      run: mingw32-make build
+      run: make build
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2

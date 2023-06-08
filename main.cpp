@@ -15,23 +15,31 @@ int main(int argc, char *c_argv[])
     std::string argv[argc];
 
     for (int i = 0; i < argc; i++)
-        argv[i] = (std::string) c_argv[i];
+        argv[i] = (std::string)c_argv[i];
 
-    std::cout << "\x1b[0;32m" << "Cast arguments\n" << "\x1b[0m";
+    std::cout << "\x1b[0;32m"
+              << "Cast arguments\n"
+              << "\x1b[0m";
 
     if (argv[1] == "init")
         commands::init(argv[2]);
 
     if (argv[1] == "test")
-        std::cout << "\x1b[0;33m" << "Note: This command is to test the contents of the \'main\' function of CPM.\n" << "\x1b[0m";
-    
+        std::cout << "\x1b[0;33m"
+                  << "Note: This command is to test the contents of the \'main\' function of CPM.\n"
+                  << "\x1b[0m";
+
     else
     {
-        std::cerr << "\x1b[0;31m" << "Error: No command for \'" << argv[1] << "\'" << "\x1b[0m" << std::endl;
+        std::cerr << "\x1b[0;31m"
+                  << "Error: No command for \'" << argv[1] << "\'"
+                  << "\x1b[0m" << std::endl;
         return 1;
     }
-    
-    std::cout << "\x1b[0;32m" << "Finished \'" << argv[1] << "\'" << "\x1b[0m" << std::endl;
+
+    std::cout << "\x1b[0;32m"
+              << "Finished \'" << argv[1] << "\'"
+              << "\x1b[0m" << std::endl;
 
     return 0;
 }

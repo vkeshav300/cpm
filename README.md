@@ -1,7 +1,7 @@
 # [C/C++ Project Manager](https://github.com/vkeshav300/cpm) (CPM)
 [![CodeQL](https://github.com/vkeshav300/cpm/actions/workflows/codeql.yml/badge.svg)](https://github.com/vkeshav300/cpm/actions/workflows/codeql.yml)
-[![All Contributors](https://img.shields.io/badge/All_Contributors-1-orange.svg?style=rounded-square)](https://github.com/vkeshav300/cpm/graphs/contributors)
-[![Latest Release](https://img.shields.io/badge/Latest_Release-None-blue.svg?style=rounded-square)](https://github.com/vkeshav300/cpm/graphs/contributors)
+[![All Contributors](https://img.shields.io/badge/All_Contributors-1-orange.svg?style=rounded-square)](https://github.com/vkeshav300/cpm#contributors)
+[![Latest Release](https://img.shields.io/badge/Latest_Release-None-blue.svg?style=rounded-square)](https://github.com/vkeshav300/cpm/releases)
 
 ### General Information
 CPM is a useful tool for managing your C and C++ projects. Note: Currently working on installing libraries from github links.<br>

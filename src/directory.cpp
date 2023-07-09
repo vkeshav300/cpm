@@ -12,6 +12,26 @@ void directory::slurp(std::ifstream &file, std::string *str)
     *str = sstr.str();
 }
 
+std::vector<std::string> splitString(const std::string &input, const std::string &delimiter)
+{
+    // * Split up string (tokens)
+    std::vector<std::string> tokens;
+
+    // * Positions (when iterating through string)
+    std::size_t pos = 0;
+    std::size_t nextPos;
+
+    while ((nextPos = input.find(delimiter, pos)) != std::string::npos)
+    {
+        tokens.push_back(input.substr(pos, nextPos - pos));
+        pos = nextPos + delimiter.length();
+    }
+
+    tokens.push_back(input.substr(pos));
+
+    return tokens;
+}
+
 bool directory::hasContents(std::string text, std::string contents)
 {
     if (text.find(contents) != std::string::npos)
@@ -62,5 +82,20 @@ void directory::createFolder(std::string dir, std::string foldername)
     if (!hasFolder(dir, foldername))
         std::cerr << "\x1b[0;31m"
                   << "Error: failed to create folder\n"
+                  << "\x1b[0m";
+}
+
+void directory::deleteFile(std::string dir, std::string filename)
+{
+    std::string filepath = dir + filename;
+
+    if (hasFile(dir, filename))
+        return;
+
+    std::filesystem::remove(filepath);
+
+    if (hasFile(dir, filename))
+        std::cerr << "\x1b[0;31m"
+                  << "Error: failed to delete file\n"
                   << "\x1b[0m";
 }

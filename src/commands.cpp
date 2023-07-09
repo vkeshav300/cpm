@@ -6,6 +6,12 @@
 #include <string>
 #include <cstddef>
 
+enum eFileMethods : std::size_t
+{
+    CREATE = 0,
+    DELETE
+};
+
 int commands::init(std::string language)
 {
     // * All folders and files to be created
@@ -32,7 +38,7 @@ int commands::init(std::string language)
         file_make << "build:\n    gcc -o main main.c";
         file_make.close();
 
-        std::ofstream file_cpm("./cpm.data");
+        std::ofstream file_cpm("./.cpm");
         file_cpm << "language: c";
         file_cpm.close();
     }
@@ -127,5 +133,26 @@ int commands::install(std::string link, std::string tags)
 
 int commands::uninstall(std::string name)
 {
+    return 0;
+}
+
+int commands::file_pair(int method, std::string language)
+{
+    // int initialized = (int)verify_init();
+
+    // switch (method)
+    // {
+    // case CREATE:
+    //     switch (initialized)
+    //     {
+    //     case 1:
+    //         std::ifstream file_cpm;
+    //         file_cpm.open("./.cpm");
+
+    //         std::string *cpm_contents;
+    //         directory::slurp(file_cpm, cpm_contents);
+    //     }
+    // }
+
     return 0;
 }

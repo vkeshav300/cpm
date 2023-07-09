@@ -15,4 +15,7 @@ namespace commands
 
     // ? Deletes library from library folders
     int uninstall(std::string name);
+
+    // ? Creates / Deletes file pairs ([.hpp or .h] + [.cpp or .c])
+    int file_pair(int method, std::string language);
 };

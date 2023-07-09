@@ -8,6 +8,7 @@
 ! C/C++ Project Manager [CPM] General Information:
 * - CPM stands for C/C++ Project Manager, not C/C++ Package Manager (although in the future it may support packages ;)
 ? - This project uses ANSI escape codes to color text. [https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797].
+? - Please note that if a specific file (or chunk of code) is lacking comments, it usually is because the code is fairly straightforward and no comments are needed to those who can read the code.
 */
 
 int main(int argc, char *c_argv[])

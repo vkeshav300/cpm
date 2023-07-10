@@ -5,20 +5,15 @@
 #include <fstream>
 #include <string>
 #include <cstddef>
-
-enum eFileMethods : std::size_t
-{
-    CREATE = 0,
-    DELETE
-};
+#include <vector>
 
 int commands::init(std::string language)
 {
     // * All folders and files to be created
-    std::string default_folders[4] = {"assets", "src", "src/include", "src/lib"};
-    std::string default_files[5] = {".gitignore", "Makefile", "README.md", "LICENSE", ".cpm"};
+    std::vector<std::string> default_folders = {"assets", "src", "src/include", "src/lib"};
+    std::vector<std::string> default_files = {".gitignore", "Makefile", "README.md", "LICENSE", ".cpm"};
 
-    // * Creates folders and files
+    // * Create folders and files
     for (auto &folder : default_folders)
         directory::createFolder("./", folder);
 
@@ -91,42 +86,39 @@ bool commands::verify_init()
 
 int commands::install(std::string link, std::string tags)
 {
-    // * Verifies src/include and src/lib have been created
-    if (!directory::hasFolder("./", "src/include"))
-        directory::createFolder("./", "src/include");
+    // * Verify src/include and src/lib have been created
+    directory::createFolder("./", "src/include");
+    directory::createFolder("./", "src/lib");
 
-    if (!directory::hasFolder("./", "src/lib"))
-        directory::createFolder("./", "src/lib");
-
-    // * Verifies makefile has -Isrc/Include -Lsrc/lib
+    // * Verify makefile has -Isrc/Include -Lsrc/lib
     if (!directory::hasFile("./", "Makefile"))
     {
         std::cerr << "\x1b[0;31m"
                   << "Error: Current directory does not contain a Makefile\n"
                   << "\x1b[0m";
 
-        return 1;
+        return 2;
     }
 
     std::ifstream file_make;
     file_make.open("./Makefile");
 
-    std::string *mf_contents;
-    directory::slurp(file_make, mf_contents);
+    std::string mf_contents;
+    directory::slurp(file_make, &mf_contents);
 
     file_make.close();
 
-    if (!directory::hasContents(*mf_contents, "-Isrc/Include -Lsrc/lib") && !directory::hasContents(*mf_contents, "-Lsrc/lib -Isrc/Include"))
+    if (!directory::hasContents(mf_contents, "-Isrc/Include -Lsrc/lib") && !directory::hasContents(mf_contents, "-Lsrc/lib -Isrc/Include"))
     {
         std::ofstream file_make;
         file_make.open("./Makefile");
         file_make << " -Isrc/Include -Lsrc/lib";
         file_make.close();
     }
-    // TODO --> Copies files from github link
-    // TODO --> Gets library name
-    // TODO --> Verifies library doesn't already exist (if not "uninstall" files)
-    // TODO --> Puts files in src/include and src/lib folders as well as adds .dll file to project folder (./)
+    // TODO --> Copy files from github link
+    // TODO --> Get library name
+    // TODO --> Verify library doesn't already exist (if not "uninstall" files)
+    // TODO --> Put files in src/include and src/lib folders as well as adds .dll file to project folder (./)
 
     return 0;
 }
@@ -136,23 +128,110 @@ int commands::uninstall(std::string name)
     return 0;
 }
 
-int commands::file_pair(int method, std::string language)
+int commands::file_pair(int method, std::string pair_name, std::string language)
 {
-    // int initialized = (int)verify_init();
+    int initialized = static_cast<int>(verify_init());
 
-    // switch (method)
-    // {
-    // case CREATE:
-    //     switch (initialized)
-    //     {
-    //     case 1:
-    //         std::ifstream file_cpm;
-    //         file_cpm.open("./.cpm");
+    if (method == CREATE)
+    {
+        switch (initialized)
+        {
+        case 0:
+        {
+            // * Create files
+            if (language == "c" || language == "cpp")
+            {
+                std::string file_extension = (language == "c") ? ".c" : ".cpp";
+                directory::createFile("./src/", pair_name + file_extension);
 
-    //         std::string *cpm_contents;
-    //         directory::slurp(file_cpm, cpm_contents);
-    //     }
-    // }
+                {
+                    std::ofstream file_pair_main("./src/" + pair_name + file_extension);
+                    file_pair_main << "#include \"" + pair_name + ".h\"";
+                }
+            }
+            else
+            {
+                std::cerr << "\x1b[0;31m"
+                          << "Error: \'" << language << "\' is an unsupported programming language\n"
+                          << "\x1b[0m";
+
+                return 2;
+            }
+            break;
+        }
+
+        case 1:
+        {
+            // * Create .h file
+            directory::createFile("./src/", pair_name + ".h");
+
+            {
+                std::ofstream file_pair_h("./src/" + pair_name + ".h");
+                file_pair_h << "#pragma once";
+            }
+
+            // * Open and read .cpm file
+            std::ifstream file_cpm("./.cpm");
+            std::string cpm_contents;
+            directory::slurp(file_cpm, &cpm_contents);
+
+            // * Split read data from .cpm file (line by line)
+            std::vector<std::string> cpm_contents_split = directory::splitString(cpm_contents, "\n");
+
+            bool found_language = false;
+            // * Check for "language:" line
+            for (const std::string &line : cpm_contents_split)
+            {
+                if (line == "language: c" || line == "language: cpp")
+                {
+                    found_language = true;
+                    if (line == "language: c")
+                        directory::createFile("./src/", pair_name + ".c");
+                    else
+                        directory::createFile("./src/", pair_name + ".cpp");
+                    break;
+                }
+            }
+
+            if (!found_language)
+            {
+                std::cerr << "\x1b[0;31m"
+                          << "Error: .cpm file does not contain a valid \'language\' line\n"
+                          << "\x1b[0m";
+                return 1;
+            }
+
+            std::string file_extension = (language == "c") ? ".c" : ".cpp";
+            {
+                std::ofstream file_pair_main("./src/" + pair_name + file_extension);
+                file_pair_main << "#include \"" + pair_name + ".h\"";
+            }
+            break;
+        }
+
+        default:
+            std::cerr << "\x1b[0;31m"
+                      << "Error: Unknown error occurred reading initialized status\n"
+                      << "\x1b[0m";
+            return 3;
+        }
+    }
+    else if (method == DELETE)
+    {
+        // * Delete files
+        // ? Note that this code is confusing because there is no checking of file (or folder) existance. Go to "directory.h" for clarification.
+        directory::deleteFile("./src/", pair_name + ".h");
+        directory::deleteFile("./src/", pair_name + ".hpp");
+        directory::deleteFile("./src/", pair_name + ".c");
+        directory::deleteFile("./src/", pair_name + ".cpp");
+    }
+    else
+    {
+        std::cerr << "\x1b[0;31m"
+                  << "Error: Unknown error occurred reading method status\n"
+                  << "\x1b[0m";
+        return 4;
+    }
 
     return 0;
 }

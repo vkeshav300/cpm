@@ -12,15 +12,16 @@ void directory::slurp(std::ifstream &file, std::string *str)
     *str = sstr.str();
 }
 
-std::vector<std::string> splitString(const std::string &input, const std::string &delimiter)
+std::vector<std::string> directory::splitString(const std::string &input, const std::string &delimiter)
 {
     // * Split up string (tokens)
     std::vector<std::string> tokens;
 
-    // * Positions (when iterating through string)
+    // * Position (when iterating through string)
     std::size_t pos = 0;
     std::size_t nextPos;
 
+    // * Iterates through the string
     while ((nextPos = input.find(delimiter, pos)) != std::string::npos)
     {
         tokens.push_back(input.substr(pos, nextPos - pos));
@@ -89,7 +90,7 @@ void directory::deleteFile(std::string dir, std::string filename)
 {
     std::string filepath = dir + filename;
 
-    if (hasFile(dir, filename))
+    if (!hasFile(dir, filename))
         return;
 
     std::filesystem::remove(filepath);

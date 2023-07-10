@@ -11,35 +11,85 @@
 ? - Please note that if a specific file (or chunk of code) is lacking comments, it usually is because the code is fairly straightforward and no comments are needed to those who can read the code.
 */
 
-int main(int argc, char *c_argv[])
+int main(int argc, char *argv[])
 {
-    std::string argv[argc];
-
-    for (int i = 0; i < argc; i++)
-        argv[i] = (std::string)c_argv[i];
-
-    std::cout << "\x1b[0;32m"
-              << "Cast arguments\n"
-              << "\x1b[0m";
-
-    if (argv[1] == "init")
-        commands::init(argv[2]);
-
-    if (argv[1] == "test")
-        std::cout << "\x1b[0;33m"
-                  << "Note: This command is to test the contents of the \'main\' function of CPM.\n"
-                  << "\x1b[0m";
-
-    else
+    if (argc < 1)
     {
         std::cerr << "\x1b[0;31m"
-                  << "Error: No command for \'" << argv[1] << "\'"
+                  << "Error: No command provided"
                   << "\x1b[0m" << std::endl;
         return 1;
     }
 
     std::cout << "\x1b[0;32m"
-              << "Finished \'" << argv[1] << "\'"
+              << "Command: " << argv[1]
+              << "\x1b[0m" << std::endl;
+
+    std::string command = argv[1];
+
+    // * Init command
+    if (command == "init")
+    {
+        if (argc != 3)
+        {
+            std::cerr << "\x1b[0;31m"
+                      << "Error: Invalid number of arguments for init command"
+                      << "\x1b[0m" << std::endl;
+            return 2;
+        }
+
+        commands::init(argv[2]);
+    }
+
+    // * Test commaand
+    else if (command == "test")
+    {
+        std::cout << "\x1b[0;33m"
+                  << "Note: This command is to test the contents of the 'main' function of CPM."
+                  << "\x1b[0m" << std::endl;
+    }
+
+    // * Pair command
+    else if (command == "pair")
+    {
+        if (argc < 4 || argc > 5)
+        {
+            std::cerr << "\x1b[0;31m"
+                      << "Error: Invalid number of arguments for pair command"
+                      << "\x1b[0m" << std::endl;
+            return 3;
+        }
+
+        std::string sub_command = argv[2];
+        std::string file_name = argv[3];
+        std::string language = (argc == 5) ? argv[4] : "CPM_FILE";
+
+        if (sub_command == "add")
+        {
+            commands::file_pair(commands::CREATE, file_name, language);
+        }
+        else if (sub_command == "remove")
+        {
+            commands::file_pair(commands::DELETE, file_name, language);
+        }
+        else
+        {
+            std::cerr << "\x1b[0;31m"
+                      << "Error: Invalid sub-command for pair command: " << sub_command
+                      << "\x1b[0m" << std::endl;
+            return 4;
+        }
+    }
+    else
+    {
+        std::cerr << "\x1b[0;31m"
+                  << "Error: Invalid command: " << command
+                  << "\x1b[0m" << std::endl;
+        return 5;
+    }
+
+    std::cout << "\x1b[0;32m"
+              << "Finished command: " << command
               << "\x1b[0m" << std::endl;
 
     return 0;

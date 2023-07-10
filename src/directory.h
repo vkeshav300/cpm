@@ -14,9 +14,6 @@ namespace directory
     // ? Convert file into string
     void slurp(std::ifstream &file, std::string *str);
 
-    // ? Split string based off specific sequence of characters (delimiter)
-    std::vector<std::string> splitString(const std::string &input, const std::string &delimiter);
-
     // ? Check if a string has specific contents
     bool hasContents(std::string text, std::string contents);
     

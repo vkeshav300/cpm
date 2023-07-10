@@ -132,7 +132,7 @@ int commands::file_pair(int method, std::string pair_name, std::string language)
 {
     int initialized = static_cast<int>(verify_init());
 
-    directory::createFolder("./", "src")
+    directory::createFolder("./", "src");
 
     if (method == CREATE)
     {
@@ -177,22 +177,14 @@ int commands::file_pair(int method, std::string pair_name, std::string language)
             std::string cpm_contents;
             directory::slurp(file_cpm, &cpm_contents);
 
-            // * Split read data from .cpm file (line by line)
-            std::vector<std::string> cpm_contents_split = directory::splitString(cpm_contents, "\n");
-
             bool found_language = false;
             // * Check for "language:" line
-            for (const std::string &line : cpm_contents_split)
+            std::string file_extension;
+            if (cpm_contents.find("language: c") != std::string::npos || cpm_contents.find("language: cpp") != std::string::npos)
             {
-                if (line == "language: c" || line == "language: cpp")
-                {
-                    found_language = true;
-                    if (line == "language: c")
-                        directory::createFile("./src/", pair_name + ".c");
-                    else
-                        directory::createFile("./src/", pair_name + ".cpp");
-                    break;
-                }
+                found_language = true;
+                file_extension = (cpm_contents.find("language: c") != std::string::npos) ? ".c" : ".cpp";
+                directory::createFile("./src/", pair_name + file_extension);
             }
 
             if (!found_language)
@@ -203,11 +195,8 @@ int commands::file_pair(int method, std::string pair_name, std::string language)
                 return 1;
             }
 
-            std::string file_extension = (language == "c") ? ".c" : ".cpp";
-            {
-                std::ofstream file_pair_main("./src/" + pair_name + file_extension);
-                file_pair_main << "#include \"" + pair_name + ".h\"";
-            }
+            std::ofstream file_pair_main("./src/" + pair_name + file_extension);
+            file_pair_main << "#include \"" + pair_name + ".h\"";
             break;
         }
 

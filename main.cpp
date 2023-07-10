@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
     std::cout << "\x1b[0;32m"
               << "Command: " << argv[1]
-              << "\x1b[0m\n"
+              << "\x1b[0m\n";
 
     std::string command = argv[1];
 

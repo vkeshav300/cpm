@@ -12,27 +12,6 @@ void directory::slurp(std::ifstream &file, std::string *str)
     *str = sstr.str();
 }
 
-std::vector<std::string> directory::splitString(const std::string &input, const std::string &delimiter)
-{
-    // * Split up string (tokens)
-    std::vector<std::string> tokens;
-
-    // * Position (when iterating through string)
-    std::size_t pos = 0;
-    std::size_t nextPos;
-
-    // * Iterates through the string
-    while ((nextPos = input.find(delimiter, pos)) != std::string::npos)
-    {
-        tokens.push_back(input.substr(pos, nextPos - pos));
-        pos = nextPos + delimiter.length();
-    }
-
-    tokens.push_back(input.substr(pos));
-
-    return tokens;
-}
-
 bool directory::hasContents(std::string text, std::string contents)
 {
     if (text.find(contents) != std::string::npos)

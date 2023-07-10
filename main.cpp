@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
     std::cout << "\x1b[0;32m"
               << "Command: " << argv[1]
-              << "\x1b[0m" << std::endl;
+              << "\x1b[0m\n"
 
     std::string command = argv[1];
 
@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     {
         std::cout << "\x1b[0;33m"
                   << "Note: This command is to test the contents of the 'main' function of CPM."
-                  << "\x1b[0m" << std::endl;
+                  << "\x1b[0m\n";
     }
 
     // * Pair command
@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
     }
 
     std::cout << "\x1b[0;32m"
-              << "Finished command: " << command
+              << "Finished command: " << command << "successfully"
               << "\x1b[0m" << std::endl;
 
     return 0;

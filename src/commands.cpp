@@ -30,7 +30,7 @@ int commands::init(std::string language)
         file_main.close();
 
         std::ofstream file_make("./Makefile");
-        file_make << "build:\n    gcc -o main main.c";
+        file_make << "build:\n    gcc -o main main.c ./src/*.c -Isrc/Include -Lsrc/lib";
         file_make.close();
 
         std::ofstream file_cpm("./.cpm");
@@ -47,7 +47,7 @@ int commands::init(std::string language)
         file_main.close();
 
         std::ofstream file_make(default_files[1]);
-        file_make << "build:\n    g++ -o executable_name main.cpp";
+        file_make << "build:\n    gcc -o main main.cpp ./src/*.cpp -Isrc/Include -Lsrc/lib";
         file_make.close();
 
         std::ofstream file_cpm(default_files[4]);
@@ -131,6 +131,8 @@ int commands::uninstall(std::string name)
 int commands::file_pair(int method, std::string pair_name, std::string language)
 {
     int initialized = static_cast<int>(verify_init());
+
+    directory::createFolder("./", "src")
 
     if (method == CREATE)
     {

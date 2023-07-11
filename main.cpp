@@ -15,15 +15,16 @@ int main(int argc, char *argv[])
 {
     if (argc < 1)
     {
-        std::cerr << "\x1b[0;31m"
-                  << "Error: No command provided"
-                  << "\x1b[0m" << std::endl;
+        std::cerr << "\x1b[0;31m[error]: \x1b[0m"
+                  << "no command provided"
+                  << std::endl;
+
         return 1;
     }
 
-    std::cout << "\x1b[0;32m"
-              << "Command: " << argv[1]
-              << "\x1b[0m\n";
+    std::cout << "\x1b[0;32m[success]: \x1b[0m\n"
+              << "command: " << argv[1]
+              << "\n";
 
     std::string command = argv[1];
 
@@ -32,9 +33,10 @@ int main(int argc, char *argv[])
     {
         if (argc != 3)
         {
-            std::cerr << "\x1b[0;31m"
-                      << "Error: Invalid number of arguments for init command"
-                      << "\x1b[0m" << std::endl;
+            std::cerr << "\x1b[0;31m[error]: \x1b[0m"
+                      << "invalid number of arguments for init command"
+                      << std::endl;
+
             return 2;
         }
 
@@ -44,9 +46,8 @@ int main(int argc, char *argv[])
     // * Test commaand
     else if (command == "test")
     {
-        std::cout << "\x1b[0;33m"
-                  << "Note: This command is to test the contents of the 'main' function of CPM."
-                  << "\x1b[0m\n";
+        std::cout << "\x1b[0;33m[note]:\x1b[0m"
+                  << "this command is to test the contents of the 'main' function of CPM.\n";
     }
 
     // * Pair command
@@ -54,9 +55,10 @@ int main(int argc, char *argv[])
     {
         if (argc < 4 || argc > 5)
         {
-            std::cerr << "\x1b[0;31m"
-                      << "Error: Invalid number of arguments for pair command"
-                      << "\x1b[0m" << std::endl;
+            std::cerr << "\x1b[0;31m[error]: \x1b[0m"
+                      << "invalid number of arguments for pair command"
+                      << std::endl;
+
             return 3;
         }
 
@@ -74,23 +76,25 @@ int main(int argc, char *argv[])
         }
         else
         {
-            std::cerr << "\x1b[0;31m"
-                      << "Error: Invalid sub-command for pair command: " << sub_command
-                      << "\x1b[0m" << std::endl;
+            std::cerr << "\x1b[0;31m[error]: \x1b[0m"
+                      << "invalid sub-command for pair command"
+                      << std::endl;
+
             return 4;
         }
     }
     else
     {
-        std::cerr << "\x1b[0;31m"
-                  << "Error: Invalid command: " << command
-                  << "\x1b[0m" << std::endl;
+        std::cerr << "\x1b[0;31m[error]: \x1b[0m"
+                  << "invalid command"
+                  << std::endl;
+
         return 5;
     }
 
-    std::cout << "\x1b[0;32m"
-              << "Finished command: " << command << "successfully"
-              << "\x1b[0m" << std::endl;
+    std::cout << "\x1b[0;32m[success]: \x1b[0m"
+              << "finished command: " << command << "successfully"
+              << std::endl;
 
     return 0;
 }

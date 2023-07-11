@@ -57,9 +57,8 @@ int commands::init(std::string language)
 
     else
     {
-        std::cerr << "\x1b[0;31m"
-                  << "Error: \'" << language << "\' is a unsupported programming language\n"
-                  << "\x1b[0m";
+        std::cerr << "\x1b[0;31m[error]: \x1b[0m"
+                  << "\'" << language << "\' is a unsupported programming language\n";
 
         return 1;
     }
@@ -68,9 +67,8 @@ int commands::init(std::string language)
     file_ignore << "# Build Artifacts\n.exe\n\n# Other\n.vscode/";
     file_ignore.close();
 
-    std::cout << "\x1b[0;33m"
-              << "Note: To edit the name of the executable [.exe file], go into the Makefile and change the placeholder that reads \'executable_name\'.\n"
-              << "\x1b[0m";
+    std::cout << "\x1b[0;33m[note]: \x1b[0m"
+              << "to edit the name of the executable [.exe file], go into the Makefile and change the placeholder that reads \'executable_name\'.\n";
 
     return 0;
 }
@@ -82,50 +80,6 @@ bool commands::verify_init()
         return true;
 
     return false;
-}
-
-int commands::install(std::string link, std::string tags)
-{
-    // * Verify src/include and src/lib have been created
-    directory::createFolder("./", "src/include");
-    directory::createFolder("./", "src/lib");
-
-    // * Verify makefile has -Isrc/Include -Lsrc/lib
-    if (!directory::hasFile("./", "Makefile"))
-    {
-        std::cerr << "\x1b[0;31m"
-                  << "Error: Current directory does not contain a Makefile\n"
-                  << "\x1b[0m";
-
-        return 2;
-    }
-
-    std::ifstream file_make;
-    file_make.open("./Makefile");
-
-    std::string mf_contents;
-    directory::slurp(file_make, &mf_contents);
-
-    file_make.close();
-
-    if (!directory::hasContents(mf_contents, "-Isrc/Include -Lsrc/lib") && !directory::hasContents(mf_contents, "-Lsrc/lib -Isrc/Include"))
-    {
-        std::ofstream file_make;
-        file_make.open("./Makefile");
-        file_make << " -Isrc/Include -Lsrc/lib";
-        file_make.close();
-    }
-    // TODO --> Copy files from github link
-    // TODO --> Get library name
-    // TODO --> Verify library doesn't already exist (if not "uninstall" files)
-    // TODO --> Put files in src/include and src/lib folders as well as adds .dll file to project folder (./)
-
-    return 0;
-}
-
-int commands::uninstall(std::string name)
-{
-    return 0;
 }
 
 int commands::file_pair(int method, std::string pair_name, std::string language)
@@ -153,9 +107,10 @@ int commands::file_pair(int method, std::string pair_name, std::string language)
             }
             else
             {
-                std::cerr << "\x1b[0;31m"
-                          << "Error: \'" << language << "\' is an unsupported programming language\n"
-                          << "\x1b[0m";
+                std::cerr << "\x1b[0;31m[error]: \x1b[0m"
+                          << "Error: \'" 
+                          << language 
+                          << "\' is an unsupported programming language\n";
 
                 return 2;
             }
@@ -189,9 +144,9 @@ int commands::file_pair(int method, std::string pair_name, std::string language)
 
             if (!found_language)
             {
-                std::cerr << "\x1b[0;31m"
-                          << "Error: .cpm file does not contain a valid \'language\' line\n"
-                          << "\x1b[0m";
+                std::cerr << "\x1b[0;31m[error]: \x1b[0m"
+                          << ".cpm file does not contain a valid \'language\' line\n";
+
                 return 1;
             }
 
@@ -201,9 +156,9 @@ int commands::file_pair(int method, std::string pair_name, std::string language)
         }
 
         default:
-            std::cerr << "\x1b[0;31m"
-                      << "Error: Unknown error occurred reading initialized status\n"
-                      << "\x1b[0m";
+            std::cerr << "\x1b[0;31m[error]: \x1b[0m"
+                      << "Error: Unknown error occurred reading initialized status\n";
+
             return 3;
         }
     }
@@ -218,9 +173,9 @@ int commands::file_pair(int method, std::string pair_name, std::string language)
     }
     else
     {
-        std::cerr << "\x1b[0;31m"
-                  << "Error: Unknown error occurred reading method status\n"
-                  << "\x1b[0m";
+        std::cerr << "\x1b[0;31m[error]: \x1b[0m"
+                  << "Error: Unknown error occurred reading method status\n";
+
         return 4;
     }
 

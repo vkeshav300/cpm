@@ -90,6 +90,9 @@ int commands::file_pair(int method, std::string pair_name, std::string language)
 
     if (method == CREATE)
     {
+        // * Create .h file
+        directory::createFile("./src/", pair_name + ".h");
+        
         switch (initialized)
         {
         case 0:
@@ -119,9 +122,6 @@ int commands::file_pair(int method, std::string pair_name, std::string language)
 
         case 1:
         {
-            // * Create .h file
-            directory::createFile("./src/", pair_name + ".h");
-
             {
                 std::ofstream file_pair_h("./src/" + pair_name + ".h");
                 file_pair_h << "#pragma once";

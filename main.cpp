@@ -22,8 +22,8 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    std::cout << "\x1b[0;32m[success]: \x1b[0m\n"
-              << "command: " << argv[1]
+    std::cout << "\x1b[0;32m[success]: \x1b[0m"
+              << "received " << argv[1]
               << "\n";
 
     std::string command = argv[1];
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
         std::string file_name = argv[3];
         std::string language = (argc == 5) ? argv[4] : "CPM_FILE";
 
-        if (sub_command == "add")
+        if (sub_command == "new")
         {
             commands::file_pair(commands::CREATE, file_name, language);
         }
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
     }
 
     std::cout << "\x1b[0;32m[success]: \x1b[0m"
-              << "finished command: " << command << "successfully"
+              << "finished command " << command << " successfully"
               << std::endl;
 
     return 0;

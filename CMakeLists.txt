@@ -1,5 +1,5 @@
 # Minimum required version of CMake (cmake --version)
-cmake_minimum_required(VERSION 3.27.0)
+cmake_minimum_required(VERSION 3.26.4)
 
 # Project info
 project(

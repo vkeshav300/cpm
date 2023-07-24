@@ -33,13 +33,21 @@ jobs:
       with:
         platform: x86
 
+    - name: CMake Action
+      uses: threeal/cmake-action@v1.2.0
+
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
       with:
         languages: ${{ matrix.language }}
 
-    - name: Builds Project
-      run: make build
+    - name: Enters Build Directory
+      run: |
+        cd build
+        cmake ..
+        make
+        cd ../
+          
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2

@@ -10,28 +10,30 @@
 int commands::init(std::string language)
 {
     // * All folders and files to be created
-    std::vector<std::string> default_folders = {"assets", "src", "src/include", "src/lib"};
-    std::vector<std::string> default_files = {".gitignore", "Makefile", "README.md", "LICENSE", ".cpm"};
+    std::vector<std::string> default_folders = {"assets", "src", "include", "build", "tests"};
+    std::vector<std::string> default_files = {".gitignore", "CMakeLists.txt", "README.md", "LICENSE", ".cpm", "src/main.cpp"};
 
-    // * Create folders and files
-    for (auto &folder : default_folders)
-        directory::createFolder("./", folder);
-
+    // * Create files and folders
     for (auto &file : default_files)
         directory::createFile("./", file);
 
-    // * Fills files with default code
+    for (auto &folder : default_folders)
+        directory::createFolder("./", folder);
+
+    // * Fills files with default code / text
     if (language == "c")
     {
-        directory::createFile("./", "main.c");
+        directory::createFile("./src/", "main.c");
 
-        std::ofstream file_main("./main.c");
+        std::ofstream file_main("./src/main.c");
         file_main << "#include <iostream>\n\nint main(int argc, char *argv[])\n{\n    std::cout << \"Hello World!\" << std::endl;\n\n    return 0;\n}";
         file_main.close();
 
-        std::ofstream file_make("./Makefile");
-        file_make << "build:\n    gcc -o main main.c ./src/*.c -Isrc/Include -Lsrc/lib";
-        file_make.close();
+        std::ofstream file_cmake("./CMakeLists.txt");
+        file_cmake << "# Minimum required version of CMake (cmake --version)\ncmake_minimum_required(VERSION 3.27.0)\n\n# Project info\nproject(project_name VERSION 0.0)\n\n# Giving CMake file structure info\nset(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)\n\n# Get all the source files in the SOURCE_DIR\nfile(GLOB SOURCES "
+                   << "${SOURCE_DIR}/*.c"
+                   << ")\n\nadd_executable(project_name ${SOURCES})\n\ntarget_include_directories(project_name PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)";
+        file_cmake.close();
 
         std::ofstream file_cpm("./.cpm");
         file_cpm << "language: c";
@@ -40,15 +42,17 @@ int commands::init(std::string language)
 
     else if (language == "cpp" || language == "c++")
     {
-        directory::createFile("./", "main.cpp");
+        directory::createFile("./src/", "main.cpp");
 
-        std::ofstream file_main("./main.cpp");
+        std::ofstream file_main("./src/main.cpp");
         file_main << "#include <iostream>\n\nint main(int argc, char *argv[])\n{\n    std::cout << \"Hello World!\" << std::endl;\n\n    return 0;\n}";
         file_main.close();
 
-        std::ofstream file_make(default_files[1]);
-        file_make << "build:\n    gcc -o main main.cpp ./src/*.cpp -Isrc/Include -Lsrc/lib";
-        file_make.close();
+        std::ofstream file_cmake("./CMakeLists.txt");
+        file_cmake << "# Minimum required version of CMake (cmake --version)\ncmake_minimum_required(VERSION 3.27.0)\n\n# Project info\nproject(project_name VERSION 0.0)\n\n# Giving CMake file structure info\nset(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)\n\n# Get all the source files in the SOURCE_DIR\nfile(GLOB SOURCES "
+                   << "${SOURCE_DIR}/*.cpp"
+                   << ")\n\nadd_executable(project_name ${SOURCES})\n\ntarget_include_directories(project_name PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)";
+        file_cmake.close();
 
         std::ofstream file_cpm(default_files[4]);
         file_cpm << "language: cpp";
@@ -58,17 +62,20 @@ int commands::init(std::string language)
     else
     {
         std::cerr << "\x1b[0;31m[error]: \x1b[0m"
-                  << "\'" << language << "\' is a unsupported programming language\n";
-
-        return 1;
+                  << "\'"
+                  << language
+                  << "\' is an unsupported programming language\n";
     }
 
     std::ofstream file_ignore("./.gitignore");
-    file_ignore << "# Build Artifacts\n.exe\n\n# Other\n.vscode/";
+    file_ignore << "# CMake generated files and directories\n/build/build\nCMakeFiles/\nCMakeCache.txt\nCMakeScripts/\ncmake_install.cmake\nMakefile\n\n# Other\n.exe\n.vscode/";
     file_ignore.close();
 
+    // * Provided information
     std::cout << "\x1b[0;33m[note]: \x1b[0m"
-              << "to edit the name of the executable [.exe file], go into the Makefile and change the placeholder that reads \'executable_name\'.\n";
+              << "to best utilize this project structure, it is recommended that you know how to use CMake.\n";
+    std::cout << "\x1b[0;33m[note]: \x1b[0m"
+              << "to edit the name of the project, go into the CMakeLists.txt and change all the placeholders that read \'project_name\'.\n";
 
     return 0;
 }
@@ -91,8 +98,8 @@ int commands::file_pair(int method, std::string pair_name, std::string language)
     if (method == CREATE)
     {
         // * Create .h file
-        directory::createFile("./src/", pair_name + ".h");
-        
+        directory::createFile("./include/", pair_name + ".h");
+
         switch (initialized)
         {
         case 0:
@@ -104,14 +111,14 @@ int commands::file_pair(int method, std::string pair_name, std::string language)
                 directory::createFile("./src/", pair_name + file_extension);
 
                 {
-                    std::ofstream file_pair_main("./src/" + pair_name + file_extension);
+                    std::ofstream file_pair_main("./include/" + pair_name + file_extension);
                     file_pair_main << "#include \"" + pair_name + ".h\"";
                 }
             }
             else
             {
                 std::cerr << "\x1b[0;31m[error]: \x1b[0m"
-                          << "Error: \'" 
+                          << "\'" 
                           << language 
                           << "\' is an unsupported programming language\n";
 
@@ -123,7 +130,7 @@ int commands::file_pair(int method, std::string pair_name, std::string language)
         case 1:
         {
             {
-                std::ofstream file_pair_h("./src/" + pair_name + ".h");
+                std::ofstream file_pair_h("./include/" + pair_name + ".h");
                 file_pair_h << "#pragma once";
             }
 
@@ -132,8 +139,8 @@ int commands::file_pair(int method, std::string pair_name, std::string language)
             std::string cpm_contents;
             directory::slurp(file_cpm, &cpm_contents);
 
-            bool found_language = false;
             // * Check for "language:" line
+            bool found_language = false;
             std::string file_extension;
             if (cpm_contents.find("language: c") != std::string::npos || cpm_contents.find("language: cpp") != std::string::npos)
             {
@@ -150,14 +157,14 @@ int commands::file_pair(int method, std::string pair_name, std::string language)
                 return 1;
             }
 
-            std::ofstream file_pair_main("./src/" + pair_name + file_extension);
+            std::ofstream file_pair_main("./include/" + pair_name + file_extension);
             file_pair_main << "#include \"" + pair_name + ".h\"";
             break;
         }
 
         default:
             std::cerr << "\x1b[0;31m[error]: \x1b[0m"
-                      << "Error: Unknown error occurred reading initialized status\n";
+                      << "unknown error occured reading initialized status\n";
 
             return 3;
         }
@@ -166,15 +173,15 @@ int commands::file_pair(int method, std::string pair_name, std::string language)
     {
         // * Delete files
         // ? Note that this code is confusing because there is no checking of file (or folder) existance. Go to "directory.h" for clarification.
-        directory::deleteFile("./src/", pair_name + ".h");
-        directory::deleteFile("./src/", pair_name + ".hpp");
+        directory::deleteFile("./include/", pair_name + ".h");
+        directory::deleteFile("./include/", pair_name + ".hpp");
         directory::deleteFile("./src/", pair_name + ".c");
         directory::deleteFile("./src/", pair_name + ".cpp");
     }
     else
     {
         std::cerr << "\x1b[0;31m[error]: \x1b[0m"
-                  << "Error: Unknown error occurred reading method status\n";
+                  << "unknown error occured reading method status\n";
 
         return 4;
     }

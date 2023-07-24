@@ -45,9 +45,10 @@ void directory::createFile(std::string dir, std::string filename)
     file.close();
 
     if (!hasFile(dir, filename))
-        std::cerr << "\x1b[0;31m"
-                  << "Error: failed to create file\n"
-                  << "\x1b[0m";
+        std::cerr << "\x1b[0;31m[error]: \x1b[0m"
+                  << "failed to create file \'"
+                  << filepath
+                  << "\'\n";
 }
 
 void directory::createFolder(std::string dir, std::string foldername)
@@ -60,9 +61,10 @@ void directory::createFolder(std::string dir, std::string foldername)
     std::filesystem::create_directory(folderpath);
 
     if (!hasFolder(dir, foldername))
-        std::cerr << "\x1b[0;31m"
-                  << "Error: failed to create folder\n"
-                  << "\x1b[0m";
+        std::cerr << "\x1b[0;31m[error]: \x1b[0m"
+                  << "failed to create folder \'"
+                  << folderpath
+                  << "\'\n";
 }
 
 void directory::deleteFile(std::string dir, std::string filename)
@@ -75,7 +77,8 @@ void directory::deleteFile(std::string dir, std::string filename)
     std::filesystem::remove(filepath);
 
     if (hasFile(dir, filename))
-        std::cerr << "\x1b[0;31m"
-                  << "Error: failed to delete file\n"
-                  << "\x1b[0m";
+        std::cerr << "\x1b[0;31m[error]: \x1b[0m"
+                  << "failed to delete file \'"
+                  << filepath
+                  << "\'\n";
 }

@@ -1,5 +1,11 @@
-# Build Artifacts
-.exe
+# CMake generated files and directories
+/build/build
+CMakeFiles/
+CMakeCache.txt
+CMakeScripts/
+cmake_install.cmake
+Makefile
 
 # Other
+.exe
 .vscode/

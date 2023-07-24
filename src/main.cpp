@@ -1,4 +1,4 @@
-#include "src/commands.h"
+#include "commands.h"
 
 #include <iostream>
 #include <fstream>
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 
         std::string sub_command = argv[2];
         std::string file_name = argv[3];
-        std::string language = (argc == 5) ? argv[4] : "CPM_FILE";
+        std::string language = (argc == 5) ? argv[4] : "null";
 
         if (sub_command == "new")
         {

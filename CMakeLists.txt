@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.26.4)
 
 # Project info
 project(
-    CPM 
+    cpm 
     VERSION 0.0
     LANGUAGES CXX
 )

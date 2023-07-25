@@ -35,6 +35,12 @@ jobs:
 
     - name: CMake Action
       uses: threeal/cmake-action@v1.2.0
+      
+    - name: Cache
+      uses: actions/cache@v2
+      with:
+        path: ./build/
+        key: ${{ runner.os }}-codeql-${{ hashFiles('**/qlpack.yml') }}
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
@@ -44,7 +50,7 @@ jobs:
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
       with:
-        category: "/language:${{matrix.language}}"
+        categories: "/language:${{matrix.language}}"
         
     - name: Close Stale Issues
       uses: actions/stale@v6.0.1

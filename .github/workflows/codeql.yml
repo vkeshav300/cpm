@@ -35,11 +35,9 @@ jobs:
 
     - name: Install yq on Linux/macOS
       run: |
-        if [ "$(uname)" == "Darwin" ]; then
-          brew install yq
-        else
-          sudo apt-get update && sudo apt-get install yq -y
-        fi
+        sudo apt-get update
+        sudo snap install yq
+        yq --version
 
     - name: Extract Categories Path
       run: |

@@ -28,18 +28,33 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v3
       
-    - name: Set up MinGW
-      uses: egor-tensin/setup-mingw@v2
+    - name: Set up C/C++ compiler
+      uses: actions/setup-cpp@v1
       with:
-        platform: x86
+        cpp-version: '17'
+
+    - name: Install yq on Linux/macOS
+      run: |
+        if [ "$(uname)" == "Darwin" ]; then
+          brew install yq
+        else
+          sudo apt-get update && sudo apt-get install yq -y
+        fi
+
+    - name: Extract Categories Path
+      run: |
+        categories_path=$(yq e '.categories[0]' qlpack.yml)
+        echo "CATEGORIES_PATH=${categories_path}" >> $GITHUB_ENV
 
     - name: CMake Action
       uses: threeal/cmake-action@v1.2.0
       
     - name: Cache
-      uses: actions/cache@v2
+      uses: actions/cache@v1.2.1
       with:
+        # A directory to store and save the cache
         path: ./build/
+        # An explicit key for restoring and saving the cache
         key: ${{ runner.os }}-codeql-${{ hashFiles('**/qlpack.yml') }}
 
     - name: Initialize CodeQL
@@ -50,7 +65,7 @@ jobs:
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
       with:
-        categories: "/language:${{matrix.language}}"
+        categories: "${{ env.CATEGORIES_PATH }}"
         
     - name: Close Stale Issues
       uses: actions/stale@v6.0.1

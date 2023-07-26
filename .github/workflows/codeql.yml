@@ -36,6 +36,9 @@ jobs:
     - name: CMake Action
       uses: threeal/cmake-action@v1.2.0
 
+    - name: Builds Project
+      run: mingw-make
+
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
       with:

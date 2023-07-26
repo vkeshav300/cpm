@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 namespace commands
 {
@@ -17,7 +18,7 @@ namespace commands
     int uninstall(std::string name);
 
     // ? Create / Deletes file pairs (.h + [.cpp or .c])
-    int file_pair(int method, std::string pair_name, std::string language);
+    int file_pair(int method, std::string pair_name, std::string language, std::vector<std::string> optionals);
 
     // ? Enums
     enum eFileMethods : std::size_t

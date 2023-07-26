@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 
 /*
 ! C/C++ Project Manager [CPM] General Information:
@@ -10,6 +11,17 @@
 ? - This project uses ANSI escape codes to color text. [https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797].
 ? - Please note that if a specific file (or chunk of code) is lacking comments, it usually is because the code is fairly straightforward and no comments are needed to those who can read the code.
 */
+std::vector<std::string> get_optionals(int argc, char *argv[])
+{
+    std::vector<std::string> optionals;
+    for (int i = 0; i < argc; i++)
+    {
+        std::string arg = argv[i];
+        if (arg.substr(0, 1) == "-" && arg.size() >= 2)
+            optionals.push_back(arg);
+    }
+    return optionals;
+}
 
 int main(int argc, char *argv[])
 {
@@ -43,17 +55,10 @@ int main(int argc, char *argv[])
         commands::init(argv[2]);
     }
 
-    // * Test commaand
-    else if (command == "test")
-    {
-        std::cout << "\x1b[0;33m[note]:\x1b[0m"
-                  << "this command is to test the contents of the 'main' function of CPM.\n";
-    }
-
     // * Pair command
     else if (command == "pair")
     {
-        if (argc < 4 || argc > 5)
+        if (argc < 4)
         {
             std::cerr << "\x1b[0;31m[error]: \x1b[0m"
                       << "invalid number of arguments for pair command"
@@ -62,18 +67,17 @@ int main(int argc, char *argv[])
             return 3;
         }
 
+        // * Assigning arguments
         std::string sub_command = argv[2];
         std::string file_name = argv[3];
-        std::string language = (argc == 5) ? argv[4] : "null";
+        std::string language = (argc >= 5 && argv[4][0] != '-') ? argv[4] : "null";
+        std::vector<std::string> optionals = get_optionals(argc, argv);
 
+        // * Sub commands
         if (sub_command == "new")
-        {
-            commands::file_pair(commands::CREATE, file_name, language);
-        }
+            commands::file_pair(commands::CREATE, file_name, language, optionals);
         else if (sub_command == "remove")
-        {
-            commands::file_pair(commands::DELETE, file_name, language);
-        }
+            commands::file_pair(commands::DELETE, file_name, language, optionals);
         else
         {
             std::cerr << "\x1b[0;31m[error]: \x1b[0m"

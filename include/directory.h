@@ -12,7 +12,7 @@
 namespace directory
 {
     // ? Convert file into string
-    void slurp(std::ifstream &file, std::string *str);
+    std::string slurp(std::string dir, std::string filename);
 
     // ? Check if a string has specific contents
     bool hasContents(std::string text, std::string contents);

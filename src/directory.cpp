@@ -5,11 +5,36 @@
 #include <fstream>
 #include <filesystem>
 
-void directory::slurp(std::ifstream &file, std::string *str)
+std::string directory::slurp(std::string dir, std::string filename)
 {
-    std::stringstream sstr;
-    sstr << file.rdbuf();
-    *str = sstr.str();
+    // * Checking if file exists
+    if (!hasFile(dir, filename))
+    {
+        std::cerr << "\x1b[0;31m[error]: \x1b[0m\'"
+                  << filename
+                  << "\' does not exist at \'"
+                  << dir
+                  << "\'\n";
+        
+        return NULL;
+    }
+
+    // * Opening the file
+    std::string filepath = dir + filename;
+
+    std::ifstream file;
+    file.open(filepath);
+
+    // * Reading contents of the file
+    std::string contents;
+    char ch;
+    
+    while(file.get(ch))
+        contents += ch;
+
+    file.close();
+
+    return contents;
 }
 
 bool directory::hasContents(std::string text, std::string contents)
@@ -45,10 +70,19 @@ void directory::createFile(std::string dir, std::string filename)
     file.close();
 
     if (!hasFile(dir, filename))
+    {
         std::cerr << "\x1b[0;31m[error]: \x1b[0m"
                   << "failed to create file \'"
                   << filepath
                   << "\'\n";
+
+        return;
+    }
+
+    std::cout << "\x1b[0;32m[success]: \x1b[0m"
+              << "created file " 
+              << filepath 
+              << "\n";
 }
 
 void directory::createFolder(std::string dir, std::string foldername)
@@ -61,10 +95,19 @@ void directory::createFolder(std::string dir, std::string foldername)
     std::filesystem::create_directory(folderpath);
 
     if (!hasFolder(dir, foldername))
+    {
         std::cerr << "\x1b[0;31m[error]: \x1b[0m"
                   << "failed to create folder \'"
                   << folderpath
                   << "\'\n";
+
+        return;
+    }
+
+    std::cout << "\x1b[0;32m[success]: \x1b[0m"
+              << "created folder "
+              << folderpath
+              << "\n";
 }
 
 void directory::deleteFile(std::string dir, std::string filename)
@@ -76,9 +119,18 @@ void directory::deleteFile(std::string dir, std::string filename)
 
     std::filesystem::remove(filepath);
 
-    if (hasFile(dir, filename))
+    if (!hasFile(dir, filename))
+    {
         std::cerr << "\x1b[0;31m[error]: \x1b[0m"
                   << "failed to delete file \'"
                   << filepath
                   << "\'\n";
+
+        return;
+    }
+
+    std::cout << "\x1b[0;32m[success]: \x1b[0m"
+              << "deleted file "
+              << filepath
+              << "\n";
 }

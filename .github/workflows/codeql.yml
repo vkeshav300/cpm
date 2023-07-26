@@ -55,6 +55,9 @@ jobs:
         # An explicit key for restoring and saving the cache
         key: ${{ runner.os }}-codeql-${{ hashFiles('**/qlpack.yml') }}
 
+    - name: Builds Project
+      run: mingw-make
+
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
       with:

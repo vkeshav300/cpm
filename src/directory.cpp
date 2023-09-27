@@ -119,7 +119,7 @@ void directory::deleteFile(std::string dir, std::string filename)
 
     std::filesystem::remove(filepath);
 
-    if (!hasFile(dir, filename))
+    if (hasFile(dir, filename))
     {
         std::cerr << "\x1b[0;31m[error]: \x1b[0m"
                   << "failed to delete file \'"

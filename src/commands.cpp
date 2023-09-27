@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 #include <cstddef>
+#include <curl/curl.h>
 
 int commands::init(std::string language)
 {

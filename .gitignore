@@ -9,3 +9,5 @@ Makefile
 # Other
 .exe
 .vscode/
+README_tmp.html
+.DS_Store

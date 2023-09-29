@@ -22,3 +22,9 @@ add_executable(cpm
 )
 
 target_include_directories(cpm PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+# Check if the current platform is macOS
+if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
+    # Specify the installation directory for macOS (e.g., /usr/local/bin)
+    install(TARGETS cpm DESTINATION /usr/local/bin)
+endif()

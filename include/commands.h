@@ -17,8 +17,11 @@ namespace commands
     // ? Delete library from library folders
     int uninstall(std::string name);
 
-    // ? Create / Deletes file pairs (.h + [.cpp or .c])
+    // ? Create / deletes file pairs ([.h + .hpp] + [.cpp or .c])
     int file_pair(int method, std::string pair_name, std::string language, std::vector<std::string> optionals);
+
+    // ? Lists commands + arguments + optional arguments
+    int help();
 
     // ? Enums
     enum eFileMethods : std::size_t

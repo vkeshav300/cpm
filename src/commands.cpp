@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 #include <cstddef>
+
 #include <curl/curl.h>
 
 int commands::init(std::string language)
@@ -174,7 +175,7 @@ int commands::file_pair(int method, std::string pair_name, std::string language,
             if (!found_language)
             {
                 std::cerr << "\x1b[0;31m[error]: \x1b[0m"
-                          << ".cpm file does not contain a valid \'language\' line\n";
+                          << ".cpm file does not contain a valid \'language\' value\n";
 
                 return 1;
             }
@@ -210,6 +211,28 @@ int commands::file_pair(int method, std::string pair_name, std::string language,
 
         return 4;
     }
+
+    return 0;
+}
+
+int commands::help()
+{
+    // * CPM ASCII Art
+    std::cout << " ██████ ██████  ███    ███\n"
+              << "██      ██   ██ ████  ████\n"
+              << "██      ██████  ██ ████ ██\n"
+              << "██      ██      ██  ██  ██\n"
+              << " ██████ ██      ██      ██\n";
+
+    // * Usage
+    std::cout << "\x1b[0;34m[usage]: \x1b[0m"
+              << "cpm <command> <args>\n";
+
+    // * Commands
+    std::cout << "help --> lists commands + other useful information related to CPM.\n"
+              << "init <language> --> sets up a new C or C++ project.\n"
+              << "pair new <name> <optional -hpp for .hpp header> --> creates header/source file pair.\n"
+              << "pair remove <name> --> gets rid of header/source file pair.\n";
 
     return 0;
 }

@@ -1,5 +1,6 @@
-# CMake generated files and directories
-/build/build
+# CMake related files and directories
+/build
+/tests
 CMakeFiles/
 CMakeCache.txt
 CMakeScripts/

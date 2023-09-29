@@ -5,12 +5,6 @@
 #include <string>
 #include <vector>
 
-/*
-! C/C++ Project Manager [CPM] General Information:
-* - CPM stands for C/C++ Project Manager, not C/C++ Package Manager (although in the future it may support packages ;)
-? - This project uses ANSI escape codes to color text. [https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797].
-? - Please note that if a specific file (or chunk of code) is lacking comments, it usually is because the code is fairly straightforward and no comments are needed to those who can read the code.
-*/
 std::vector<std::string> get_optionals(int argc, char *argv[])
 {
     std::vector<std::string> optionals;
@@ -87,6 +81,10 @@ int main(int argc, char *argv[])
             return 4;
         }
     }
+    else if (command == "help")
+    {
+        commands::help();
+    }
     else
     {
         std::cerr << "\x1b[0;31m[error]: \x1b[0m"
@@ -97,7 +95,8 @@ int main(int argc, char *argv[])
     }
 
     std::cout << "\x1b[0;32m[success]: \x1b[0m"
-              << "finished command " << command << " successfully"
+              << "finished command "
+              << command
               << std::endl;
 
     return 0;

@@ -5,7 +5,11 @@
 [![License](https://img.shields.io/badge/License-CC0_1.0_Universal-yellow.svg?style=rounded-square)](https://github.com/vkeshav300/cpm/blob/master/LICENSE)
 
 ### General Information
-CPM is a useful tool for managing your C and C++ projects.<br>Note: Currently working on installing libraries from github links using [CURL](https://everything.curl.dev/).<br>
+CPM is a useful tool for managing your C and C++ projects.
+
+### Useful information
+- The code uses [ANSI Escape Codes](https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797) to color text.
+- The code uses [CURL](https://everything.curl.dev/) for some api calls.
 
 ### Contributors
 - [Keshav V](https://github.com/vkeshav300) (Developer)

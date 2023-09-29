@@ -19,7 +19,7 @@ std::vector<std::string> get_optionals(int argc, char *argv[])
 
 int main(int argc, char *argv[])
 {
-    if (argc < 1)
+    if (argc <= 1)
     {
         std::cerr << "\x1b[0;31m[error]: \x1b[0m"
                   << "no command provided"

@@ -274,6 +274,10 @@ int commands::help()
     return 0;
 }
 
+/**
+ * @brief Outputs current CPM version.
+ * 
+ */
 void commands::version()
 {
     std::cout << "\x1b[0;32m[success]: \x1b[0m"

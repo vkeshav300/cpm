@@ -17,7 +17,6 @@ sudo make install
 
 ### Useful information
 - The code uses [ANSI Escape Codes](https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797) to color text.
-- The code uses [CURL](https://everything.curl.dev/) for some api calls.
 
 ### Contributors
 - [Keshav V](https://github.com/vkeshav300) (Creator/Owner/Lead Developer)

@@ -1,3 +1,12 @@
+/**
+ * @file directory.cpp
+ * @brief This file contains most directory-related functions that aren't commands.
+ * @version 0.1
+ * @date 2023-09-29
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
 #include "directory.h"
 
 #include <iostream>
@@ -5,6 +14,13 @@
 #include <fstream>
 #include <filesystem>
 
+/**
+ * @brief Reads file into string.
+ * 
+ * @param dir 
+ * @param filename 
+ * @return std::string 
+ */
 std::string directory::slurp(std::string dir, std::string filename)
 {
     // * Checking if file exists
@@ -37,6 +53,14 @@ std::string directory::slurp(std::string dir, std::string filename)
     return contents;
 }
 
+/**
+ * @brief Checks if a file has specific contents.
+ * 
+ * @param text 
+ * @param contents 
+ * @return true 
+ * @return false 
+ */
 bool directory::hasContents(std::string text, std::string contents)
 {
     if (text.find(contents) != std::string::npos)
@@ -45,6 +69,14 @@ bool directory::hasContents(std::string text, std::string contents)
     return false;
 }
 
+/**
+ * @brief Checks if directory has a file.
+ * 
+ * @param dir 
+ * @param filename 
+ * @return true 
+ * @return false 
+ */
 bool directory::hasFile(std::string dir, std::string filename)
 {
     std::string filepath = dir + filename;
@@ -52,6 +84,14 @@ bool directory::hasFile(std::string dir, std::string filename)
     return std::filesystem::exists(filepath) && std::filesystem::is_regular_file(filepath);
 }
 
+/**
+ * @brief Checks if directory has a folder.
+ * 
+ * @param dir 
+ * @param foldername 
+ * @return true 
+ * @return false 
+ */
 bool directory::hasFolder(std::string dir, std::string foldername)
 {
     std::string folderpath = dir + foldername;
@@ -59,6 +99,12 @@ bool directory::hasFolder(std::string dir, std::string foldername)
     return std::filesystem::exists(folderpath) && std::filesystem::is_directory(folderpath);
 }
 
+/**
+ * @brief Creates file in directory.
+ * 
+ * @param dir 
+ * @param filename 
+ */
 void directory::createFile(std::string dir, std::string filename)
 {
     std::string filepath = dir + filename;
@@ -85,6 +131,12 @@ void directory::createFile(std::string dir, std::string filename)
               << "\n";
 }
 
+/**
+ * @brief Creates folder in directory.
+ * 
+ * @param dir 
+ * @param foldername 
+ */
 void directory::createFolder(std::string dir, std::string foldername)
 {
     std::string folderpath = dir + foldername;
@@ -110,6 +162,12 @@ void directory::createFolder(std::string dir, std::string foldername)
               << "\n";
 }
 
+/**
+ * @brief Deletes file in directory.
+ * 
+ * @param dir 
+ * @param filename 
+ */
 void directory::deleteFile(std::string dir, std::string filename)
 {
     std::string filepath = dir + filename;

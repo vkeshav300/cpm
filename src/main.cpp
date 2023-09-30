@@ -1,3 +1,12 @@
+/**
+ * @file main.cpp
+ * @brief This file puts together all the other files.
+ * @version 0.1
+ * @date 2023-09-29
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
 #include "commands.h"
 
 #include <iostream>

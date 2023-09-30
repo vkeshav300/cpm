@@ -1,3 +1,12 @@
+/**
+ * @file directory.h
+ * @brief This file outlines directory.cpp.
+ * @version 0.1
+ * @date 2023-09-29
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
 #pragma once
 
 #include <string>

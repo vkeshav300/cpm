@@ -7,6 +7,10 @@ CMakeScripts/
 cmake_install.cmake
 Makefile
 
+# Doxygen generation artifacts
+docs/html
+docs/latex
+
 # Other
 .exe
 .vscode/

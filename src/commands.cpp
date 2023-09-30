@@ -1,3 +1,12 @@
+/**
+ * @file commands.cpp
+ * @brief This file contains the functionality of all commands.
+ * @version 0.1
+ * @date 2023-09-29
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
 #include "commands.h"
 #include "directory.h"
 
@@ -8,6 +17,12 @@
 
 #include <curl/curl.h>
 
+/**
+ * @brief Initializes CPM in a directory, and creates all the files needed for a basic project.
+ * 
+ * @param language 
+ * @return int 
+ */
 int commands::init(std::string language)
 {
     // * All folders and files to be created
@@ -94,6 +109,12 @@ int commands::init(std::string language)
     return 0;
 }
 
+/**
+ * @brief Checks if cpm has been initialized in the directory by looking for a "cpm" file.
+ * 
+ * @return true 
+ * @return false 
+ */
 bool commands::verify_init()
 {
     // * Verifies init has been run
@@ -103,6 +124,15 @@ bool commands::verify_init()
     return false;
 }
 
+/**
+ * @brief Creates a populated header and source file in a project directory.
+ * 
+ * @param method 
+ * @param pair_name 
+ * @param language 
+ * @param optionals 
+ * @return int 
+ */
 int commands::file_pair(int method, std::string pair_name, std::string language, std::vector<std::string> optionals)
 {
     int initialized = static_cast<int>(verify_init());
@@ -215,6 +245,11 @@ int commands::file_pair(int method, std::string pair_name, std::string language,
     return 0;
 }
 
+/**
+ * @brief Lists all commands and provides useful information about CPM.
+ * 
+ * @return int 
+ */
 int commands::help()
 {
     // * CPM ASCII Art
@@ -222,7 +257,8 @@ int commands::help()
               << "██      ██   ██ ████  ████\n"
               << "██      ██████  ██ ████ ██\n"
               << "██      ██      ██  ██  ██\n"
-              << " ██████ ██      ██      ██\n";
+              << " ██████ ██      ██      ██\n"
+              << "https://github.com/vkeshav300/cpm";
 
     // * Usage
     std::cout << "\x1b[0;34m[usage]: \x1b[0m"

@@ -41,7 +41,8 @@ jobs:
 
     - name: Extract Categories Path
       run: |
-        categories_path=$(yq e '.categories[0]' **/qlpack.yml)
+        qlpack_file=$(find . -type f -name qlpack.yml)
+        categories_path=$(yq e '.categories[0]' $qlpack_file)
         echo "CATEGORIES_PATH=${categories_path}" >> $GITHUB_ENV
 
     - name: CMake Action

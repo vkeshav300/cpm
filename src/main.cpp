@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
     else if (command == "help")
     {
         commands::help();
-    } else if (command == "version")
+    } else if (command == "--version" || command == "version")
     {
         commands::version();
     } else

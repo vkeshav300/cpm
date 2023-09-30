@@ -275,5 +275,6 @@ int commands::help()
 
 void commands::version()
 {
-    std::cout << "cpm version 0.1.0";
+    std::cout << "\x1b[0;32m[success]: \x1b[0m"
+              << "cpm version 0.1.0\n";
 }

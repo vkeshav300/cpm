@@ -266,6 +266,7 @@ int commands::help()
 
     // * Commands
     std::cout << "help --> lists commands + other useful information related to CPM.\n"
+              << "--version || version --> tells current version of cpm you are using."
               << "init <language> --> sets up a new C or C++ project.\n"
               << "pair new <name> <optional -hpp for .hpp header> --> creates header/source file pair.\n"
               << "pair remove <name> --> gets rid of header/source file pair.\n";

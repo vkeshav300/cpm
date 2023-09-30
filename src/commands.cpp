@@ -15,8 +15,6 @@
 #include <string>
 #include <cstddef>
 
-#include <curl/curl.h>
-
 /**
  * @brief Initializes CPM in a directory, and creates all the files needed for a basic project.
  * 

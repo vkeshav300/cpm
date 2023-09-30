@@ -57,7 +57,9 @@ jobs:
         key: ${{ runner.os }}-codeql-${{ hashFiles('**/qlpack.yml') }}
 
     - name: Builds Project
-      run: make
+      run: |
+        cd /home/runner/work/cpm/cpm/build
+        make
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2

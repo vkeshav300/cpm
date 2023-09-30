@@ -32,6 +32,9 @@ namespace commands
     // ? Lists commands + arguments + optional arguments
     int help();
 
+    // ? Gives current version of CPM
+    void version();
+
     // ? Enums
     enum eFileMethods : std::size_t
     {

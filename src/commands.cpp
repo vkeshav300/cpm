@@ -272,3 +272,8 @@ int commands::help()
 
     return 0;
 }
+
+void commands::version()
+{
+    std::cout << "cpm version 0.1.0";
+}

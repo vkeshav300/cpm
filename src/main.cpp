@@ -17,6 +17,7 @@
 std::vector<std::string> get_optionals(int argc, char *argv[])
 {
     std::vector<std::string> optionals;
+
     for (int i = 0; i < argc; i++)
     {
         std::string arg = argv[i];
@@ -93,8 +94,10 @@ int main(int argc, char *argv[])
     else if (command == "help")
     {
         commands::help();
-    }
-    else
+    } else if (command == "version")
+    {
+        commands::version();
+    } else
     {
         std::cerr << "\x1b[0;31m[error]: \x1b[0m"
                   << "invalid command"

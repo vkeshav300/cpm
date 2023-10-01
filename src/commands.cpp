@@ -84,10 +84,7 @@ int commands::init(std::string language)
 
     else
     {
-        std::cerr << "\x1b[0;31m[error]: \x1b[0m"
-                  << "\'"
-                  << language
-                  << "\' is an unsupported programming language\n";
+        logger::error("\'" language "\' is an unsupported programming language");
     }
 
     {
@@ -96,8 +93,7 @@ int commands::init(std::string language)
         file_ignore.close();
     }
 
-    std::cout << "\x1b[0;32m[success]: \x1b[0m"
-              << "populated files\n";
+    logger::success("populated files");
 
     // * Provided information
     std::cout << "\x1b[0;33m[note]: \x1b[0m"
@@ -176,10 +172,7 @@ int commands::file_pair(int method, std::string pair_name, std::string language,
             }
             else
             {
-                std::cerr << "\x1b[0;31m[error]: \x1b[0m"
-                          << "\'" 
-                          << language 
-                          << "\' is an unsupported programming language\n";
+                logger::error("\'" + language + "\' is an unsupported programing language");
 
                 return 2;
             }
@@ -203,8 +196,7 @@ int commands::file_pair(int method, std::string pair_name, std::string language,
 
             if (!found_language)
             {
-                std::cerr << "\x1b[0;31m[error]: \x1b[0m"
-                          << ".cpm file does not contain a valid \'language\' value\n";
+                logger::error(".cpm file does not contain a valid \'language\' value");
 
                 return 1;
             }
@@ -218,8 +210,7 @@ int commands::file_pair(int method, std::string pair_name, std::string language,
         }
 
         default:
-            std::cerr << "\x1b[0;31m[error]: \x1b[0m"
-                      << "unknown error occured reading initialized status\n";
+            logger::error("unknown error occured reading initialized status");
 
             return 3;
         }
@@ -235,8 +226,7 @@ int commands::file_pair(int method, std::string pair_name, std::string language,
     }
     else
     {
-        std::cerr << "\x1b[0;31m[error]: \x1b[0m"
-                  << "unknown error occured reading method status\n";
+        logger::error("unknown error occured reading method status");
 
         return 4;
     }
@@ -279,6 +269,5 @@ int commands::help()
  */
 void commands::version()
 {
-    std::cout << "\x1b[0;32m[success]: \x1b[0m"
-              << "cpm version 0.1.0\n";
+    logger::success("cpm version 0.1.0");
 }

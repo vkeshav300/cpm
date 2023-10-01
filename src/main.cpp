@@ -8,6 +8,7 @@
  * 
  */
 #include "commands.h"
+#include "logger.h"
 
 #include <iostream>
 #include <fstream>

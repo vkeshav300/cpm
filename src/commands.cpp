@@ -9,6 +9,7 @@
  */
 #include "commands.h"
 #include "directory.h"
+#include "logger.h"
 
 #include <iostream>
 #include <fstream>

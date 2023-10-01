@@ -8,6 +8,7 @@
  * 
  */
 #include "directory.h"
+#include "logger.h"
 
 #include <iostream>
 #include <string>

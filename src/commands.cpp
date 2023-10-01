@@ -21,7 +21,7 @@ namespace commands
     /**
      * @brief Initializes CPM in a directory, and creates all the files needed for a basic project.
      *
-     * @param language
+     * @param language The primary language the project will be coded in.
      * @return int
      */
     int init(std::string language)
@@ -98,10 +98,8 @@ namespace commands
         logger::success("populated files");
 
         // * Provided information
-        std::cout << "\x1b[0;33m[note]: \x1b[0m"
-                  << "to best utilize this project structure, it is recommended that you know how to use CMake.\n";
-        std::cout << "\x1b[0;33m[note]: \x1b[0m"
-                  << "to edit the name of the project, go into the CMakeLists.txt and change all the placeholders that read \'project_name\'.\n";
+        logger::custom("to best utilize this project structure, it is recommended that you know how to use CMake.", "note", "yellow");
+        logger::custom("to edit the name of the project, go into the CMakeLists.txt and change all the placeholders that read \'project_name\'.", "note", "yellow");
 
         return 0;
     }
@@ -124,10 +122,11 @@ namespace commands
     /**
      * @brief Creates a populated header and source file in a project directory.
      *
-     * @param method
-     * @param pair_name
-     * @param language
-     * @param optionals
+     * @param method The action that is going to be performed on the file pair.
+     * @param pair_name The names of the files.
+     * @param language The coding language of the project (only will be required if cpm has not been initialized in the directory).
+     * @param optionals Any extra arguments-- only extra argument that will be accepted is '-hpp' for the header file to be in .hpp format.
+     * 
      * @return int
      */
     int file_pair(int method, std::string pair_name, std::string language, std::vector<std::string> optionals)
@@ -252,8 +251,7 @@ namespace commands
                   << "https://github.com/vkeshav300/cpm\n";
 
         // * Usage
-        std::cout << "\x1b[0;34m[usage]: \x1b[0m"
-                  << "cpm <command> <args>\n";
+        logger::custom("cpm <command> <args>", "usage", "blue");
 
         // * Commands
         std::cout << "help --> lists commands + other useful information related to CPM.\n\n"
@@ -267,10 +265,13 @@ namespace commands
 
     /**
      * @brief Outputs current CPM version.
-     *
+     * 
+     * @return int 
      */
-    void version()
+    int version()
     {
         logger::success("cpm version 0.1.0");
+
+        return 0;
     }
 }

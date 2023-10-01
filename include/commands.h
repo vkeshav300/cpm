@@ -33,7 +33,7 @@ namespace commands
     int help();
 
     // ? Gives current version of CPM
-    void version();
+    int version();
 
     // ? Enums
     enum eFileMethods : std::size_t

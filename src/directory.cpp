@@ -20,8 +20,8 @@ namespace directory
     /**
      * @brief Reads file into string.
      *
-     * @param dir
-     * @param filename
+     * @param dir Directory file is located in.
+     * @param filename Name of the file.
      * @return std::string
      */
     std::string slurp(std::string dir, std::string filename)
@@ -61,8 +61,8 @@ namespace directory
     /**
      * @brief Checks if a file has specific contents.
      *
-     * @param text
-     * @param contents
+     * @param text Text to search in.
+     * @param contents Contents to search for.
      * @return true
      * @return false
      */
@@ -77,8 +77,8 @@ namespace directory
     /**
      * @brief Checks if directory has a file.
      *
-     * @param dir
-     * @param filename
+     * @param dir Directory file is located in.
+     * @param filename Name of the file.
      * @return true
      * @return false
      */
@@ -92,8 +92,8 @@ namespace directory
     /**
      * @brief Checks if directory has a folder.
      *
-     * @param dir
-     * @param foldername
+     * @param dir Directory folder is located in.
+     * @param foldername Name of the folder.
      * @return true
      * @return false
      */
@@ -107,8 +107,8 @@ namespace directory
     /**
      * @brief Creates file in directory.
      *
-     * @param dir
-     * @param filename
+     * @param dir Directory file will be located in.
+     * @param filename Name of the file to be created.
      */
     void createFile(std::string dir, std::string filename)
     {
@@ -133,8 +133,8 @@ namespace directory
     /**
      * @brief Creates folder in directory.
      *
-     * @param dir
-     * @param foldername
+     * @param dir Directory folder will be located in.
+     * @param foldername Name of the folder to be created.
      */
     void createFolder(std::string dir, std::string foldername)
     {
@@ -158,8 +158,8 @@ namespace directory
     /**
      * @brief Deletes file in directory.
      *
-     * @param dir
-     * @param filename
+     * @param dir Directory file is located in.
+     * @param filename Name of the file.
      */
     void deleteFile(std::string dir, std::string filename)
     {

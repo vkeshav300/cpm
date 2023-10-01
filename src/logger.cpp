@@ -7,7 +7,7 @@ namespace logger
     /**
      * @brief Logs success message to console.
      *
-     * @param message
+     * @param message Text to be logged.
      */
     void success(std::string message)
     {
@@ -19,7 +19,7 @@ namespace logger
     /**
      * @brief Logs error message to console.
      *
-     * @param message
+     * @param message Text to be logged.
      */
     void error(std::string message)
     {
@@ -30,11 +30,19 @@ namespace logger
 
     /**
      * @brief Logs custom message to console.
-     *
-     * @param message
+     * 
+     * @param message Text to be logged.
+     * @param mtype The type of message (the text in between the square brackets).
+     * @param color The color of the message.
      */
-    void custom(std::string message)
+    void custom(std::string message, std::string mtype, std::string color)
     {
+        std::cout << colors[color]
+                  << "["
+                  << mtype
+                  << "]: \x1b[0m"
+                  << message
+                  << "\n";
     }
 
     /**
@@ -43,6 +51,6 @@ namespace logger
      */
     void flush_buffer()
     {
-        std::cout << "" << std::endl;
+        std::cout << std::endl;
     }
 }

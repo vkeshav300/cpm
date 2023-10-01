@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
         // * Assigning arguments
         std::string sub_command = argv[2];
         std::string file_name = argv[3];
-        std::string language = (argc >= 5 && argv[4][0] != '-') ? argv[4] : "null";
+        std::string language = (argc >= 5 && argv[4][0] != '-') ? argv[4] : NULL;
         std::vector<std::string> optionals = get_optionals(argc, argv);
 
         // * Sub commands
@@ -102,11 +102,6 @@ int main(int argc, char *argv[])
 
         return 5;
     }
-
-    std::cout << "\x1b[0;32m[success]: \x1b[0m"
-              << "finished command "
-              << command
-              << std::endl;
     
     logger::success("finished command " + command);
     logger::flush_buffer();

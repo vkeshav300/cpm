@@ -32,6 +32,8 @@ std::string directory::slurp(std::string dir, std::string filename)
                   << "\' does not exist at \'"
                   << dir
                   << "\'\n";
+
+        logger::error("\'" + filename + "\' does not exist at \'" + dir + "\'");
         
         return NULL;
     }
@@ -118,18 +120,12 @@ void directory::createFile(std::string dir, std::string filename)
 
     if (!hasFile(dir, filename))
     {
-        std::cerr << "\x1b[0;31m[error]: \x1b[0m"
-                  << "failed to create file \'"
-                  << filepath
-                  << "\'\n";
+        logger::error("failed to create file " + filepath);
 
         return;
     }
 
-    std::cout << "\x1b[0;32m[success]: \x1b[0m"
-              << "created file " 
-              << filepath 
-              << "\n";
+    logger::success("created file " + filepath);
 }
 
 /**
@@ -149,18 +145,12 @@ void directory::createFolder(std::string dir, std::string foldername)
 
     if (!hasFolder(dir, foldername))
     {
-        std::cerr << "\x1b[0;31m[error]: \x1b[0m"
-                  << "failed to create folder \'"
-                  << folderpath
-                  << "\'\n";
+        logger::error("failed to create folder " + folderpath);
 
         return;
     }
 
-    std::cout << "\x1b[0;32m[success]: \x1b[0m"
-              << "created folder "
-              << folderpath
-              << "\n";
+    logger::success("created folder " + folderpath);
 }
 
 /**
@@ -180,16 +170,8 @@ void directory::deleteFile(std::string dir, std::string filename)
 
     if (hasFile(dir, filename))
     {
-        std::cerr << "\x1b[0;31m[error]: \x1b[0m"
-                  << "failed to delete file \'"
-                  << filepath
-                  << "\'\n";
+        logger::error("failed to delete file " + filepath);
 
         return;
     }
-
-    std::cout << "\x1b[0;32m[success]: \x1b[0m"
-              << "deleted file "
-              << filepath
-              << "\n";
 }

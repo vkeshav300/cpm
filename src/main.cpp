@@ -33,14 +33,13 @@ int main(int argc, char *argv[])
     if (argc <= 1)
     {   
         logger::error("no command provided");
-        logger::endl();
+        logger::flush_buffer();
 
         return 1;
     }
 
-    logger::success("received " + argv[1]);
-
     std::string command = argv[1];
+    logger::success("received " + command);
 
     // * Init command
     if (command == "init")
@@ -48,7 +47,7 @@ int main(int argc, char *argv[])
         if (argc != 3)
         {   
             logger::error("invalid number of arguments for init command");
-            logger::endl();
+            logger::flush_buffer();
 
             return 2;
         }
@@ -66,7 +65,7 @@ int main(int argc, char *argv[])
                       << std::endl;
             
             logger::error("invalid number of arguments for pair command");
-            logger::endl();
+            logger::flush_buffer();
 
             return 3;
         }
@@ -85,7 +84,7 @@ int main(int argc, char *argv[])
         else
         {
             logger::error("invalid sub-command for pair command");
-            logger::endl();
+            logger::flush_buffer();
 
             return 4;
         }
@@ -99,7 +98,7 @@ int main(int argc, char *argv[])
     } else
     {
         logger::error("invalid command");
-        logger::endl();
+        logger::flush_buffer();
 
         return 5;
     }
@@ -110,7 +109,7 @@ int main(int argc, char *argv[])
               << std::endl;
     
     logger::success("finished command " + command);
-    logger::endl();
+    logger::flush_buffer();
 
     return 0;
 }

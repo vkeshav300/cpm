@@ -23,5 +23,5 @@ namespace logger
     void custom(std::string message);
 
     // ? Flushes buffer
-    void endl();
+    void flush_buffer();
 }

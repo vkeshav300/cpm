@@ -84,7 +84,7 @@ int commands::init(std::string language)
 
     else
     {
-        logger::error("\'" language "\' is an unsupported programming language");
+        logger::error("\'" + language + "\' is an unsupported programming language");
     }
 
     {

@@ -8,6 +8,7 @@
  * 
  */
 #include "commands.h"
+#include "logger.h"
 
 #include <iostream>
 #include <fstream>
@@ -30,28 +31,23 @@ std::vector<std::string> get_optionals(int argc, char *argv[])
 int main(int argc, char *argv[])
 {
     if (argc <= 1)
-    {
-        std::cerr << "\x1b[0;31m[error]: \x1b[0m"
-                  << "no command provided"
-                  << std::endl;
+    {   
+        logger::error("no command provided");
+        logger::flush_buffer();
 
         return 1;
     }
 
-    std::cout << "\x1b[0;32m[success]: \x1b[0m"
-              << "received " << argv[1]
-              << "\n";
-
     std::string command = argv[1];
+    logger::success("received " + command);
 
     // * Init command
     if (command == "init")
     {
         if (argc != 3)
-        {
-            std::cerr << "\x1b[0;31m[error]: \x1b[0m"
-                      << "invalid number of arguments for init command"
-                      << std::endl;
+        {   
+            logger::error("invalid number of arguments for init command");
+            logger::flush_buffer();
 
             return 2;
         }
@@ -67,6 +63,9 @@ int main(int argc, char *argv[])
             std::cerr << "\x1b[0;31m[error]: \x1b[0m"
                       << "invalid number of arguments for pair command"
                       << std::endl;
+            
+            logger::error("invalid number of arguments for pair command");
+            logger::flush_buffer();
 
             return 3;
         }
@@ -84,9 +83,8 @@ int main(int argc, char *argv[])
             commands::file_pair(commands::DELETE, file_name, language, optionals);
         else
         {
-            std::cerr << "\x1b[0;31m[error]: \x1b[0m"
-                      << "invalid sub-command for pair command"
-                      << std::endl;
+            logger::error("invalid sub-command for pair command");
+            logger::flush_buffer();
 
             return 4;
         }
@@ -99,9 +97,8 @@ int main(int argc, char *argv[])
         commands::version();
     } else
     {
-        std::cerr << "\x1b[0;31m[error]: \x1b[0m"
-                  << "invalid command"
-                  << std::endl;
+        logger::error("invalid command");
+        logger::flush_buffer();
 
         return 5;
     }
@@ -110,6 +107,9 @@ int main(int argc, char *argv[])
               << "finished command "
               << command
               << std::endl;
+    
+    logger::success("finished command " + command);
+    logger::flush_buffer();
 
     return 0;
 }

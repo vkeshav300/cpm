@@ -35,3 +35,12 @@ void custom(std::string message)
 {
 
 }
+
+/**
+ * @brief Flushes output buffer.
+ * 
+ */
+void endl()
+{
+    std::cout << std::endl;
+}

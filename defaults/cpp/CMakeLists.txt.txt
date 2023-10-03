@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.27.6)
 
 # Project info
 project(
-    cpm 
+    PROJECT_NAME_HERE 
     VERSION 0.1
     LANGUAGES CXX
 )
@@ -17,14 +17,14 @@ set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 # Get all the source files in the SOURCE_DIR
 file(GLOB SOURCES "${SOURCE_DIR}/*.cpp")
 
-add_executable(cpm
+add_executable(EXECUTABLE_NAME_HERE
     ${SOURCES}
 )
 
-target_include_directories(cpm PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(EXECUTABLE_NAME_HERE PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Check if the current platform is macOS
 if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
     # Specify the installation directory for macOS (e.g., /usr/local/bin)
-    install(TARGETS cpm DESTINATION /usr/local/bin)
+    install(TARGETS EXECUTABLE_NAME_HERE DESTINATION /usr/local/bin)
 endif()

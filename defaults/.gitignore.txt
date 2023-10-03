@@ -1,0 +1,18 @@
+# CMake related files and directories
+/build
+/tests
+CMakeFiles/
+CMakeCache.txt
+CMakeScripts/
+cmake_install.cmake
+Makefile
+
+# Doxygen generation artifacts
+docs/html
+docs/latex
+
+# Other
+.exe
+.vscode/
+README_tmp.html
+.DS_Store

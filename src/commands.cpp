@@ -15,6 +15,7 @@
 #include <fstream>
 #include <string>
 #include <cstddef>
+#include <vector>
 
 namespace commands
 {
@@ -38,52 +39,38 @@ namespace commands
             directory::createFile("./", file);
 
         // * Populates files with default code / text
+        std::string defaults_folder = "../defaults/";
+
         if (language == "c")
         {
             directory::createFile("./src/", "main.c");
 
             {
                 std::ofstream file_main("./src/main.c");
-                file_main << "#include <iostream>\n\nint main(int argc, char *argv[])\n{\n    std::cout << \"Hello World!\" << std::endl;\n\n    return 0;\n}";
+                file_main << directory::slurp(defaults_folder, "main.txt");
                 file_main.close();
             }
             {
                 std::ofstream file_cmake("./CMakeLists.txt");
-                file_cmake << "# Minimum required version of CMake (cmake --version)\ncmake_minimum_required(VERSION 3.27.0)\n\n# Project info\nproject(project_name VERSION 0.0)\n\n# Giving CMake file structure info\nset(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)\n\n# Get all the source files in the SOURCE_DIR\nfile(GLOB SOURCES "
-                           << "${SOURCE_DIR}/*.c"
-                           << ")\n\nadd_executable(project_name ${SOURCES})\n\ntarget_include_directories(project_name PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)";
+                file_cmake << directory::slurp(defaults_folder + "c/", "CMakeLists.txt.txt");
                 file_cmake.close();
             }
-            {
-                std::ofstream file_cpm("./.cpm");
-                file_cpm << "language: c";
-                file_cpm.close();
-            }
         }
-
-        else if (language == "cpp" || language == "c++")
+        else if (language == "cpp")
         {
             directory::createFile("./src/", "main.cpp");
 
             {
                 std::ofstream file_main("./src/main.cpp");
-                file_main << "#include <iostream>\n\nint main(int argc, char *argv[])\n{\n    std::cout << \"Hello World!\" << std::endl;\n\n    return 0;\n}";
+                file_main << directory::slurp(defaults_folder, "main.txt");
                 file_main.close();
             }
             {
                 std::ofstream file_cmake("./CMakeLists.txt");
-                file_cmake << "# Minimum required version of CMake (cmake --version)\ncmake_minimum_required(VERSION 3.27.0)\n\n# Project info\nproject(project_name VERSION 0.0)\n\n# Giving CMake file structure info\nset(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)\n\n# Get all the source files in the SOURCE_DIR\nfile(GLOB SOURCES "
-                           << "${SOURCE_DIR}/*.cpp"
-                           << ")\n\nadd_executable(project_name ${SOURCES})\n\ntarget_include_directories(project_name PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)";
+                file_cmake << directory::slurp(defaults_folder + "cpp/", "CMakeLists.txt.txt");
                 file_cmake.close();
             }
-            {
-                std::ofstream file_cpm("./.cpm");
-                file_cpm << "language: cpp";
-                file_cpm.close();
-            }
         }
-
         else
         {
             logger::error("\'" + language + "\' is an unsupported programming language");
@@ -91,8 +78,14 @@ namespace commands
 
         {
             std::ofstream file_ignore("./.gitignore");
-            file_ignore << "# CMake generated files and directories\n/build/build\nCMakeFiles/\nCMakeCache.txt\nCMakeScripts/\ncmake_install.cmake\nMakefile\n\n# Other\n.exe\n.vscode/";
+            file_ignore << directory::slurp(defaults_folder, ".gitignore.txt");
             file_ignore.close();
+        }
+        {
+            std::ofstream file_cpm("./.cpm");
+            file_cpm << directory::slurp(defaults_folder, ".cpm.txt")
+                     << language;
+            file_cpm.close();
         }
 
         logger::success("populated files");
@@ -102,6 +95,22 @@ namespace commands
         logger::custom("to edit the name of the project, go into the CMakeLists.txt and change all the placeholders that read \'project_name\'.", "note", "yellow");
 
         return 0;
+    }
+
+    /**
+     * @brief Initializes CPM in a pre-existing project.
+     *
+     * @param language The primary language the project is coded in.
+     * @return int
+     */
+    int post_init(std::string language)
+    {
+        directory::createFile("./", ".cpm");
+
+        std::ofstream file_cpm("./.cpm");
+        file_cpm << directory::slurp("../defaults/", ".cpm.txt")
+                 << language;
+        file_cpm.close();
     }
 
     /**
@@ -120,35 +129,24 @@ namespace commands
     }
 
     /**
-     * @brief Creates a populated header and source file in a project directory.
-     *
-     * @param method The action that is going to be performed on the file pair.
-     * @param pair_name The names of the files.
-     * @param language The coding language of the project (only will be required if cpm has not been initialized in the directory).
-     * @param optionals Any extra arguments-- only extra argument that will be accepted is '-hpp' for the header file to be in .hpp format.
+     * @brief Creates header/source file pair.
      * 
-     * @return int
+     * @param arguments
+     * @param hpp 
+     * @param language 
+     * @return int 
      */
-    int file_pair(int method, std::string pair_name, std::string language, std::vector<std::string> optionals)
+    int file_pair(std::vector<std::string> *arguments, bool hpp, std::string language)
     {
-        int initialized = static_cast<int>(verify_init());
-
         directory::createFolder("./", "src");
         directory::createFolder("./", "include");
 
-        std::string header_file_extention = ".h";
-        for (auto &optional : optionals)
-        {
-            if (optional == "-hpp")
-            {
-                header_file_extention = ".hpp";
-                break;
-            }
-        }
+        std::string header_file_extention = (hpp) ? ".hpp" : ".h";
+        std::string pair_name = (*arguments)[1];
 
-        if (method == CREATE)
+        if ((*arguments)[0] == "new")
         {
-            // * Create header file
+            // * Create header and source files, then populate them
             directory::createFile("./include/", pair_name + header_file_extention);
 
             {
@@ -156,80 +154,39 @@ namespace commands
                 file_header << "#pragma once";
             }
 
-            switch (initialized)
+            if (language == "c")
             {
-            case 0:
-            {
-                // * Create files
-                if (language == "c" || language == "cpp")
-                {
-                    std::string file_extension = (language == "c") ? ".c" : ".cpp";
-                    directory::createFile("./src/", pair_name + file_extension);
+                std::ofstream file_main("./src/" + pair_name + ".c");
+                file_main << "#include \"" + pair_name + header_file_extention + "\"";
+                file_main.close();
 
-                    {
-                        std::ofstream file_source("./src/" + pair_name + file_extension);
-                        file_source << "#include \"" + pair_name + header_file_extention + "\"";
-                    }
-                }
-                else
-                {
-                    logger::error("\'" + language + "\' is an unsupported programing language");
-
-                    return 2;
-                }
-                break;
+                return 0;
             }
 
-            case 1:
             {
-                // * Open and read .cpm file
-                std::string cpm_contents = directory::slurp("./", ".cpm");
-
-                // * Check for "language:" line
-                bool found_language = false;
-                std::string file_extension;
-                if (cpm_contents.find("language: c") != std::string::npos || cpm_contents.find("language: cpp") != std::string::npos)
-                {
-                    found_language = true;
-                    file_extension = (cpm_contents.find("language: cpp") != std::string::npos) ? ".cpp" : ".c";
-                    directory::createFile("./src/", pair_name + file_extension);
-                }
-
-                if (!found_language)
-                {
-                    logger::error(".cpm file does not contain a valid \'language\' value");
-
-                    return 1;
-                }
-
-                // * Writing '#pragma once' to header file and '#include <header_file>' to source file
-                {
-                    std::ofstream file_source("./src/" + pair_name + file_extension);
-                    file_source << "#include \"" + pair_name + header_file_extention + "\"";
-                }
-                break;
+                std::ofstream file_main("./src/" + pair_name + ".cpp");
+                file_main << "#include \"" + pair_name + header_file_extention + "\"";
+                file_main.close();
             }
 
-            default:
-                logger::error("unknown error occured reading initialized status");
-
-                return 3;
-            }
+            return 0;
         }
-        else if (method == DELETE)
+        else if ((*arguments)[0] == "remove")
         {
             // * Delete files
-            // ? Note that this code is confusing because there is no checking of file (or folder) existance. Go to "directory.h" for clarification.
             directory::deleteFile("./include/", pair_name + ".h");
             directory::deleteFile("./include/", pair_name + ".hpp");
             directory::deleteFile("./src/", pair_name + ".c");
             directory::deleteFile("./src/", pair_name + ".cpp");
+
+            return 0;
         }
         else
         {
-            logger::error("unknown error occured reading method status");
+            // * Invalid "method" of dealing with files
+            logger::error((*arguments)[0] + " is not a valid argument");
 
-            return 4;
+            return 1;
         }
 
         return 0;
@@ -265,8 +222,8 @@ namespace commands
 
     /**
      * @brief Outputs current CPM version.
-     * 
-     * @return int 
+     *
+     * @return int
      */
     int version()
     {

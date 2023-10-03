@@ -11,7 +11,6 @@
 
 #include <string>
 #include <fstream>
-#include <vector>
 
 namespace directory
 {

@@ -17,36 +17,13 @@
 #include <vector>
 #include <algorithm>
 
-/*
-* Getting executable src directory
-? Note that the following code has not been utilized yet.
-*/
-#if defined(_WIN32)
-#include <windows.h>
-#elif defined(__linux__) || defined(__APPLE__)
-#include <unistd.h>
-#endif
-
-std::string src_path;
-
-#if defined(_WIN32)
-char buffer[MAX_PATH];
-GetModuleFileName(NULL, buffer, MAX_PATH);
-src_path = std::string(buffer);
-#elif defined(__linux__) || defined(__APPLE__)
-char buffer[1024];
-ssize_t len = readlink("/proc/self/exe", buffer, sizeof(buffer) - 1);
-if (len != -1)
-{
-    buffer[len] = '\0';
-    src_path = std::string(buffer);
-}
-#endif
-size_t found = src_path.find_last_of("/\\");
-if (found != std::string::npos)
-    src_path = src_path.substr(0, found);
-
 // * All commands
+std::vector<std::string> all_commands = {
+    "init",
+    "pair",
+    "help",
+    "version"};
+
 /**
  * @brief Processes command.
  *
@@ -63,6 +40,11 @@ int process_command(std::string command, std::vector<std::string> arguments, std
 
     if (command == "init")
     {
+        if (language != "c" || language != "cpp")
+        {
+            logger::error("\'" + language + "\' is not a supported programming language");
+            return r_code;
+        }
         if (std::find(flags.begin(), flags.end(), "-post") != flags.end())
         {
             r_code = commands::post_init(language);
@@ -86,11 +68,6 @@ int process_command(std::string command, std::vector<std::string> arguments, std
     {
         r_code = commands::version();
         return r_code;
-    }
-    else
-    {
-        logger::error("command not found \'" + command + "\'");
-        return 1;
     }
 
     return r_code;
@@ -143,6 +120,13 @@ int main(int argc, char *argv[])
     if (command == "--version")
         command = "version";
 
+    // * Validating command
+    if (!(std::find(all_commands.begin(), all_commands.end(), command) != all_commands.end()))
+    {
+        logger::error("command not found \'" + command + "\'");
+        return 1;
+    }
+
     // * Checking initialized status
     bool initialized = commands::verify_init();
 
@@ -174,6 +158,9 @@ int main(int argc, char *argv[])
     {
         language = (arguments[1] == "c") ? "c" : "cpp";
     }
+
+    if (language == "c++")
+        language = "cpp";
 
     // * Running command
     int result = process_command(command, arguments, flags, language);

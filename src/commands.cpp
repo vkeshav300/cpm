@@ -29,7 +29,7 @@ namespace commands
     {
         // * All folders and files to be created
         std::vector<std::string> default_folders = {"assets", "src", "include", "build", "tests"};
-        std::vector<std::string> default_files = {".gitignore", "CMakeLists.txt", "README.md", "LICENSE", ".cpm", "src/main.cpp"};
+        std::vector<std::string> default_files = {".gitignore", "CMakeLists.txt", "README.md", "LICENSE", ".cpm", "src/main." + language};
 
         // * Create files and folders
         for (auto &folder : default_folders)
@@ -39,47 +39,33 @@ namespace commands
             directory::createFile("./", file);
 
         // * Populates files with default code / text
-        std::string defaults_folder = "../defaults/";
 
         if (language == "c")
         {
-            directory::createFile("./src/", "main.c");
-
-            {
-                std::ofstream file_main("./src/main.c");
-                file_main << directory::slurp(defaults_folder, "main.txt");
-                file_main.close();
-            }
-            {
-                std::ofstream file_cmake("./CMakeLists.txt");
-                file_cmake << directory::slurp(defaults_folder + "c/", "CMakeLists.txt.txt");
-                file_cmake.close();
-            }
+            std::ofstream file_cmake("./CMakeLists.txt");
+            file_cmake << "# Minimum required version of CMake (cmake --version)\ncmake_minimum_required(VERSION 3.27.6)\n\n# Project info\nproject(\n    PROJECT_NAME_HERE \n    VERSION 0.1\n    LANGUAGES C\n)\n\nset(CMAKE_C_STANDARD 20)\nset(CMAKE_C_EXTENSIONS OFF)\n\n# Giving CMake file structure info\nset(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)\n\n# Get all the source files in the SOURCE_DIR\nfile(GLOB SOURCES \"${SOURCE_DIR}/*.c\")\n\nadd_executable(EXECUTABLE_NAME_HERE\n    ${SOURCES}\n)\n\ntarget_include_directories(EXECUTABLE_NAME_HERE PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)\n\n# Check if the current platform is macOS\nif (CMAKE_SYSTEM_NAME MATCHES \"Darwin\")\n    # Specify the installation directory for macOS (e.g., /usr/local/bin)\n    install(TARGETS EXECUTABLE_NAME_HERE DESTINATION /usr/local/bin)\nendif()";
+            file_cmake.close();
         }
         else if (language == "cpp")
         {
-            directory::createFile("./src/", "main.cpp");
-
-            {
-                std::ofstream file_main("./src/main.cpp");
-                file_main << directory::slurp(defaults_folder, "main.txt");
-                file_main.close();
-            }
-            {
-                std::ofstream file_cmake("./CMakeLists.txt");
-                file_cmake << directory::slurp(defaults_folder + "cpp/", "CMakeLists.txt.txt");
-                file_cmake.close();
-            }
+            std::ofstream file_cmake("./CMakeLists.txt");
+            file_cmake << "# Minimum required version of CMake (cmake --version)\ncmake_minimum_required(VERSION 3.27.6)\n\n# Project info\nproject(\n    PROJECT_NAME_HERE \n    VERSION 0.1\n    LANGUAGES CXX\n)\n\nset(CMAKE_CXX_STANDARD 21)\nset(CMAKE_CXX_EXTENSIONS OFF)\n\n# Giving CMake file structure info\nset(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)\n\n# Get all the source files in the SOURCE_DIR\nfile(GLOB SOURCES \"${SOURCE_DIR}/*.cpp\")\n\nadd_executable(EXECUTABLE_NAME_HERE\n    ${SOURCES}\n)\n\ntarget_include_directories(EXECUTABLE_NAME_HERE PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)\n\n# Check if the current platform is macOS\nif (CMAKE_SYSTEM_NAME MATCHES \"Darwin\")\n    # Specify the installation directory for macOS (e.g., /usr/local/bin)\n    install(TARGETS EXECUTABLE_NAME_HERE DESTINATION /usr/local/bin)\nendif()";
+            file_cmake.close();
         }
 
         {
+            std::ofstream file_main("./src/main." + language);
+            file_main << "#include <iostream>\n\nint main(int argc, char *argv[])\n{\n    std::cout << \"Hello World\" << std::endl;\n\n    return 0;\n}";
+            file_main.close();
+        }
+        {
             std::ofstream file_ignore("./.gitignore");
-            file_ignore << directory::slurp(defaults_folder, ".gitignore.txt");
+            file_ignore << "# CMake related files and directories\n/build\n/tests\nCMakeFiles/\nCMakeCache.txt\nCMakeScripts/\ncmake_install.cmake\nMakefile\n\n# Doxygen generation artifacts\ndocs/html\ndocs/latex\n\n# Other\n.exe\n.vscode/\nREADME_tmp.html\n.DS_Store";
             file_ignore.close();
         }
         {
             std::ofstream file_cpm("./.cpm");
-            file_cpm << directory::slurp(defaults_folder, ".cpm.txt")
+            file_cpm << "language: "
                      << language;
             file_cpm.close();
         }

@@ -17,6 +17,36 @@
 #include <vector>
 #include <algorithm>
 
+/*
+* Getting executable src directory
+? Note that the following code has not been utilized yet.
+*/
+#if defined(_WIN32)
+#include <windows.h>
+#elif defined(__linux__) || defined(__APPLE__)
+#include <unistd.h>
+#endif
+
+std::string src_path;
+
+#if defined(_WIN32)
+char buffer[MAX_PATH];
+GetModuleFileName(NULL, buffer, MAX_PATH);
+src_path = std::string(buffer);
+#elif defined(__linux__) || defined(__APPLE__)
+char buffer[1024];
+ssize_t len = readlink("/proc/self/exe", buffer, sizeof(buffer) - 1);
+if (len != -1)
+{
+    buffer[len] = '\0';
+    src_path = std::string(buffer);
+}
+#endif
+size_t found = src_path.find_last_of("/\\");
+if (found != std::string::npos)
+    src_path = src_path.substr(0, found);
+
+// * All commands
 /**
  * @brief Processes command.
  *
@@ -83,6 +113,8 @@ int main(int argc, char *argv[])
 
         return 1;
     }
+
+    // * All commands
 
     // * Parsing command
     std::string command = argv[1];

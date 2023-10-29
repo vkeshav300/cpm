@@ -17,28 +17,18 @@ namespace commands
     // ? Create directories and files needed for a basic C/C++ project.
     int init(std::string language);
 
+    // ? Adds .cpm file to project that has already been created.
+    int post_init(std::string language);
+
     // ? Verify "cpm init" has been run
     bool verify_init();
 
-    // ? Download library from github link and puts files in proper folders.
-    int install(std::string link, std::string tags);
-
-    // ? Delete library from library folders
-    int uninstall(std::string name);
-
     // ? Create / deletes file pairs ([.h + .hpp] + [.cpp or .c])
-    int file_pair(int method, std::string pair_name, std::string language, std::vector<std::string> optionals);
+    int file_pair(std::vector<std::string> arguments, bool hpp, std::string language);
 
     // ? Lists commands + arguments + optional arguments
     int help();
 
     // ? Gives current version of CPM
     int version();
-
-    // ? Enums
-    enum eFileMethods : std::size_t
-    {
-        CREATE = 0,
-        DELETE
-    };
 };

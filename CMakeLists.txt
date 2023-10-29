@@ -1,14 +1,14 @@
 # Minimum required version of CMake (cmake --version)
-cmake_minimum_required(VERSION 3.26.4)
+cmake_minimum_required(VERSION 3.27.6)
 
 # Project info
 project(
     cpm 
-    VERSION 0.0
+    VERSION 0.1
     LANGUAGES CXX
 )
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Giving CMake file structure info

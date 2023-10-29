@@ -24,7 +24,7 @@ namespace commands
     bool verify_init();
 
     // ? Create / deletes file pairs ([.h + .hpp] + [.cpp or .c])
-    int file_pair(std::vector<std::string> *arguments, bool hpp, std::string language);
+    int file_pair(std::vector<std::string> arguments, bool hpp, std::string language);
 
     // ? Lists commands + arguments + optional arguments
     int help();

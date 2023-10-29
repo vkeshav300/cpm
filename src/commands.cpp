@@ -71,10 +71,6 @@ namespace commands
                 file_cmake.close();
             }
         }
-        else
-        {
-            logger::error("\'" + language + "\' is an unsupported programming language");
-        }
 
         {
             std::ofstream file_ignore("./.gitignore");
@@ -111,6 +107,8 @@ namespace commands
         file_cpm << directory::slurp("../defaults/", ".cpm.txt")
                  << language;
         file_cpm.close();
+
+        return 0;
     }
 
     /**
@@ -130,21 +128,21 @@ namespace commands
 
     /**
      * @brief Creates header/source file pair.
-     * 
+     *
      * @param arguments
-     * @param hpp 
-     * @param language 
-     * @return int 
+     * @param hpp
+     * @param language
+     * @return int
      */
-    int file_pair(std::vector<std::string> *arguments, bool hpp, std::string language)
+    int file_pair(std::vector<std::string> arguments, bool hpp, std::string language)
     {
         directory::createFolder("./", "src");
         directory::createFolder("./", "include");
 
         std::string header_file_extention = (hpp) ? ".hpp" : ".h";
-        std::string pair_name = (*arguments)[1];
+        std::string pair_name = arguments[1];
 
-        if ((*arguments)[0] == "new")
+        if (arguments[0] == "new")
         {
             // * Create header and source files, then populate them
             directory::createFile("./include/", pair_name + header_file_extention);
@@ -171,7 +169,7 @@ namespace commands
 
             return 0;
         }
-        else if ((*arguments)[0] == "remove")
+        else if (arguments[0] == "remove")
         {
             // * Delete files
             directory::deleteFile("./include/", pair_name + ".h");
@@ -184,7 +182,7 @@ namespace commands
         else
         {
             // * Invalid "method" of dealing with files
-            logger::error((*arguments)[0] + " is not a valid argument");
+            logger::error(arguments[0] + " is not a valid argument");
 
             return 1;
         }
@@ -227,7 +225,7 @@ namespace commands
      */
     int version()
     {
-        logger::success("cpm version 0.1.0");
+        logger::custom("cpm version 0.1.0", "version", "red");
 
         return 0;
     }

@@ -61,8 +61,8 @@ jobs:
         cd /home/runner/work/cpm/cpm/build
         make
 
-    - name: Move To Project Directory
-      run: cd ..
+    - name: Move To Source Directory
+      run: cd ../src
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2

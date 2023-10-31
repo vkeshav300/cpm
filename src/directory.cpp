@@ -173,7 +173,6 @@ namespace directory
         if (hasFile(dir, filename))
         {
             logger::error("failed to delete file " + filepath);
-
             return;
         }
     }

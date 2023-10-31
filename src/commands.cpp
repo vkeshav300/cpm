@@ -40,27 +40,64 @@ namespace commands
 
         // * Populates files with default code / text
 
-        if (language == "c")
         {
+            // * Language-specific variables
+            std::string addon = (language == "c") ? "" : "XX";
+            std::string version = (language == "c") ? "20" : "21";
+
             std::ofstream file_cmake("./CMakeLists.txt");
-            file_cmake << "# Minimum required version of CMake (cmake --version)\ncmake_minimum_required(VERSION 3.27.6)\n\n# Project info\nproject(\n    PROJECT_NAME_HERE \n    VERSION 0.1\n    LANGUAGES C\n)\n\nset(CMAKE_C_STANDARD 20)\nset(CMAKE_C_EXTENSIONS OFF)\n\n# Giving CMake file structure info\nset(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)\n\n# Get all the source files in the SOURCE_DIR\nfile(GLOB SOURCES \"${SOURCE_DIR}/*.c\")\n\nadd_executable(EXECUTABLE_NAME_HERE\n    ${SOURCES}\n)\n\ntarget_include_directories(EXECUTABLE_NAME_HERE PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)\n\n# Check if the current platform is macOS\nif (CMAKE_SYSTEM_NAME MATCHES \"Darwin\")\n    # Specify the installation directory for macOS (e.g., /usr/local/bin)\n    install(TARGETS EXECUTABLE_NAME_HERE DESTINATION /usr/local/bin)\nendif()";
-            file_cmake.close();
-        }
-        else if (language == "cpp")
-        {
-            std::ofstream file_cmake("./CMakeLists.txt");
-            file_cmake << "# Minimum required version of CMake (cmake --version)\ncmake_minimum_required(VERSION 3.27.6)\n\n# Project info\nproject(\n    PROJECT_NAME_HERE \n    VERSION 0.1\n    LANGUAGES CXX\n)\n\nset(CMAKE_CXX_STANDARD 21)\nset(CMAKE_CXX_EXTENSIONS OFF)\n\n# Giving CMake file structure info\nset(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)\n\n# Get all the source files in the SOURCE_DIR\nfile(GLOB SOURCES \"${SOURCE_DIR}/*.cpp\")\n\nadd_executable(EXECUTABLE_NAME_HERE\n    ${SOURCES}\n)\n\ntarget_include_directories(EXECUTABLE_NAME_HERE PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)\n\n# Check if the current platform is macOS\nif (CMAKE_SYSTEM_NAME MATCHES \"Darwin\")\n    # Specify the installation directory for macOS (e.g., /usr/local/bin)\n    install(TARGETS EXECUTABLE_NAME_HERE DESTINATION /usr/local/bin)\nendif()";
+            file_cmake << "# Minimum required version of CMake (cmake --version)"
+                       << "cmake_minimum_required(VERSION 3.27.6)\n"
+                       << "\n# Project info\n"
+                       << "project(\n"
+                       << "    PROJECT_NAME_HERE \n"
+                       << "    VERSION 0.1\n"
+                       << "    LANGUAGES C" << addon << "\n"
+                       << ")\n"
+                       << "\nset(CMAKE_C" << addon << "_STANDARD " << version << ")\n"
+                       << "set(CMAKE_C" << addon << "_EXTENSIONS OFF)\n"
+                       << "\n# Giving CMake file structure info\n"
+                       << "set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)\n"
+                       << "\n# Get all the source files in the SOURCE_DIR\n"
+                       << "file(GLOB SOURCES \"${SOURCE_DIR}/*." << language << "\")\n"
+                       << "\nadd_executable(EXECUTABLE_NAME_HERE\n"
+                       << "    ${SOURCES}\n"
+                       << ")\n"
+                       << "\ntarget_include_directories(EXECUTABLE_NAME_HERE PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)\n"
+                       << "\n# Check if the current platform is macOS\nif (CMAKE_SYSTEM_NAME MATCHES \"Darwin\")\n"
+                       << "    # Specify the installation directory for macOS (e.g., /usr/local/bin)\n"
+                       << "    install(TARGETS EXECUTABLE_NAME_HERE DESTINATION /usr/local/bin)\n"
+                       << "endif()";
             file_cmake.close();
         }
 
         {
             std::ofstream file_main("./src/main." + language);
-            file_main << "#include <iostream>\n\nint main(int argc, char *argv[])\n{\n    std::cout << \"Hello World\" << std::endl;\n\n    return 0;\n}";
+            file_main << "#include <iostream>\n"
+                      << "\nint main(int argc, char *argv[])\n"
+                      << "{\n    std::cout << \"Hello World\" << std::endl;\n"
+                      << "\n    return 0;"
+                      << "\n}";
             file_main.close();
         }
         {
             std::ofstream file_ignore("./.gitignore");
-            file_ignore << "# CMake related files and directories\n/build\n/tests\nCMakeFiles/\nCMakeCache.txt\nCMakeScripts/\ncmake_install.cmake\nMakefile\n\n# Doxygen generation artifacts\ndocs/html\ndocs/latex\n\n# Other\n.exe\n.vscode/\nREADME_tmp.html\n.DS_Store";
+            file_ignore << "# CMake related files and directories\n"
+            << "/build/*\n"
+            << "/tests/*\n"
+            << "CMakeFiles/\n"
+            << "CMakeCache.txt\n"
+            << "CMakeScripts/\n"
+            << "cmake_install.cmake\n"
+            << "Makefile\n"
+            << "\n# Doxygen generation artifacts\n"
+            << "docs/html\n"
+            << "docs/latex\n"
+            << "\n# Other\n"
+            << ".exe\n"
+            << ".vscode/\n"
+            << "README_tmp.html\n"
+            << ".DS_Store";
             file_ignore.close();
         }
         {
@@ -90,7 +127,7 @@ namespace commands
         directory::createFile("./", ".cpm");
 
         std::ofstream file_cpm("./.cpm");
-        file_cpm << directory::slurp("../defaults/", ".cpm.txt")
+        file_cpm << "language: "
                  << language;
         file_cpm.close();
 
@@ -211,7 +248,7 @@ namespace commands
      */
     int version()
     {
-        logger::custom("cpm version 0.1.0", "version", "red");
+        logger::custom("cpm version 0.1.0", "version", "yellow");
 
         return 0;
     }

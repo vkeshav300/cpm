@@ -211,12 +211,14 @@ namespace commands
     int help()
     {
         // * CPM ASCII Art
-        std::cout << " ██████ ██████  ███    ███\n"
+        std::cout << "\n"
+                  << " ██████ ██████  ███    ███\n"
                   << "██      ██   ██ ████  ████\n"
                   << "██      ██████  ██ ████ ██\n"
                   << "██      ██      ██  ██  ██\n"
-                  << " ██████ ██      ██      ██\n"
-                  << "https://github.com/vkeshav300/cpm\n";
+                  << " ██████ ██      ██      ██\n\n";
+        
+        logger::custom("https://github.com/vkeshav300/cpm\n", "source code", "red");
 
         // * Usage
         logger::custom("cpm <command> <args>", "usage", "blue");
@@ -226,7 +228,12 @@ namespace commands
                   << "--version || version --> tells current version of cpm you are using.\n\n"
                   << "init <language> --> sets up a new C or C++ project.\n\n"
                   << "pair new <name> <optional -hpp for .hpp header> --> creates header/source file pair.\n\n"
-                  << "pair remove <name> --> gets rid of header/source file pair.\n\n";
+                  << "pair remove <name> --> gets rid of header/source file pair.\n\n"
+                  << "contents copy <copy from> <copy to> <option -app/-append to append to file> --> copies contents of one file to another.\n\n"
+                  << "contents erase <file> --> erases all contents from a file.\n\n";
+
+        // * Other
+        logger::custom("arguments must be in order, but flags can be placed anywhere after the command.", "note", "yellow");
 
         return 0;
     }
@@ -238,7 +245,7 @@ namespace commands
      */
     int version()
     {
-        logger::custom("cpm version 0.1.0", "version", "yellow");
+        logger::custom("cpm version 0.1.0", "version", "red");
 
         return 0;
     }

@@ -12,76 +12,29 @@ on:
 
 jobs: 
   build-analyze:
-    name: Build and Analyze
+    name: build and analyze
     runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
-
-    strategy:
-      fail-fast: false
-      matrix:
-        language: [ 'cpp' ]
 
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v3
-      
-    - name: Setup C/C++ Compiler
-      uses: rlalik/setup-cpp-compiler@v1.2
+      uses: actions/checkout@v2
+
+    - name: Set Up CodeQL
+      uses: github/codeql-action/setup@v2
       with:
-        compiler: gcc-latest
-
-    - name: Install yq on Linux/macOS
-      run: |
-        sudo apt-get update
-        sudo snap install yq
-        yq --version
-
-    - name: Extract Categories Path
-      run: |
-        qlpack_file=$(find . -type f -name qlpack.yml)
-        categories_path=$(yq e '.categories[0]' $qlpack_file)
-        echo "CATEGORIES_PATH=${categories_path}" >> $GITHUB_ENV
-
-    - name: CMake Action
-      uses: threeal/cmake-action@v1.2.0
-      
-    - name: Cache
-      uses: actions/cache@v1.2.1
-      with:
-        # A directory to store and save the cache
-        path: ./build/
-        # An explicit key for restoring and saving the cache
-        key: ${{ runner.os }}-codeql-${{ hashFiles('**/qlpack.yml') }}
-
-    - name: Builds Project
-      run: |
-        cd /home/runner/work/cpm/cpm/build
-        make
-
-    - name: Move To Source Directory
-      run: cd ../src
+        languages: cpp
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
-      with:
-        languages: ${{ matrix.language }}
+
+    - name: Configure CMake
+      run: cmake -Bbuild -S.
+
+    - name: Build Project
+      run: cmake --build build
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
-      with:
-        categories: "${{ env.CATEGORIES_PATH }}"
-        
-    - name: Close Stale Issues
-      uses: actions/stale@v6.0.1
-      with:
-        stale-issue-message: "Inactive"
-        stale-pr-message: "Inactive"
-        close-issue-message: "Closed"
-        close-pr-message: "Closed"
-        days-before-issue-stale: 15
-        days-before-pr-stale: 5
-        days-before-issue-close: 20
-        days-before-pr-close: 25
+
+    - name: Upload CodeQL Results
+      uses: github/codeql-action/upload-sarif@v2

@@ -3,7 +3,7 @@ name: Bug report
 about: Create a report about a bug.
 title: Bug Report
 labels: help wanted
-assignees: vkeshav300
+assignees: ''
 
 ---
 

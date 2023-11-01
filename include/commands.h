@@ -34,4 +34,7 @@ namespace commands
 
     // ? Manipulates contents of a file
     int contents(std::vector<std::string> arguments, std::vector<std::string> flags);
+
+    // ? Insert templates for example classes into file
+    int insert(std::vector<std::string> arguments);
 };

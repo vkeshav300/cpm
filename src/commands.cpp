@@ -261,17 +261,23 @@ namespace commands
         std::string sub_command = arguments[0];
         int arguments_amt = arguments.size();
 
+        // * Min amt of arguments (for entire command)
+        if (arguments_amt < 2)
+        {
+            logger::error("minimum amount of arguments not met");
+            return 1;
+        }
+
+        std::string file_primary_s = arguments[1];
+
         if (sub_command == "copy")
         {
-            // * Min amt of arguments
+            // * Min amt of arguments (for sub command)
             if (arguments_amt < 3)
             {
                 logger::error("minimum amount of arguments not met");
                 return 1;
             }
-
-            // * The file to read from
-            std::string file_primary_s = arguments[1];
 
             // * The file to write to
             std::string file_target_s = arguments[2];
@@ -279,7 +285,7 @@ namespace commands
             // * Checking if files exist
             if (!directory::hasFile("./", file_primary_s))
             {
-                logger::error("\'" + file_primary_s + "\' does not exist");
+                logger::error_q("does not exist", file_primary_s);
                 return 1;
             }
 
@@ -312,17 +318,61 @@ namespace commands
         }
         else if (sub_command == "erase")
         {
-            // * Min amt of arguments
-            if (arguments_amt < 2)
-            {
-                logger::error("minimum amount of arguments not met");
-                return 1;
-            }
-
             std::ofstream file_primary;
-            file_primary.open(arguments[1], std::ofstream::out | std::ofstream::trunc);
+            file_primary.open(file_primary_s, std::ofstream::out | std::ofstream::trunc);
             file_primary.close();
         }
+        else
+        {
+            logger::error_q("is an invalid sub-command", sub_command);
+            return 1;
+        }
+
+        return 0;
+    }
+
+    int insert(std::vector<std::string> arguments)
+    {
+        std::string template_type = arguments[0];
+        std::string name = arguments[1];
+        std::string filepath = arguments[2];
+
+        if (!directory::hasFile("./", filepath))
+        {
+            logger::error_q("does not exist", filepath);
+            return 1;
+        }
+
+        // * Opening file
+        std::ofstream file_primary;
+        file_primary.open(filepath, std::ios::app);
+
+        // * Spacing
+        file_primary << "\n\n";
+
+        if (template_type == "class")
+            file_primary << "class " << name << "\n"
+                         << "{\n"
+                         << "   private:\n"
+                         << "\n"
+                         << "   public:\n"
+                         << "       " << name << "();"
+                         << "       ~" << name << "();"
+                         << "};";
+        else if (template_type == "struct")
+            file_primary << "struct " << name << "\n"
+                         << "{\n"
+                         << "   int id;\n"
+                         << "   std::string name;\n"
+                         << "   float value;\n"
+                         << "};";
+        else
+        {
+            logger::error_q("is not a valid template", template_type);
+            return 1;
+        }
+
+        file_primary.close();
 
         return 0;
     }

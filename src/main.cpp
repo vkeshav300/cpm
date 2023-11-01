@@ -43,7 +43,7 @@ int process_command(std::string command, std::vector<std::string> arguments, std
     {
         if (language != "c" && language != "cpp")
         {
-            logger::error("\'" + language + "\' is not a supported programming language");
+            logger::error_q("is not a supported programming language", language);
             return r_code;
         }
 

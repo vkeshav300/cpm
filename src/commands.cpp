@@ -83,21 +83,21 @@ namespace commands
         {
             std::ofstream file_ignore("./.gitignore");
             file_ignore << "# CMake related files and directories\n"
-            << "/build/*\n"
-            << "/tests/*\n"
-            << "CMakeFiles/\n"
-            << "CMakeCache.txt\n"
-            << "CMakeScripts/\n"
-            << "cmake_install.cmake\n"
-            << "Makefile\n"
-            << "\n# Doxygen generation artifacts\n"
-            << "docs/html\n"
-            << "docs/latex\n"
-            << "\n# Other\n"
-            << ".exe\n"
-            << ".vscode/\n"
-            << "README_tmp.html\n"
-            << ".DS_Store";
+                        << "/build/*\n"
+                        << "/tests/*\n"
+                        << "CMakeFiles/\n"
+                        << "CMakeCache.txt\n"
+                        << "CMakeScripts/\n"
+                        << "cmake_install.cmake\n"
+                        << "Makefile\n"
+                        << "\n# Doxygen generation artifacts\n"
+                        << "docs/html\n"
+                        << "docs/latex\n"
+                        << "\n# Other\n"
+                        << ".exe\n"
+                        << ".vscode/\n"
+                        << "README_tmp.html\n"
+                        << ".DS_Store";
             file_ignore.close();
         }
         {
@@ -173,24 +173,16 @@ namespace commands
             {
                 std::ofstream file_header("./include/" + pair_name + header_file_extention);
                 file_header << "#pragma once";
-            }
-
-            if (language == "c")
-            {
-                std::ofstream file_main("./src/" + pair_name + ".c");
-                file_main << "#include \"" + pair_name + header_file_extention + "\"";
-                file_main.close();
-
-                return 0;
+                file_header.close();
             }
 
             {
-                std::ofstream file_main("./src/" + pair_name + ".cpp");
+                std::string file_extention = (language == "c") ? ".c" : ".cpp";
+
+                std::ofstream file_main("./src/" + pair_name + file_extention);
                 file_main << "#include \"" + pair_name + header_file_extention + "\"";
                 file_main.close();
             }
-
-            return 0;
         }
         else if (arguments[0] == "remove")
         {
@@ -199,8 +191,6 @@ namespace commands
             directory::deleteFile("./include/", pair_name + ".hpp");
             directory::deleteFile("./src/", pair_name + ".c");
             directory::deleteFile("./src/", pair_name + ".cpp");
-
-            return 0;
         }
         else
         {
@@ -221,12 +211,14 @@ namespace commands
     int help()
     {
         // * CPM ASCII Art
-        std::cout << " ██████ ██████  ███    ███\n"
+        std::cout << "\n"
+                  << " ██████ ██████  ███    ███\n"
                   << "██      ██   ██ ████  ████\n"
                   << "██      ██████  ██ ████ ██\n"
                   << "██      ██      ██  ██  ██\n"
-                  << " ██████ ██      ██      ██\n"
-                  << "https://github.com/vkeshav300/cpm\n";
+                  << " ██████ ██      ██      ██\n\n";
+        
+        logger::custom("https://github.com/vkeshav300/cpm\n", "source code", "red");
 
         // * Usage
         logger::custom("cpm <command> <args>", "usage", "blue");
@@ -236,7 +228,12 @@ namespace commands
                   << "--version || version --> tells current version of cpm you are using.\n\n"
                   << "init <language> --> sets up a new C or C++ project.\n\n"
                   << "pair new <name> <optional -hpp for .hpp header> --> creates header/source file pair.\n\n"
-                  << "pair remove <name> --> gets rid of header/source file pair.\n\n";
+                  << "pair remove <name> --> gets rid of header/source file pair.\n\n"
+                  << "contents copy <copy from> <copy to> <option -app/-append to append to file> --> copies contents of one file to another.\n\n"
+                  << "contents erase <file> --> erases all contents from a file.\n\n";
+
+        // * Other
+        logger::custom("arguments must be in order, but flags can be placed anywhere after the command.", "note", "yellow");
 
         return 0;
     }
@@ -248,7 +245,84 @@ namespace commands
      */
     int version()
     {
-        logger::custom("cpm version 0.1.0", "version", "yellow");
+        logger::custom("cpm version 0.1.0", "version", "red");
+
+        return 0;
+    }
+
+    /**
+     * @brief Uses contents of files to execute sub-commands.
+     * 
+     * @param arguments 
+     * @return int 
+     */
+    int contents(std::vector<std::string> arguments, std::vector<std::string> flags)
+    {
+        std::string sub_command = arguments[0];
+        int arguments_amt = arguments.size();
+
+        if (sub_command == "copy")
+        {
+            // * Min amt of arguments
+            if (arguments_amt < 3)
+            {
+                logger::error("minimum amount of arguments not met");
+                return 1;
+            }
+
+            // * The file to read from
+            std::string file_primary_s = arguments[1];
+
+            // * The file to write to
+            std::string file_target_s = arguments[2];
+
+            // * Checking if files exist
+            if (!directory::hasFile("./", file_primary_s))
+            {
+                logger::error("\'" + file_primary_s + "\' does not exist");
+                return 1;
+            }
+
+            if (!directory::hasFile("./", file_target_s))
+                directory::createFile("./", file_target_s);
+
+            // * Copying file
+            std::ifstream file_primary;
+            file_primary.open(file_primary_s);
+
+            {
+                std::ofstream file_target;
+                
+                if (std::find(flags.begin(), flags.end(), "-append") != flags.end() || std::find(flags.begin(), flags.end(), "-app") != flags.end())
+                    file_target.open(file_target_s, std::ios::app);
+                else
+                    file_target.open(file_target_s);
+
+                // * Reading / Writing
+                char ch;
+
+                while (file_primary.get(ch))
+                    file_target << ch;
+
+                file_target.close();
+            }
+
+            // * Closing files
+            file_primary.close();
+        }
+        else if (sub_command == "erase")
+        {
+            // * Min amt of arguments
+            if (arguments_amt < 2)
+            {
+                logger::error("minimum amount of arguments not met");
+                return 1;
+            }
+
+            std::ofstream file_primary;
+            file_primary.open(arguments[1], std::ofstream::out | std::ofstream::trunc);
+            file_primary.close();
+        }
 
         return 0;
     }

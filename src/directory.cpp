@@ -18,7 +18,7 @@
 namespace directory
 {
     /**
-     * @brief Reads file into string.
+     * @brief Reads file into string. WARNING: Should only be used for small files, as all contents will be loaded into one string.
      *
      * @param dir Directory file is located in.
      * @param filename Name of the file.
@@ -29,12 +29,6 @@ namespace directory
         // * Checking if file exists
         if (!hasFile(dir, filename))
         {
-            std::cerr << "\x1b[0;31m[error]: \x1b[0m\'"
-                      << filename
-                      << "\' does not exist at \'"
-                      << dir
-                      << "\'\n";
-
             logger::error("\'" + filename + "\' does not exist at \'" + dir + "\'");
 
             return NULL;

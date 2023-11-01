@@ -22,7 +22,8 @@ std::vector<std::string> all_commands = {
     "init",
     "pair",
     "help",
-    "version"
+    "version",
+    "contents"
 };
 
 /**
@@ -41,7 +42,7 @@ int process_command(std::string command, std::vector<std::string> arguments, std
 
     if (command == "init")
     {
-        if (language != "c" || language != "cpp")
+        if (language != "c" && language != "cpp")
         {
             logger::error("\'" + language + "\' is not a supported programming language");
             return r_code;
@@ -54,23 +55,15 @@ int process_command(std::string command, std::vector<std::string> arguments, std
         }
 
         r_code = commands::init(language);
-        return r_code;
     }
     else if (command == "pair")
-    {
         r_code = commands::file_pair(arguments, (std::find(flags.begin(), flags.end(), "-hpp") != flags.end()) ? true : false, language);
-        return r_code;
-    }
     else if (command == "help")
-    {
         r_code = commands::help();
-        return r_code;
-    }
     else if (command == "version")
-    {
         r_code = commands::version();
-        return r_code;
-    }
+    else if (command == "contents")
+        r_code = commands::contents(arguments, flags);
 
     return r_code;
 }
@@ -92,8 +85,6 @@ int main(int argc, char *argv[])
 
         return 1;
     }
-
-    // * All commands
 
     // * Parsing command
     std::string command = argv[1];
@@ -133,7 +124,13 @@ int main(int argc, char *argv[])
     bool initialized = commands::verify_init();
 
     // * All commands that don't need the directory to be initialized.
-    std::vector<std::string> init_exceptions = {"init", "help", "version"};
+    std::vector<std::string> init_exceptions = {
+        "init",
+        "help",
+        "version",
+        "contents"
+    };
+
     bool cmd_is_exception = false;
 
     if (std::find(init_exceptions.begin(), init_exceptions.end(), command) != init_exceptions.end())

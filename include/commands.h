@@ -14,10 +14,10 @@
 
 namespace commands
 {
-    // ? Create directories and files needed for a basic C/C++ project.
+    // ? Create directories and files needed for a basic C/C++ project
     int init(std::string language);
 
-    // ? Adds .cpm file to project that has already been created.
+    // ? Adds .cpm file to project that has already been created
     int post_init(std::string language);
 
     // ? Verify "cpm init" has been run
@@ -31,4 +31,7 @@ namespace commands
 
     // ? Gives current version of CPM
     int version();
+    
+    // ? Manipulates contents of a file
+    int contents(std::vector<std::string> arguments, std::vector<std::string> flags);
 };

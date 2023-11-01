@@ -15,8 +15,8 @@
 namespace logger
 {
     inline std::map<std::string, std::string> colors{
-        {"red", "\x1b[0;32m"},
-        {"green", "\x1b[0;31m"},
+        {"green", "\x1b[0;32m"},
+        {"red", "\x1b[0;31m"},
         {"blue", "\x1b[0;34m"},
         {"yellow", "\x1b[0;33m"},
     };

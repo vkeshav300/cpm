@@ -23,8 +23,7 @@ std::vector<std::string> all_commands = {
     "pair",
     "help",
     "version",
-    "contents"
-};
+    "contents"};
 
 /**
  * @brief Processes command.
@@ -47,7 +46,7 @@ int process_command(std::string command, std::vector<std::string> arguments, std
             logger::error("\'" + language + "\' is not a supported programming language");
             return r_code;
         }
-        
+
         if (std::find(flags.begin(), flags.end(), "-post") != flags.end())
         {
             r_code = commands::post_init(language);
@@ -128,8 +127,7 @@ int main(int argc, char *argv[])
         "init",
         "help",
         "version",
-        "contents"
-    };
+        "contents"};
 
     bool cmd_is_exception = false;
 

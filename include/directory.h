@@ -3,9 +3,9 @@
  * @brief This file outlines directory.cpp.
  * @version 0.1
  * @date 2023-09-29
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #pragma once
 
@@ -19,7 +19,7 @@ namespace directory
 
     // ? Check if a string has specific contents
     bool hasContents(std::string text, std::string contents);
-    
+
     bool hasFile(std::string dir, std::string filename);
 
     bool hasFolder(std::string dir, std::string foldername);

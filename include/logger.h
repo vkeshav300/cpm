@@ -3,9 +3,9 @@
  * @brief This file outlines logger.cpp.
  * @version 0.1
  * @date 2023-09-30
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #pragma once
 

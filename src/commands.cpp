@@ -217,7 +217,7 @@ namespace commands
                   << "██      ██████  ██ ████ ██\n"
                   << "██      ██      ██  ██  ██\n"
                   << " ██████ ██      ██      ██\n\n";
-        
+
         logger::custom("https://github.com/vkeshav300/cpm\n", "source code", "red");
 
         // * Usage
@@ -252,9 +252,9 @@ namespace commands
 
     /**
      * @brief Uses contents of files to execute sub-commands.
-     * 
-     * @param arguments 
-     * @return int 
+     *
+     * @param arguments
+     * @return int
      */
     int contents(std::vector<std::string> arguments, std::vector<std::string> flags)
     {
@@ -292,7 +292,7 @@ namespace commands
 
             {
                 std::ofstream file_target;
-                
+
                 if (std::find(flags.begin(), flags.end(), "-append") != flags.end() || std::find(flags.begin(), flags.end(), "-app") != flags.end())
                     file_target.open(file_target_s, std::ios::app);
                 else

@@ -31,7 +31,7 @@ namespace logger
 
     /**
      * @brief Logs custom message to console.
-     * 
+     *
      * @param message Text to be logged.
      * @param mtype The type of message (the text in between the square brackets).
      * @param color The color of the message.

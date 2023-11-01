@@ -3,9 +3,9 @@
  * @brief This file outlines commands.cpp.
  * @version 0.1
  * @date 2023-09-29
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
 #pragma once
 
@@ -31,7 +31,7 @@ namespace commands
 
     // ? Gives current version of CPM
     int version();
-    
+
     // ? Manipulates contents of a file
     int contents(std::vector<std::string> arguments, std::vector<std::string> flags);
 };

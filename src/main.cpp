@@ -23,7 +23,9 @@ std::vector<std::string> all_commands = {
     "pair",
     "help",
     "version",
-    "contents"};
+    "contents",
+    "insert"
+};
 
 /**
  * @brief Processes command.
@@ -63,6 +65,8 @@ int process_command(std::string command, std::vector<std::string> arguments, std
         r_code = commands::version();
     else if (command == "contents")
         r_code = commands::contents(arguments, flags);
+    else if (command == "insert")
+        r_code = commands::insert(arguments);
 
     return r_code;
 }
@@ -127,7 +131,9 @@ int main(int argc, char *argv[])
         "init",
         "help",
         "version",
-        "contents"};
+        "contents",
+        "insert"
+    };
 
     bool cmd_is_exception = false;
 

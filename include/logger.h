@@ -27,6 +27,9 @@ namespace logger
     // ? Error output
     void error(std::string message);
 
+    // ? Error message "enquoting" certain string
+    void error_q(std::string message, std::string quote);
+
     // ? Custom output
     void custom(std::string message, std::string mtype, std::string color);
 

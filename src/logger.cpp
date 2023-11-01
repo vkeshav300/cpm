@@ -29,6 +29,11 @@ namespace logger
                   << "\n";
     }
 
+    void error_q(std::string message, std::string quote)
+    {
+        error("\'" + quote + "\' " + message);
+    }
+
     /**
      * @brief Logs custom message to console.
      *

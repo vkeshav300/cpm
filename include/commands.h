@@ -36,5 +36,5 @@ namespace commands
     int contents(std::vector<std::string> arguments, std::vector<std::string> flags);
 
     // ? Insert templates for example classes into file
-    int insert(std::vector<std::string> arguments);
+    int insert(std::vector<std::string> arguments, std::string language);
 };

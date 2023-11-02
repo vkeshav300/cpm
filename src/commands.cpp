@@ -162,10 +162,11 @@ namespace commands
         directory::createFolder("./", "src");
         directory::createFolder("./", "include");
 
+        std::string sub_command = arguments[0];
         std::string header_file_extention = (hpp) ? ".hpp" : ".h";
         std::string pair_name = arguments[1];
 
-        if (arguments[0] == "new")
+        if (sub_command == "new")
         {
             // * Create header and source files, then populate them
             directory::createFile("./include/", pair_name + header_file_extention);
@@ -184,7 +185,7 @@ namespace commands
                 file_main.close();
             }
         }
-        else if (arguments[0] == "remove")
+        else if (sub_command == "remove")
         {
             // * Delete files
             directory::deleteFile("./include/", pair_name + ".h");
@@ -195,7 +196,7 @@ namespace commands
         else
         {
             // * Invalid "method" of dealing with files
-            logger::error(arguments[0] + " is not a valid argument");
+            logger::error_q("is not a valid argument", sub_command);
 
             return 1;
         }
@@ -331,27 +332,57 @@ namespace commands
         return 0;
     }
 
-    int insert(std::vector<std::string> arguments)
+    int insert(std::vector<std::string> arguments, std::string language)
     {
         std::string template_type = arguments[0];
         std::string name = arguments[1];
-        std::string filepath = arguments[2];
+        std::string pair_name = arguments[2];
 
-        if (!directory::hasFile("./", filepath))
+        std::vector<std::string> pair_exceptions = {
+            "struct"
+        };
+
+        // * Language-related variables
+        std::string src_extention = (language == "c") ? "c" : "cpp";
+        bool hpp = false;
+
+        if (!directory::hasFile("./include/", pair_name + ".h") && std::find(pair_exceptions.begin(), pair_exceptions.end(), template_type) != pair_exceptions.end())
         {
-            logger::error_q("does not exist", filepath);
+            if (!directory::hasFile("./include/", pair_name + ".hpp"))
+            {
+                logger::error_q(".h or .hpp does not exist", pair_name);
+                return 1;
+            }
+
+            hpp = true;
+        }
+
+        std::string header_file = ".h";
+
+        if (hpp)
+            header_file = ".hpp";
+
+        std::string src_file = pair_name + src_extention;
+
+        if (!directory::hasFile("./", src_file))
+        {
+            logger::error_q("does not exist", src_file);
             return 1;
         }
 
-        // * Opening file
-        std::ofstream file_primary;
-        file_primary.open(filepath, std::ios::app);
+        // * Opening files
+        std::ofstream file_src;
+        std::ofstream file_header;
+        file_src.open(src_file, std::ios::app);
+        file_header.open(header_file, std::ios::app);
 
         // * Spacing
-        file_primary << "\n\n";
+        file_src << "\n\n";
+        file_header << "\n\n";
 
         if (template_type == "class")
-            file_primary << "class " << name << "\n"
+        {
+            file_header << "class " << name << "\n"
                          << "{\n"
                          << "   private:\n"
                          << "\n"
@@ -359,8 +390,18 @@ namespace commands
                          << "       " << name << "();"
                          << "       ~" << name << "();"
                          << "};";
+            
+            file_src << "class " << name << "\n"
+                         << "{\n"
+                         << "   private:\n"
+                         << "\n"
+                         << "   public:\n"
+                         << "       " << name << "() {}"
+                         << "       ~" << name << "() {}"
+                         << "};";
+        }
         else if (template_type == "struct")
-            file_primary << "struct " << name << "\n"
+            file_src << "struct " << name << "\n"
                          << "{\n"
                          << "   int id;\n"
                          << "   std::string name;\n"
@@ -372,7 +413,8 @@ namespace commands
             return 1;
         }
 
-        file_primary.close();
+        file_header.close();
+        file_src.close();
 
         return 0;
     }

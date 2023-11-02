@@ -66,7 +66,7 @@ int process_command(std::string command, std::vector<std::string> arguments, std
     else if (command == "contents")
         r_code = commands::contents(arguments, flags);
     else if (command == "insert")
-        r_code = commands::insert(arguments);
+        r_code = commands::insert(arguments, language);
 
     return r_code;
 }
@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
     // * Validating command
     if (!(std::find(all_commands.begin(), all_commands.end(), command) != all_commands.end()))
     {
-        logger::error("command not found \'" + command + "\'");
+        logger::error_q("is not a valid command", command);
         return 1;
     }
 
@@ -132,7 +132,6 @@ int main(int argc, char *argv[])
         "help",
         "version",
         "contents",
-        "insert"
     };
 
     bool cmd_is_exception = false;

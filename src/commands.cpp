@@ -222,16 +222,21 @@ namespace commands
         logger::custom("https://github.com/vkeshav300/cpm\n", "source code", "red");
 
         // * Usage
-        logger::custom("cpm <command> <args>", "usage", "blue");
+        logger::custom("cpm <command> <args> <opt (optional) flags>", "usage", "blue");
 
         // * Commands
         std::cout << "help --> lists commands + other useful information related to CPM.\n\n"
                   << "--version || version --> tells current version of cpm you are using.\n\n"
                   << "init <language> --> sets up a new C or C++ project.\n\n"
-                  << "pair new <name> <optional -hpp for .hpp header> --> creates header/source file pair.\n\n"
+                  << "pair new <name> --> creates header/source file pair.\n\n"
+                  << "pair new <name> -hpp --> creates header/source file pair (header file will be in .hpp format).\n\n"
                   << "pair remove <name> --> gets rid of header/source file pair.\n\n"
-                  << "contents copy <copy from> <copy to> <option -app/-append to append to file> --> copies contents of one file to another.\n\n"
-                  << "contents erase <file> --> erases all contents from a file.\n\n";
+                  << "contents copy <copy from> <copy to> --> copies contents of one file to another (will erase all data from copy to file).\n\n"
+                  << "contents copy -app/-append --> copies contents of one file to another (will not erase contents of copy to file).\n\n"
+                  << "contents erase <file> --> erases all contents from a file.\n\n"
+                  << "insert <template> <pair name> --> inserts C/C++ code chunk into file.\n\n"
+                  << "insert <template> <pair name> -header --> inserts C/C++ code chunk into file (inserts directly into header file; will only work for some templates).\n\n"
+                  << "insert <template> <file path> -cpath --> inserts C/C++ code chunk into file (inserts template into file at specified path)\n\n";
 
         // * Other
         logger::custom("arguments must be in order, but flags can be placed anywhere after the command.", "note", "yellow");
@@ -332,90 +337,8 @@ namespace commands
         return 0;
     }
 
-    int insert(std::vector<std::string> arguments, std::string language)
+    int insert(std::vector<std::string> arguments, std::vector<std::string> flags, std::string language)
     {
-        std::string template_type = arguments[0];
-        std::string name = arguments[1];
-        std::string pair_name = arguments[2];
-
-        std::vector<std::string> pair_exceptions = {
-            "struct"
-        };
-
-        // * Language-related variables
-        std::string src_extention = (language == "c") ? "c" : "cpp";
-        bool hpp = false;
-
-        if (!directory::hasFile("./include/", pair_name + ".h") && std::find(pair_exceptions.begin(), pair_exceptions.end(), template_type) != pair_exceptions.end())
-        {
-            if (!directory::hasFile("./include/", pair_name + ".hpp"))
-            {
-                logger::error_q(".h or .hpp does not exist", pair_name);
-                return 1;
-            }
-
-            hpp = true;
-        }
-
-        std::string header_file = ".h";
-
-        if (hpp)
-            header_file = ".hpp";
-
-        std::string src_file = pair_name + src_extention;
-
-        if (!directory::hasFile("./", src_file))
-        {
-            logger::error_q("does not exist", src_file);
-            return 1;
-        }
-
-        // * Opening files
-        std::ofstream file_src;
-        std::ofstream file_header;
-        file_src.open(src_file, std::ios::app);
-        file_header.open(header_file, std::ios::app);
-
-        // * Spacing
-        file_src << "\n\n";
-        file_header << "\n\n";
-
-        if (template_type == "class")
-        {
-            file_header << "class " << name << "\n"
-                         << "{\n"
-                         << "   private:\n"
-                         << "\n"
-                         << "   public:\n"
-                         << "       " << name << "();"
-                         << "       ~" << name << "();"
-                         << "};";
-            
-            file_src << "class " << name << "\n"
-                         << "{\n"
-                         << "   private:\n"
-                         << "\n"
-                         << "   public:\n"
-                         << "       " << name << "() {}"
-                         << "       ~" << name << "() {}"
-                         << "};";
-        }
-        else if (template_type == "struct")
-            file_src << "struct " << name << "\n"
-                         << "{\n"
-                         << "   int id;\n"
-                         << "   std::string name;\n"
-                         << "   float value;\n"
-                         << "};";
-        else
-        {
-            logger::error_q("is not a valid template", template_type);
-            return 1;
-        }
-
-        file_header.close();
-        file_src.close();
-
-        return 0;
+        // ! I will work on this command later, but I need to do more planning first.
     }
 }

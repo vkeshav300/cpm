@@ -66,7 +66,7 @@ int process_command(std::string command, std::vector<std::string> arguments, std
     else if (command == "contents")
         r_code = commands::contents(arguments, flags);
     else if (command == "insert")
-        r_code = commands::insert(arguments, language);
+        r_code = commands::insert(arguments, flags, language);
 
     return r_code;
 }

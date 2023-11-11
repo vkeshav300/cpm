@@ -35,6 +35,12 @@ namespace commands
     // ? Manipulates contents of a file
     int contents(std::vector<std::string> arguments, std::vector<std::string> flags);
 
-    // ? Insert templates for example classes into file
-    int insert(std::vector<std::string> arguments, std::vector<std::string> flags, std::string language);
+    // ? CURL --> Calculates total size of received data and appends it to a string
+    size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *output);
+
+    // ? Installs package from github repository in cpm format
+    int install(std::vector<std::string> arguments, std::vector<std::string> flags, std::string language);
+
+    // ? Uninstalls package
+    int uninstall(std::vector<std::string> arguments);
 };

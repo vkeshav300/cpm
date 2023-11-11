@@ -3,12 +3,14 @@
  * @brief CPM's custom logger
  * @version 0.1
  * @date 2023-11-11
- * 
+ *
  * @copyright Copyright (c) 2023
- * 
+ *
  */
+// ? Project headers
 #include "logger.h"
 
+// ? Standard library
 #include <iostream>
 #include <string>
 
@@ -64,8 +66,5 @@ namespace logger
      * @brief Flushes output buffer.
      *
      */
-    void flush_buffer()
-    {
-        std::cout << std::endl;
-    }
+    void flush_buffer() { std::cout << std::endl; }
 }

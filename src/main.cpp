@@ -7,15 +7,20 @@
  * @copyright Copyright (c) 2023
  *
  */
+// ? Project headers
 #include "commands.h"
 #include "directory.h"
 #include "logger.h"
 
+// ? Standard library
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
 #include <algorithm>
+
+// ? Libraries
+#include <curl/curl.h>
 
 // * Finding OS
 #ifdef _WIN32
@@ -76,8 +81,6 @@ int process_command(std::string command, std::vector<std::string> arguments, std
         r_code = commands::version();
     else if (command == "contents")
         r_code = commands::contents(arguments, flags);
-    else if (command == "insert")
-        r_code = commands::insert(arguments, flags, language);
 
     return r_code;
 }
@@ -173,11 +176,17 @@ int main(int argc, char *argv[])
     if (language == "c++")
         language = "cpp";
 
+    // * CURL init global
+    curl_global_init(CURL_GLOBAL_DEFAULT);
+
     // * Running command
     int result = process_command(command, arguments, flags, language);
 
     logger::custom("command \'" + command + "\' with exit code " + std::to_string(result), "finished", "blue");
     logger::flush_buffer();
+
+    // * CURL cleanup
+    curl_global_cleanup();
 
     return 0;
 }

@@ -17,11 +17,22 @@ set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 # Get all the source files in the SOURCE_DIR
 file(GLOB SOURCES "${SOURCE_DIR}/*.cpp")
 
+# Find CURL package
+find_package(CURL REQUIRED)
+
+# Add executable
 add_executable(cpm
     ${SOURCES}
 )
 
-target_include_directories(cpm PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+# Include directories
+target_include_directories(cpm PUBLIC 
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CURL_INCLUDE_DIRS}  # Include CURL headers
+)
+
+# Link against CURL
+target_link_libraries(cpm PRIVATE ${CURL_LIBRARIES})
 
 # Check if the current platform is macOS
 if (CMAKE_SYSTEM_NAME MATCHES "Darwin")

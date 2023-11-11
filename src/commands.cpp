@@ -7,15 +7,20 @@
  * @copyright Copyright (c) 2023
  *
  */
+// ? Project headers
 #include "commands.h"
 #include "directory.h"
 #include "logger.h"
 
+// ? Standard library
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <cstddef>
 #include <vector>
+
+// ? Libraries
+#include <curl/curl.h>
 
 namespace commands
 {
@@ -233,10 +238,7 @@ namespace commands
                   << "pair remove <name> --> gets rid of header/source file pair.\n\n"
                   << "contents copy <copy from> <copy to> --> copies contents of one file to another (will erase all data from copy to file).\n\n"
                   << "contents copy -app/-append --> copies contents of one file to another (will not erase contents of copy to file).\n\n"
-                  << "contents erase <file> --> erases all contents from a file.\n\n"
-                  << "insert <template> <pair name> --> inserts C/C++ code chunk into file.\n\n"
-                  << "insert <template> <pair name> -header --> inserts C/C++ code chunk into file (inserts directly into header file; will only work for some templates).\n\n"
-                  << "insert <template> <file path> -cpath --> inserts C/C++ code chunk into file (inserts template into file at specified path)\n\n";
+                  << "contents erase <file> --> erases all contents from a file.\n\n";
 
         // * Other
         logger::custom("arguments must be in order, but flags can be placed anywhere after the command.", "note", "yellow");
@@ -337,8 +339,88 @@ namespace commands
         return 0;
     }
 
-    int insert(std::vector<std::string> arguments, std::vector<std::string> flags, std::string language)
+    /**
+     * @brief CURL --> Calculates total size of received data and appends it to a string
+     * 
+     * @param contents 
+     * @param size 
+     * @param nmemb 
+     * @param output 
+     * @return size_t 
+     */
+    size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *output)
     {
-        // ! I will work on this command later, but I need to do more planning first.
+        size_t total_size = size * nmemb;
+        output->append(static_cast<char *>(contents), total_size);
+        return total_size;
+    }
+
+    /**
+     * @brief Installs package from github link
+     *
+     * @param arguments
+     * @param flags
+     * @param language
+     * @return int
+     */
+    int install(std::vector<std::string> arguments, std::vector<std::string> flags, std::string language)
+    {
+        // * Assert proper amount of arguments
+        if (arguments.size() < 1)
+        {
+            logger::error("invalid amount of arguments");
+            return 1;
+        }
+
+        // * CURL setup
+        std::string package_url = arguments[0];
+
+        CURL *curl;
+        CURLcode res;
+
+        curl = curl_easy_init();
+
+        // * Assert CURL
+        if (!curl)
+        {
+            logger::error("failed to init curl");
+            return 1;
+        }
+
+        curl_easy_setopt(curl, CURLOPT_URL, package_url.c_str());
+        curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+
+        // * Request timeout
+        curl_easy_setopt(curl, CURLOPT_TIMEOUT, 5L);
+
+        // * Configures response
+        std::string response;
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+
+        res = curl_easy_perform(curl);
+
+        // * Assert curl_easy_perform didn't fail
+        if (res != CURLE_OK) {
+            logger::error_q(": curl_easy_perform() failed", curl_easy_strerror(res));
+            curl_easy_cleanup(curl);
+            return 1;
+        }
+
+        // * CURL cleanup
+        curl_easy_cleanup(curl);
+
+        return 0;
+    }
+
+    /**
+     * @brief Uninstalls package
+     *
+     * @param arguments
+     * @return int
+     */
+    int uninstall(std::vector<std::string> arguments)
+    {
+        return 0;
     }
 }

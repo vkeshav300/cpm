@@ -1,3 +1,12 @@
+/**
+ * @file logger.cpp
+ * @brief CPM's custom logger
+ * @version 0.1
+ * @date 2023-11-11
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
 #include "logger.h"
 
 #include <iostream>

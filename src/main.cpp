@@ -17,6 +17,17 @@
 #include <vector>
 #include <algorithm>
 
+// * Finding OS
+#ifdef _WIN32
+    #define OS_NAME "windows"
+#elif __APPLE__
+    #define OS_NAME "macOS"
+#elif __linux__
+    #define OS_NAME "linux"
+#else
+    #define OS_NAME "null"
+#endif
+
 // * All commands
 std::vector<std::string> all_commands = {
     "init",

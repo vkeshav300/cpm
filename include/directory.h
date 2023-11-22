@@ -18,15 +18,15 @@ namespace directory
     std::string slurp(std::string dir, std::string filename);
 
     // ? Check if a string has specific contents
-    bool hasContents(std::string text, std::string contents);
+    bool has_contents(std::string text, std::string contents);
 
-    bool hasFile(std::string dir, std::string filename);
+    bool has_file(std::string dir, std::string filename);
 
-    bool hasFolder(std::string dir, std::string foldername);
+    bool has_folder(std::string dir, std::string foldername);
 
-    void createFile(std::string dir, std::string filename);
+    void create_file(std::string dir, std::string filename);
 
-    void createFolder(std::string dir, std::string foldername);
+    void create_folder(std::string dir, std::string foldername);
 
-    void deleteFile(std::string dir, std::string filename);
+    void delete_file(std::string dir, std::string filename);
 };

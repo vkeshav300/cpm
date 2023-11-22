@@ -29,7 +29,7 @@ namespace directory
     std::string slurp(std::string dir, std::string filename)
     {
         // * Checking if file exists
-        if (!hasFile(dir, filename))
+        if (!has_file(dir, filename))
         {
             logger::error("\'" + filename + "\' does not exist at \'" + dir + "\'");
 
@@ -62,7 +62,7 @@ namespace directory
      * @return true
      * @return false
      */
-    bool hasContents(std::string text, std::string contents)
+    bool has_contents(std::string text, std::string contents)
     {
         if (text.find(contents) != std::string::npos)
             return true;
@@ -78,7 +78,7 @@ namespace directory
      * @return true
      * @return false
      */
-    bool hasFile(std::string dir, std::string filename)
+    bool has_file(std::string dir, std::string filename)
     {
         std::string filepath = dir + filename;
 
@@ -93,7 +93,7 @@ namespace directory
      * @return true
      * @return false
      */
-    bool hasFolder(std::string dir, std::string foldername)
+    bool has_folder(std::string dir, std::string foldername)
     {
         std::string folderpath = dir + foldername;
 
@@ -106,24 +106,24 @@ namespace directory
      * @param dir Directory file will be located in.
      * @param filename Name of the file to be created.
      */
-    void createFile(std::string dir, std::string filename)
+    void create_file(std::string dir, std::string filename)
     {
         std::string filepath = dir + filename;
 
-        if (hasFile(dir, filename))
+        if (has_file(dir, filename))
             return;
 
         std::ofstream file(filepath);
         file.close();
 
-        if (!hasFile(dir, filename))
+        if (!has_file(dir, filename))
         {
-            logger::error("failed to create file " + filepath);
+            logger::error_q("could not be created", filepath);
 
             return;
         }
 
-        logger::success("created file " + filepath);
+        logger::custom(filepath, "created", "magenta");
     }
 
     /**
@@ -132,23 +132,23 @@ namespace directory
      * @param dir Directory folder will be located in.
      * @param foldername Name of the folder to be created.
      */
-    void createFolder(std::string dir, std::string foldername)
+    void create_folder(std::string dir, std::string foldername)
     {
         std::string folderpath = dir + foldername;
 
-        if (hasFolder(dir, foldername))
+        if (has_folder(dir, foldername))
             return;
 
         std::filesystem::create_directory(folderpath);
 
-        if (!hasFolder(dir, foldername))
+        if (!has_folder(dir, foldername))
         {
-            logger::error("failed to create folder " + folderpath);
+            logger::error_q("could not be created", folderpath);
 
             return;
         }
 
-        logger::success("created folder " + folderpath);
+        logger::custom(folderpath, "created", "magenta");
     }
 
     /**
@@ -157,19 +157,21 @@ namespace directory
      * @param dir Directory file is located in.
      * @param filename Name of the file.
      */
-    void deleteFile(std::string dir, std::string filename)
+    void delete_file(std::string dir, std::string filename)
     {
         std::string filepath = dir + filename;
 
-        if (!hasFile(dir, filename))
+        if (!has_file(dir, filename))
             return;
 
         std::filesystem::remove(filepath);
 
-        if (hasFile(dir, filename))
+        if (has_file(dir, filename))
         {
-            logger::error("failed to delete file " + filepath);
+            logger::error_q("could not be deleted", filepath);
             return;
         }
+
+        logger::custom(filepath, "deleted", "magenta");
     }
 }

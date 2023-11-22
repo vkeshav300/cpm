@@ -23,7 +23,8 @@ namespace logger
      */
     void success(std::string message)
     {
-        std::cout << "\x1b[0;32m[success]: \x1b[0m"
+        std::cout << "\x1b[0;32m[success]: "
+                  << colors["reset"]
                   << message
                   << "\n";
     }
@@ -35,7 +36,8 @@ namespace logger
      */
     void error(std::string message)
     {
-        std::cerr << "\x1b[0;31m[error]: \x1b[0m"
+        std::cerr << "\x1b[0;31m[error]: "
+                  << colors["reset"]
                   << message
                   << "\n";
     }
@@ -57,7 +59,8 @@ namespace logger
         std::cout << colors[color]
                   << "["
                   << mtype
-                  << "]: \x1b[0m"
+                  << "]: "
+                  << colors["reset"]
                   << message
                   << "\n";
     }

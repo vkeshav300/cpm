@@ -38,10 +38,10 @@ namespace commands
 
         // * Create files and folders
         for (auto &folder : default_folders)
-            directory::createFolder("./", folder);
+            directory::create_folder("./", folder);
 
         for (auto &file : default_files)
-            directory::createFile("./", file);
+            directory::create_file("./", file);
 
         // * Populates files with default code / text
 
@@ -129,7 +129,7 @@ namespace commands
      */
     int post_init(std::string language)
     {
-        directory::createFile("./", ".cpm");
+        directory::create_file("./", ".cpm");
 
         std::ofstream file_cpm("./.cpm");
         file_cpm << "language: "
@@ -148,7 +148,7 @@ namespace commands
     bool verify_init()
     {
         // * Verifies init has been run
-        if (directory::hasFile("./", ".cpm"))
+        if (directory::has_file("./", ".cpm"))
             return true;
 
         return false;
@@ -164,8 +164,8 @@ namespace commands
      */
     int file_pair(std::vector<std::string> arguments, bool hpp, std::string language)
     {
-        directory::createFolder("./", "src");
-        directory::createFolder("./", "include");
+        directory::create_folder("./", "src");
+        directory::create_folder("./", "include");
 
         std::string sub_command = arguments[0];
         std::string header_file_extention = (hpp) ? ".hpp" : ".h";
@@ -174,7 +174,7 @@ namespace commands
         if (sub_command == "new")
         {
             // * Create header and source files, then populate them
-            directory::createFile("./include/", pair_name + header_file_extention);
+            directory::create_file("./include/", pair_name + header_file_extention);
 
             {
                 std::ofstream file_header("./include/" + pair_name + header_file_extention);
@@ -193,10 +193,10 @@ namespace commands
         else if (sub_command == "remove")
         {
             // * Delete files
-            directory::deleteFile("./include/", pair_name + ".h");
-            directory::deleteFile("./include/", pair_name + ".hpp");
-            directory::deleteFile("./src/", pair_name + ".c");
-            directory::deleteFile("./src/", pair_name + ".cpp");
+            directory::delete_file("./include/", pair_name + ".h");
+            directory::delete_file("./include/", pair_name + ".hpp");
+            directory::delete_file("./src/", pair_name + ".c");
+            directory::delete_file("./src/", pair_name + ".cpp");
         }
         else
         {
@@ -291,14 +291,14 @@ namespace commands
             std::string file_target_s = arguments[2];
 
             // * Checking if files exist
-            if (!directory::hasFile("./", file_primary_s))
+            if (!directory::has_file("./", file_primary_s))
             {
                 logger::error_q("does not exist", file_primary_s);
                 return 1;
             }
 
-            if (!directory::hasFile("./", file_target_s))
-                directory::createFile("./", file_target_s);
+            if (!directory::has_file("./", file_target_s))
+                directory::create_file("./", file_target_s);
 
             // * Copying file
             std::ifstream file_primary;
@@ -348,7 +348,7 @@ namespace commands
      * @param output
      * @return size_t
      */
-    size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *output)
+    size_t write_callback(void *contents, size_t size, size_t nmemb, std::string *output)
     {
         size_t total_size = size * nmemb;
         output->append(static_cast<char *>(contents), total_size);
@@ -395,7 +395,7 @@ namespace commands
 
         // * Configures response
         std::string response;
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
 
         res = curl_easy_perform(curl);

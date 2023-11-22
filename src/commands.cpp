@@ -341,12 +341,12 @@ namespace commands
 
     /**
      * @brief CURL --> Calculates total size of received data and appends it to a string
-     * 
-     * @param contents 
-     * @param size 
-     * @param nmemb 
-     * @param output 
-     * @return size_t 
+     *
+     * @param contents
+     * @param size
+     * @param nmemb
+     * @param output
+     * @return size_t
      */
     size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *output)
     {
@@ -401,8 +401,22 @@ namespace commands
         res = curl_easy_perform(curl);
 
         // * Assert curl_easy_perform didn't fail
-        if (res != CURLE_OK) {
+        if (res != CURLE_OK)
+        {
             logger::error_q(": curl_easy_perform() failed", curl_easy_strerror(res));
+            curl_easy_cleanup(curl);
+            return 1;
+        }
+
+        // * Check response code
+        long http_code = 0;
+        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
+
+        if (http_code >= 200 && http_code < 300)
+            logger::success("validated package url");
+        else
+        {
+            logger::error("invalid package url");
             curl_easy_cleanup(curl);
             return 1;
         }

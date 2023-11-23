@@ -11,6 +11,7 @@
 #include "commands.h"
 #include "directory.h"
 #include "logger.h"
+#include "misc.h"
 
 // ? Standard library
 #include <iostream>
@@ -30,7 +31,7 @@ namespace commands
      * @param language The primary language the project will be coded in.
      * @return int
      */
-    int init(std::string language)
+    int init(const std::string language)
     {
         // * All folders and files to be created
         std::vector<std::string> default_folders = {"assets", "src", "include", "build", "tests"};
@@ -127,7 +128,7 @@ namespace commands
      * @param language The primary language the project is coded in.
      * @return int
      */
-    int post_init(std::string language)
+    int post_init(const std::string language)
     {
         directory::create_file("./", ".cpm");
 
@@ -162,41 +163,50 @@ namespace commands
      * @param language
      * @return int
      */
-    int file_pair(std::vector<std::string> arguments, bool hpp, std::string language)
+    int file_pair(const std::vector<std::string> arguments, const bool hpp, const std::string language)
     {
+        if (arguments.size() < 1)
+        {
+            logger::error("minimum amount of arguments not met");
+        }
+
         directory::create_folder("./", "src");
         directory::create_folder("./", "include");
 
         std::string sub_command = arguments[0];
         std::string header_file_extention = (hpp) ? ".hpp" : ".h";
-        std::string pair_name = arguments[1];
+        std::string src_file_extention = (language == "c") ? ".c" : ".cpp";
+        const std::vector<std::string> pair_names = misc::sub_vector(arguments, 1, arguments.size());
 
         if (sub_command == "new")
         {
-            // * Create header and source files, then populate them
-            directory::create_file("./include/", pair_name + header_file_extention);
-
+            for (auto &pair_name : pair_names)
             {
-                std::ofstream file_header("./include/" + pair_name + header_file_extention);
-                file_header << "#pragma once";
-                file_header.close();
-            }
+                // * Create header and source files, then populate them
+                directory::create_file("./include/", pair_name + header_file_extention);
 
-            {
-                std::string file_extention = (language == "c") ? ".c" : ".cpp";
+                {
+                    std::ofstream file_header("./include/" + pair_name + header_file_extention);
+                    file_header << "#pragma once";
+                    file_header.close();
+                }
 
-                std::ofstream file_main("./src/" + pair_name + file_extention);
-                file_main << "#include \"" + pair_name + header_file_extention + "\"";
-                file_main.close();
+                directory::create_file("./src/", pair_name + src_file_extention);
+                {
+                    std::ofstream file_main("./src/" + pair_name + src_file_extention);
+                    file_main << "#include \"" + pair_name + header_file_extention + "\"";
+                    file_main.close();
+                }
             }
         }
         else if (sub_command == "remove")
         {
-            // * Delete files
-            directory::delete_file("./include/", pair_name + ".h");
-            directory::delete_file("./include/", pair_name + ".hpp");
-            directory::delete_file("./src/", pair_name + ".c");
-            directory::delete_file("./src/", pair_name + ".cpp");
+            for (auto &pair_name : pair_names)
+            {
+                // * Delete files
+                directory::delete_file("./include/", pair_name + header_file_extention);
+                directory::delete_file("./src/", pair_name + src_file_extention);
+            }
         }
         else
         {
@@ -264,7 +274,7 @@ namespace commands
      * @param arguments
      * @return int
      */
-    int contents(std::vector<std::string> arguments, std::vector<std::string> flags)
+    int contents(const std::vector<std::string> arguments, const std::vector<std::string> flags)
     {
         std::string sub_command = arguments[0];
         int arguments_amt = arguments.size();
@@ -363,7 +373,7 @@ namespace commands
      * @param language
      * @return int
      */
-    int install(std::vector<std::string> arguments, std::vector<std::string> flags, std::string language)
+    int install(const std::vector<std::string> arguments, const std::vector<std::string> flags, const std::string language)
     {
         // * Assert proper amount of arguments
         if (arguments.size() < 1)

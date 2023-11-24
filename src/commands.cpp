@@ -96,13 +96,12 @@ namespace commands
                         << "CMakeScripts/\n"
                         << "cmake_install.cmake\n"
                         << "Makefile\n"
+                        << ".exe\n"
                         << "\n# Doxygen generation artifacts\n"
                         << "docs/html\n"
                         << "docs/latex\n"
                         << "\n# Other\n"
-                        << ".exe\n"
                         << ".vscode/\n"
-                        << "README_tmp.html\n"
                         << ".DS_Store";
             file_ignore.close();
         }
@@ -116,8 +115,8 @@ namespace commands
         logger::success("populated files");
 
         // * Provided information
-        logger::custom("to best utilize this project structure, it is recommended that you know how to use CMake.", "note", "yellow");
-        logger::custom("to edit the name of the project, go into the CMakeLists.txt and change all the placeholders that read \'project_name\'.", "note", "yellow");
+        logger::custom("to best utilize this project structure, it is recommended that you know how to use CMake.", "important", "yellow");
+        logger::custom("make sure to edit all the placeholders in your \"CMakeLists.txt\" file.", "important", "yellow");
 
         return 0;
     }

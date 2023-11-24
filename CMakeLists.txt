@@ -34,8 +34,8 @@ target_include_directories(cpm PUBLIC
 # Link against CURL
 target_link_libraries(cpm PRIVATE ${CURL_LIBRARIES})
 
-# Check if the current platform is macOS
-if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
-    # Specify the installation directory for macOS (e.g., /usr/local/bin)
-    install(TARGETS cpm DESTINATION /usr/local/bin)
+if (CMAKE_SYSTEM_NAME MATCHES "Darwin" OR CMAKE_SYSTEM_NAME MATCHES "Linux")
+    install(TARGETS cpm DESTINATION /usr/local/bin) # Installs CPM - MacOS - sudo required (sudo make install)
+elseif (CMAKE_SYSTEM_NAME MATCHES "Windows")
+    install(TARGETS cpm DESTINATION $ENV{ProgramFiles}) # Installs CPM - Windows (make install)
 endif()

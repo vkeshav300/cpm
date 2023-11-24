@@ -49,6 +49,11 @@ namespace logger
         error("\'" + quote + "\' " + message);
     }
 
+    /**
+     * @brief Logs warning message to console.
+     * 
+     * @param message 
+     */
     void warn(std::string message)
     {
         std::cout << colors["yellow"]

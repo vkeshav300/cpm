@@ -14,18 +14,14 @@
 
 namespace logger
 {
-    inline std::map<std::string, std::string> colors{
-        {"reset", "\x1b[0;0m"},
-        {"black", "\x1b[0;30m"},
-        {"red", "\x1b[0;31m"},
-        {"green", "\x1b[0;32m"},
-        {"yellow", "\x1b[0;33m"},
-        {"blue", "\x1b[0;34m"},
-        {"magenta", "\x1b[0;35m"},
-        {"cyan", "\x1b[0;36m"},
-        {"white", "\x1b[0;37m"},
-        {"default", "\x1b[0;39m"},
-    };
+    // ? ANSI escape codes
+    extern std::map<std::string, std::string> colors;
+
+    // ? Message count
+    extern int logger_count;
+
+    // ? Injects logger count into stream + increments variable
+    void handle_logger_count();
 
     // ? Success output
     void success(std::string message);

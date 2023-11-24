@@ -160,6 +160,7 @@ int main(int argc, char *argv[])
     if (!initialized)
     {
         logger::error("directory does not have a \'.cpm\' file. If you already have a project setup, you can use \'cpm init <language> -post\' to post-initalize cpm. If you don't have a project, you can use \'cpm init <language>\' to construct one.");
+        logger::flush_buffer();
         return 1;
     }
 
@@ -171,7 +172,21 @@ int main(int argc, char *argv[])
         language = (contents_cpm.find("language: c")) ? "c" : "cpp";
     }
     else if (arguments.size() >= 1)
-        language = (arguments[1] == "c") ? "c" : "cpp";
+    {
+        if (arguments[0] != "c" && arguments[0] != "cpp" && arguments[0] != "c++")
+        {
+            logger::error_q("is not a supported programming language", arguments[0]);
+            logger::flush_buffer();
+            return 1;
+        }
+        language = (arguments[0] == "c") ? "c" : "cpp";
+    }
+    else
+    {
+        logger::error("programming language not providedx");
+        logger::flush_buffer();
+        return 1;
+    }
 
     if (language == "c++")
         language = "cpp";

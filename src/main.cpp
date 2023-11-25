@@ -170,6 +170,8 @@ int main(int argc, char *argv[])
         logger::flush_buffer();
         return 1;
     }
+    else if (cmd_is_exception)
+        language = "c";
     else
     {
         logger::error("could not discern programming language");

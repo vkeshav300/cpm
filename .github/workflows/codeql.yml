@@ -11,7 +11,7 @@ on:
 jobs:
   analyze:
     name: Analyze
-    runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
+    runs-on: ${{ matrix.os }}
     timeout-minutes: ${{ (matrix.language == 'swift' && 120) || 360 }}
     permissions:
       actions: read
@@ -21,6 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        os: [macos-latest, ubuntu-latest]
         language: [ 'c-cpp' ]
 
     steps:
@@ -33,7 +34,12 @@ jobs:
         languages: ${{ matrix.language }}
 
     - name: Install dependencies
-      run: brew install CURL
+      run: |
+        # Add any necessary dependency installation here
+        # For example, for C/C++ projects, you might need build-essential on Ubuntu
+        if [ "${{ matrix.os }}" = "ubuntu-latest" ]; then
+          sudo apt-get install build-essential
+        fi
 
     - name: Configure CMake
       run: cmake -Bbuild -S.
@@ -44,4 +50,4 @@ jobs:
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
       with:
-        category: "/language:${{matrix.language}}"
+        category: "/language:${{ matrix.language }}"

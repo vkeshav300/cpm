@@ -210,7 +210,7 @@ namespace commands
         else
         {
             // * Invalid "method" of dealing with files
-            logger::error_q("is not a valid argument", sub_command);
+            logger::error_q("is not a valid sub command", sub_command);
 
             return 1;
         }

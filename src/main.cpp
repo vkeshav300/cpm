@@ -24,13 +24,13 @@
 
 // * Finding OS
 #ifdef _WIN32
-    #define OS_NAME "windows"
+#define OS_NAME "windows"
 #elif __APPLE__
-    #define OS_NAME "macOS"
+#define OS_NAME "macOS"
 #elif __linux__
-    #define OS_NAME "linux"
+#define OS_NAME "linux"
 #else
-    #define OS_NAME "null"
+#define OS_NAME "null"
 #endif
 
 // * All commands
@@ -40,8 +40,7 @@ std::vector<std::string> all_commands = {
     "help",
     "version",
     "contents",
-    "insert"
-};
+    "insert"};
 
 /**
  * @brief Processes command.
@@ -59,12 +58,6 @@ int process_command(std::string command, std::vector<std::string> arguments, std
 
     if (command == "init")
     {
-        if (language != "c" && language != "cpp")
-        {
-            logger::error_q("is not a supported programming language", language);
-            return r_code;
-        }
-
         if (std::find(flags.begin(), flags.end(), "-post") != flags.end())
         {
             r_code = commands::post_init(language);
@@ -124,8 +117,6 @@ int main(int argc, char *argv[])
 
     logger::success("parsed command");
 
-    logger::custom("command \'" + command + "\' with " + std::to_string(arguments.size()) + " arguments and " + std::to_string(flags.size()) + " flags", "received", "blue");
-
     // * Changing '--version' to 'version' for simplicity
     if (command == "--version")
         command = "version";
@@ -142,7 +133,6 @@ int main(int argc, char *argv[])
 
     // * All commands that don't need the directory to be initialized.
     std::vector<std::string> init_exceptions = {
-        "init",
         "help",
         "version",
         "contents",
@@ -156,22 +146,14 @@ int main(int argc, char *argv[])
         cmd_is_exception = true;
     }
 
-    // * Assertions
-    if (!initialized)
-    {
-        logger::error("directory does not have a \'.cpm\' file. If you already have a project setup, you can use \'cpm init <language> -post\' to post-initalize cpm. If you don't have a project, you can use \'cpm init <language>\' to construct one.");
-        logger::flush_buffer();
-        return 1;
-    }
-
     std::string language;
 
-    if (!cmd_is_exception)
+    if (!cmd_is_exception && initialized)
     {
         std::string contents_cpm = directory::slurp("./", ".cpm");
         language = (contents_cpm.find("language: c")) ? "c" : "cpp";
     }
-    else if (arguments.size() >= 1)
+    else if (arguments.size() >= 1 && !cmd_is_exception)
     {
         if (arguments[0] != "c" && arguments[0] != "cpp" && arguments[0] != "c++")
         {
@@ -180,16 +162,25 @@ int main(int argc, char *argv[])
             return 1;
         }
         language = (arguments[0] == "c") ? "c" : "cpp";
+        arguments.erase(arguments.begin(), arguments.begin() + 1);
+    }
+    else if (!cmd_is_exception && arguments.size() < 1 && !initialized)
+    {
+        logger::error("could not discern programming language. Try using \'cpm init <language> -post\' to post-initialize your project with cpm, or specifying the programming language in the first argument.");
+        logger::flush_buffer();
+        return 1;
     }
     else
     {
-        logger::error("programming language not provided");
+        logger::error("could not discern programming language");
         logger::flush_buffer();
         return 1;
     }
 
     if (language == "c++")
         language = "cpp";
+
+    logger::custom("command \'" + command + "\' with " + std::to_string(arguments.size()) + " arguments and " + std::to_string(flags.size()) + " flags", "received", "blue");
 
     // * CURL init global
     curl_global_init(CURL_GLOBAL_DEFAULT);

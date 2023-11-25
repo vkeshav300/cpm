@@ -32,6 +32,9 @@ jobs:
       with:
         languages: ${{ matrix.language }}
 
+    - name: Install dependencies
+      run: brew install CURL
+
     - name: Configure CMake
       run: cmake -Bbuild -S.
 

@@ -36,6 +36,12 @@ namespace logger
     void handle_logger_count()
     {
         std::cout << colors["cyan"] << "[" << logger_count << "]";
+        if (logger_count < 10)
+            std::cout << " ";
+        
+        if (logger_count < 100)
+            std::cout << " ";
+
         logger_count++;
     }
 

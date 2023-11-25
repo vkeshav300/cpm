@@ -183,7 +183,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-        logger::error("programming language not providedx");
+        logger::error("programming language not provided");
         logger::flush_buffer();
         return 1;
     }

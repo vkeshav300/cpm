@@ -59,7 +59,7 @@ int process_command(std::string command, std::vector<std::string> arguments, std
 
     if (command == "init")
     {
-        if (misc::find_in_vector(flags, "-post"))
+        if (misc::find_in_vector(flags, "post"))
         {
             r_code = commands::post_init(language);
             return r_code;
@@ -68,7 +68,7 @@ int process_command(std::string command, std::vector<std::string> arguments, std
         r_code = commands::init(language);
     }
     else if (command == "pair")
-        r_code = commands::file_pair(arguments, (misc::find_in_vector(flags, "-hpp")) ? true : false, language);
+        r_code = commands::file_pair(arguments, (misc::find_in_vector(flags, "hpp")) ? true : false, language);
     else if (command == "help")
         r_code = commands::help();
     else if (command == "version")
@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
     {
         std::string arg = argv[i];
         if (arg.substr(0, 1) == "-" && arg.size() >= 2)
-            flags.push_back(arg);
+            flags.push_back(arg.substr(1, arg.size()));
     }
 
     for (int i = 2; i < argc; i++)
@@ -183,7 +183,7 @@ int main(int argc, char *argv[])
     if (language == "c++")
         language = "cpp";
 
-    logger::custom("command \'" + command + "\' with " + std::to_string(arguments.size()) + " arguments and " + std::to_string(flags.size()) + " flags", "received", "blue");
+    logger::custom("command \'" + command + "\' with " + std::to_string(arguments.size()) + " argument(s) and " + std::to_string(flags.size()) + " flag(s)", "received", "blue");
 
     // * CURL init global
     curl_global_init(CURL_GLOBAL_DEFAULT);

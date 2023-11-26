@@ -11,6 +11,7 @@
 #include "commands.h"
 #include "directory.h"
 #include "logger.h"
+#include "misc.h"
 
 // ? Standard library
 #include <iostream>
@@ -58,7 +59,7 @@ int process_command(std::string command, std::vector<std::string> arguments, std
 
     if (command == "init")
     {
-        if (std::find(flags.begin(), flags.end(), "-post") != flags.end())
+        if (misc::find_in_vector(flags, "-post"))
         {
             r_code = commands::post_init(language);
             return r_code;
@@ -67,7 +68,7 @@ int process_command(std::string command, std::vector<std::string> arguments, std
         r_code = commands::init(language);
     }
     else if (command == "pair")
-        r_code = commands::file_pair(arguments, (std::find(flags.begin(), flags.end(), "-hpp") != flags.end()) ? true : false, language);
+        r_code = commands::file_pair(arguments, (misc::find_in_vector(flags, "-hpp")) ? true : false, language);
     else if (command == "help")
         r_code = commands::help();
     else if (command == "version")
@@ -122,7 +123,7 @@ int main(int argc, char *argv[])
         command = "version";
 
     // * Validating command
-    if (!(std::find(all_commands.begin(), all_commands.end(), command) != all_commands.end()))
+    if (!misc::find_in_vector(all_commands, command))
     {
         logger::error_q("is not a valid command", command);
         return 1;
@@ -140,7 +141,7 @@ int main(int argc, char *argv[])
 
     bool cmd_is_exception = false;
 
-    if (std::find(init_exceptions.begin(), init_exceptions.end(), command) != init_exceptions.end())
+    if (misc::find_in_vector(init_exceptions, command))
     {
         initialized = true;
         cmd_is_exception = true;

@@ -316,7 +316,7 @@ namespace commands
             {
                 std::ofstream file_target;
 
-                if (std::find(flags.begin(), flags.end(), "-append") != flags.end() || std::find(flags.begin(), flags.end(), "-app") != flags.end())
+                if (misc::find_in_vector(flags, "-append") || misc::find_in_vector(flags, "-app"))
                     file_target.open(file_target_s, std::ios::app);
                 else
                     file_target.open(file_target_s);

@@ -30,4 +30,9 @@ namespace misc
 
         return std::vector<std::string>(main_vector.begin() + begin_index, main_vector.begin() + end_index);
     }
+
+    bool find_in_vector(const std::vector<std::string> &main_vector, std::string content)
+    {
+        return (std::find(main_vector.begin(), main_vector.end(), content) != main_vector.end());
+    }
 }

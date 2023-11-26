@@ -162,7 +162,7 @@ namespace commands
      * @param language
      * @return int
      */
-    int file_pair(const std::vector<std::string> arguments, const bool hpp, const std::string language)
+    int file_pair(const std::vector<std::string> &arguments, const bool hpp, const std::string language)
     {
         if (arguments.size() < 1)
         {
@@ -273,7 +273,7 @@ namespace commands
      * @param arguments
      * @return int
      */
-    int contents(const std::vector<std::string> arguments, const std::vector<std::string> flags)
+    int contents(const std::vector<std::string> &arguments, const std::vector<std::string> &flags)
     {
         std::string sub_command = arguments[0];
         int arguments_amt = arguments.size();
@@ -372,7 +372,7 @@ namespace commands
      * @param language
      * @return int
      */
-    int install(const std::vector<std::string> arguments, const std::vector<std::string> flags, const std::string language)
+    int install(const std::vector<std::string> &arguments, const std::vector<std::string> &flags, const std::string language)
     {
         // * Assert proper amount of arguments
         if (arguments.size() < 1)
@@ -442,7 +442,7 @@ namespace commands
      * @param arguments
      * @return int
      */
-    int uninstall(std::vector<std::string> arguments)
+    int uninstall(std::vector<std::string> &arguments)
     {
         return 0;
     }

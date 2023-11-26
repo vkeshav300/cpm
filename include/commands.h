@@ -24,7 +24,7 @@ namespace commands
     bool verify_init();
 
     // ? Create / deletes file pairs ([.h + .hpp] + [.cpp or .c])
-    int file_pair(const std::vector<std::string> arguments, const bool hpp, const std::string language);
+    int file_pair(const std::vector<std::string> &arguments, const bool hpp, const std::string language);
 
     // ? Lists commands + arguments + optional arguments
     int help();
@@ -33,14 +33,14 @@ namespace commands
     int version();
 
     // ? Manipulates contents of a file
-    int contents(const std::vector<std::string> arguments, const std::vector<std::string> flags);
+    int contents(const std::vector<std::string> &arguments, const std::vector<std::string> &flags);
 
     // ? CURL --> Calculates total size of received data and appends it to a string
     size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *output);
 
     // ? Installs package from github repository in cpm format
-    int install(const std::vector<std::string> arguments, const std::vector<std::string> flags, const std::string language);
+    int install(const std::vector<std::string> &arguments, const std::vector<std::string> &flags, const std::string language);
 
     // ? Uninstalls package
-    int uninstall(const std::vector<std::string> arguments);
+    int uninstall(const std::vector<std::string> &arguments);
 };

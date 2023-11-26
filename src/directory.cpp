@@ -64,10 +64,7 @@ namespace directory
      */
     bool has_contents(std::string text, std::string contents)
     {
-        if (text.find(contents) != std::string::npos)
-            return true;
-
-        return false;
+        return (text.find(contents) != std::string::npos);
     }
 
     /**

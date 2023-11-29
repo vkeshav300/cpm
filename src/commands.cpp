@@ -34,7 +34,7 @@ namespace commands
     int init(const std::string language)
     {
         // * All folders and files to be created
-        std::vector<std::string> default_folders = {"assets", "src", "include", "build", "tests"};
+        std::vector<std::string> default_folders = {"assets", "src", "include", "build", "tests", "docs"};
         std::vector<std::string> default_files = {".gitignore", "CMakeLists.txt", "README.md", "LICENSE", ".cpm", "src/main." + language};
 
         // * Create files and folders

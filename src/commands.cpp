@@ -31,11 +31,23 @@ namespace commands
      * @param language The primary language the project will be coded in.
      * @return int
      */
-    int init(const std::string language)
+    int init(const std::string language, const std::vector<std::string> &flags)
     {
         // * All folders and files to be created
         std::vector<std::string> default_folders = {"assets", "src", "include", "build", "tests", "docs"};
         std::vector<std::string> default_files = {".gitignore", "CMakeLists.txt", "README.md", "LICENSE", ".cpm", "src/main." + language};
+        std::vector<std::string> files_to_erase;
+
+        // * Different project structures
+        if (misc::find_in_vector(flags, "nogit") || misc::find_in_vector(flags, "no-git") || misc::find_in_vector(flags, "no_git"))
+        {
+            logger::success("initializing project without git support");
+
+            files_to_erase.emplace_back(".gitignore");
+            files_to_erase.emplace_back("README.md");
+        }
+
+        misc::erase_from_vector(default_files, files_to_erase);
 
         // * Create files and folders
         for (auto &folder : default_folders)

@@ -15,7 +15,7 @@
 namespace commands
 {
     // ? Create directories and files needed for a basic C/C++ project
-    int init(const std::string language);
+    int init(const std::string language, const std::vector<std::string> &flags);
 
     // ? Adds .cpm file to project that has already been created
     int post_init(const std::string language);

@@ -65,7 +65,7 @@ int process_command(std::string command, std::vector<std::string> arguments, std
             return r_code;
         }
 
-        r_code = commands::init(language);
+        r_code = commands::init(language, flags);
     }
     else if (command == "pair")
         r_code = commands::file_pair(arguments, (misc::find_in_vector(flags, "hpp")) ? true : false, language);

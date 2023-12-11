@@ -98,6 +98,7 @@ namespace commands
                       << "\n}";
             file_main.close();
         }
+        if (misc::find_in_vector(default_files, ".gitignore"))
         {
             std::ofstream file_ignore("./.gitignore");
             file_ignore << "# CMake related files and directories\n"

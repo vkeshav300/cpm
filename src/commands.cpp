@@ -64,7 +64,7 @@ namespace commands
             std::string version = (language == "c") ? "20" : "21";
 
             std::ofstream file_cmake("./CMakeLists.txt");
-            file_cmake << "# Minimum required version of CMake (cmake --version)"
+            file_cmake << "# Minimum required version of CMake (cmake --version)\n"
                        << "cmake_minimum_required(VERSION 3.27.6)\n"
                        << "\n# Project info\n"
                        << "project(\n"

@@ -61,7 +61,7 @@ namespace commands
         {
             // * Language-specific variables
             std::string addon = (language == "c") ? "" : "XX";
-            std::string version = (language == "c") ? "20" : "21";
+            std::string version = (language == "c") ? "21" : "20";
 
             std::ofstream file_cmake("./CMakeLists.txt");
             file_cmake << "# Minimum required version of CMake (cmake --version)\n"

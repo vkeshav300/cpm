@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/License-CC0_1.0_Universal-yellow.svg?style=rounded-square)](https://github.com/vkeshav300/cpm/blob/master/LICENSE)
 
 ### General information
-CPM is a useful tool for managing your C and C++ projects.
+CPM is a useful tool for managing your C and C++ projects. *Note from devs: don't expect changes / updates / releases to be frequent as we are making this software on our own time without a strict schedule.*
 
 ### Building
 ```

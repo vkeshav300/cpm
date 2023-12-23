@@ -49,6 +49,18 @@ namespace commands
 
         misc::erase_from_vector(default_files, files_to_erase);
 
+        // * Project name
+        std::string project_name = "PLACEHOLDER";
+
+        for (auto &flag : flags)
+        {
+            if (flag.find("n=") != std::string::npos)
+            {
+                project_name = flag.substr(2, flag.size() - 1);
+                break;
+            }
+        }
+
         // * Create files and folders
         for (auto &folder : default_folders)
             directory::create_folder("./", folder);
@@ -68,7 +80,7 @@ namespace commands
                        << "cmake_minimum_required(VERSION 3.27.6)\n"
                        << "\n# Project info\n"
                        << "project(\n"
-                       << "    PROJECT_NAME_HERE \n"
+                       << "    " << project_name << "\n"
                        << "    VERSION 0.1\n"
                        << "    LANGUAGES C" << addon << "\n"
                        << ")\n"
@@ -78,13 +90,16 @@ namespace commands
                        << "set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)\n"
                        << "\n# Get all the source files in the SOURCE_DIR\n"
                        << "file(GLOB SOURCES \"${SOURCE_DIR}/*." << language << "\")\n"
-                       << "\nadd_executable(EXECUTABLE_NAME_HERE\n"
+                       << "\nadd_executable(" << project_name << "\n"
                        << "    ${SOURCES}\n"
                        << ")\n"
-                       << "\ntarget_include_directories(EXECUTABLE_NAME_HERE PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)\n"
-                       << "\n# Check if the current platform is macOS\nif (CMAKE_SYSTEM_NAME MATCHES \"Darwin\")\n"
+                       << "\ntarget_include_directories(" << project_name << " PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)\n"
+                       << "\n# Check if the current platform is macOS\n"
+                       << "if (CMAKE_SYSTEM_NAME MATCHES \"Darwin\" OR CMAKE_SYSTEM_NAME MATCHES \"Linux\")\n"
                        << "    # Specify the installation directory for macOS (e.g., /usr/local/bin)\n"
-                       << "    install(TARGETS EXECUTABLE_NAME_HERE DESTINATION /usr/local/bin)\n"
+                       << "    install(TARGETS " << project_name << " DESTINATION /usr/local/bin)\n"
+                       << "elseif (CMAKE_SYSTEM_NAME MATCHES \"Windows\")\n"
+                       << "    install(TARGETS " << project_name << " DESTINATION $ENV{ProgramFiles})\n"
                        << "endif()";
             file_cmake.close();
         }

@@ -19,6 +19,8 @@
 #include <string>
 #include <cstddef>
 #include <vector>
+#include <cstdio>
+#include <filesystem>
 
 // ? Libraries
 #include <curl/curl.h>
@@ -175,11 +177,7 @@ namespace commands
      */
     bool verify_init()
     {
-        // * Verifies init has been run
-        if (directory::has_file("./", ".cpm"))
-            return true;
-
-        return false;
+        return (directory::has_file("./", ".cpm")) ? true : false;
     }
 
     /**
@@ -277,7 +275,7 @@ namespace commands
                   << "pair new <name> -hpp --> creates header/source file pair (header file will be in .hpp format).\n"
                   << "pair remove <name> --> gets rid of header/source file pair.\n\n"
                   << "contents copy <copy from> <copy to> --> copies contents of one file to another (will erase all data from copy to file).\n"
-                  << "contents copy -app/-append --> copies contents of one file to another (will not erase contents of copy to file).\n"
+                  << "contents copy <copy from> <copy to> -app/-append --> copies contents of one file to another (will not erase contents of copy to file).\n"
                   << "contents erase <file> --> erases all contents from a file.\n\n";
 
         // * Other
@@ -316,8 +314,6 @@ namespace commands
             return 1;
         }
 
-        std::string file_primary_s = arguments[1];
-
         if (sub_command == "copy")
         {
             // * Min amt of arguments (for sub command)
@@ -327,13 +323,20 @@ namespace commands
                 return 1;
             }
 
-            // * The file to write to
+            // * The file to copy from and write to
+            std::string file_primary_s = arguments[1];
             std::string file_target_s = arguments[2];
 
             // * Checking if files exist
             if (!directory::has_file("./", file_primary_s))
             {
                 logger::error_q("does not exist", file_primary_s);
+                return 1;
+            }
+
+            if (!directory::has_file("./", file_target_s))
+            {
+                logger::error_q("does not exist", file_target_s);
                 return 1;
             }
 
@@ -363,12 +366,95 @@ namespace commands
 
             // * Closing files
             file_primary.close();
+
+            logger::success((misc::find_in_vector(flags, "append") || misc::find_in_vector(flags, "app")) ? "copied " + file_primary_s + " to " + file_target_s + " with append mode" : "copied " + file_primary_s + " to " + file_target_s + " without append mode");
         }
         else if (sub_command == "erase")
         {
-            std::ofstream file_primary;
-            file_primary.open(file_primary_s, std::ofstream::out | std::ofstream::trunc);
-            file_primary.close();
+            for (int i = 1; i < arguments.size(); i++)
+            {
+                std::string file_s = arguments[i];
+                if (!directory::has_file("./", file_s))
+                {
+                    logger::error_q("does not exist", file_s);
+                    continue;
+                }
+
+                std::ofstream file;
+                file.open(file_s, std::ofstream::out | std::ofstream::trunc);
+                file.close();
+
+                logger::custom(file_s, "erased", "magenta");
+            }
+        }
+        else if (sub_command == "switch")
+        {
+            // * Min amt of arguments (for sub command)
+            if (arguments_amt < 3)
+            {
+                logger::error("minimum amount of arguments not met");
+                return 1;
+            }
+
+            // * The file to copy from and write to
+            std::string file_primary_s = arguments[1];
+            std::string file_target_s = arguments[2];
+
+            // * Checking if files exist
+            if (!directory::has_file("./", file_primary_s))
+            {
+                logger::error_q("does not exist", file_primary_s);
+                return 1;
+            }
+
+            if (!directory::has_file("./", file_target_s))
+            {
+                logger::error_q("does not exist", file_target_s);
+                return 1;
+            }
+
+            if (!directory::has_file("./", file_target_s))
+            {
+                logger::error_q("does not exist", file_target_s);
+                return 1;
+            }
+
+            // * Opening files
+            std::ifstream ifs_primary, ifs_target;
+            std::ofstream ofs_primary, ofs_target;
+
+            // * Opening files to read
+            ifs_primary.open(file_primary_s);
+            ifs_target.open(file_target_s);
+
+            // * Opening files to write
+            ofs_primary.open(file_primary_s + ".tmp");
+            ofs_target.open(file_target_s + ".tmp");
+
+            // * Reading & writing
+            char ch;
+
+            while (ifs_primary.get(ch))
+                ofs_target.put(ch);
+
+            while (ifs_target.get(ch))
+                ofs_primary.put(ch);
+
+            // * Cleaning up
+            ifs_primary.close();
+            ifs_target.close();
+            ofs_primary.close();
+            ofs_target.close();
+
+            // * Deleting original files (not using directory namespace to avoid the delete messages in console)
+            std::filesystem::remove(file_primary_s.c_str());
+            std::filesystem::remove(file_target_s.c_str());
+
+            // * Renaming temporary files to original files
+            std::filesystem::rename((file_primary_s + ".tmp").c_str(), file_primary_s.c_str());
+            std::filesystem::rename((file_target_s + ".tmp").c_str(), file_target_s.c_str());
+
+            logger::success("switched contents of " + file_primary_s + " and " + file_target_s);
         }
         else
         {

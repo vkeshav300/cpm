@@ -231,7 +231,8 @@ namespace commands
             for (auto &pair_name : pair_names)
             {
                 // * Delete files
-                directory::delete_file("./include/", pair_name + header_file_extention);
+                directory::delete_file("./include/", pair_name + ".h");
+                directory::delete_file("./include/", pair_name + ".hpp");
                 directory::delete_file("./src/", pair_name + src_file_extention);
             }
         }

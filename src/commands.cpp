@@ -276,7 +276,8 @@ namespace commands
                   << "pair remove <name> --> gets rid of header/source file pair.\n\n"
                   << "contents copy <copy from> <copy to> --> copies contents of one file to another (will erase all data from copy to file).\n"
                   << "contents copy <copy from> <copy to> -app/-append --> copies contents of one file to another (will not erase contents of copy to file).\n"
-                  << "contents erase <file> --> erases all contents from a file.\n\n";
+                  << "contents erase <file> --> erases all contents from a file.\n"
+                  << "contents switch <file 1> <file 2> --> switches the contents of the two files\n\n";
 
         // * Other
         logger::custom("arguments must be in order, but flags can be placed anywhere after the command.", "note", "yellow");

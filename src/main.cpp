@@ -19,6 +19,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <chrono>
 
 // ? Libraries
 #include <curl/curl.h>
@@ -88,6 +89,9 @@ int process_command(std::string command, std::vector<std::string> arguments, std
  */
 int main(int argc, char *argv[])
 {
+    // * Start time
+    auto start = std::chrono::high_resolution_clock::now();
+
     // * Assertations
     if (argc <= 1)
     {
@@ -191,7 +195,10 @@ int main(int argc, char *argv[])
     // * Running command
     int result = process_command(command, arguments, flags, language);
 
-    logger::custom("command \'" + command + "\' with exit code " + std::to_string(result), "finished", "blue");
+    // * End time
+    auto end = std::chrono::high_resolution_clock::now();
+
+    logger::custom("command \'" + command + "\' with exit code " + std::to_string(result) + " in " + std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count()) + " ms", "finished", "blue");
     logger::flush_buffer();
 
     // * CURL cleanup

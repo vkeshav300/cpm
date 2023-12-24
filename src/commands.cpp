@@ -261,7 +261,7 @@ namespace commands
                   << "██      ██      ██  ██  ██\n"
                   << " ██████ ██      ██      ██\n\n";
 
-        logger::custom("https://github.com/vkeshav300/cpm\n", "source code", "red");
+        logger::custom("https://github.com/vkeshav300/cpm\n\n\n", "source code", "red");
 
         // * Usage
         logger::custom("cpm <command> <args> <opt (optional) flags>", "usage", "blue");
@@ -269,12 +269,14 @@ namespace commands
         // * Commands
         std::cout << "help --> lists commands + other useful information related to CPM.\n\n"
                   << "--version || version --> tells current version of cpm you are using.\n\n"
-                  << "init <language> --> sets up a new C or C++ project.\n\n"
-                  << "pair new <name> --> creates header/source file pair.\n\n"
-                  << "pair new <name> -hpp --> creates header/source file pair (header file will be in .hpp format).\n\n"
+                  << "init <language> --> sets up a new C or C++ project.\n"
+                  << "init <language> -post --> sets up CPM in a preexisting project.\n"
+                  << "init <language> -n=<project name> --> -n flag specifies project name to be used in lieu of placeholders.\n\n"
+                  << "pair new <name> --> creates header/source file pair.\n"
+                  << "pair new <name> -hpp --> creates header/source file pair (header file will be in .hpp format).\n"
                   << "pair remove <name> --> gets rid of header/source file pair.\n\n"
-                  << "contents copy <copy from> <copy to> --> copies contents of one file to another (will erase all data from copy to file).\n\n"
-                  << "contents copy -app/-append --> copies contents of one file to another (will not erase contents of copy to file).\n\n"
+                  << "contents copy <copy from> <copy to> --> copies contents of one file to another (will erase all data from copy to file).\n"
+                  << "contents copy -app/-append --> copies contents of one file to another (will not erase contents of copy to file).\n"
                   << "contents erase <file> --> erases all contents from a file.\n\n";
 
         // * Other

@@ -21,6 +21,7 @@ namespace directory
 {
     /**
      * @brief Reads file into string. WARNING: Should only be used for small files, as all contents will be loaded into one string.
+     * @warning Should only be used for small files, as all contents will be loaded into one string.
      *
      * @param dir Directory file is located in.
      * @param filename Name of the file.

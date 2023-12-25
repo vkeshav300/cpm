@@ -16,4 +16,4 @@ sudo make install
 ```
 
 ### Other information
-- The code uses [ANSI Escape Codes](https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797) to color text.
+- The code uses 256-Color Mode [ANSI Escape Codes](https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797) to color text. Not all terminals support coloring text. To check if your terminal does, run `echo -e "\x1b[38;5;196mTest\x1b[0m"`. This should appear bright red in your terminal.

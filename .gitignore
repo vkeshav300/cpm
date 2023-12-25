@@ -15,4 +15,5 @@ docs/latex
 .exe
 .vscode/
 README_tmp.html
+README.pdf
 .DS_Store

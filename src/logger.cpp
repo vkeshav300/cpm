@@ -16,29 +16,31 @@
 namespace logger
 {
     std::map<std::string, std::string> colors = {
-        {"reset", "\x1b[0;0m"},
-        {"black", "\x1b[0;30m"},
-        {"red", "\x1b[0;31m"},
-        {"green", "\x1b[0;32m"},
-        {"yellow", "\x1b[0;33m"},
-        {"blue", "\x1b[0;34m"},
-        {"magenta", "\x1b[0;35m"},
-        {"cyan", "\x1b[0;36m"},
-        {"white", "\x1b[0;37m"},
-        {"default", "\x1b[0;39m"},
+        {"reset", "\x1b[0m"},
+        {"black", "\x1b[1;38;5;0m"},
+        {"red", "\x1b[1;38;5;9m"},
+        {"green", "\x1b[1;38;5;10m"},
+        {"yellow", "\x1b[1;38;5;11m"},
+        {"blue", "\x1b[1;38;5;12m"},
+        {"magenta", "\x1b[1;38;5;13m"},
+        {"cyan", "\x1b[1;38;5;14m"},
+        {"white", "\x1b[1;38;5;15m"},
+        {"orange", "\x1b[1;38;5;202m"},
+        {"purple", "\x1b[1;38;5;129m"},
+        {"default", "\x1b[39m"}
     };
 
     int logger_count = 0;
     /**
      * @brief Handles logger count.
-     * 
+     *
      */
     void handle_logger_count()
     {
         std::cout << colors["cyan"] << "[" << logger_count << "]";
         if (logger_count < 10)
             std::cout << " ";
-        
+
         if (logger_count < 100)
             std::cout << " ";
 
@@ -82,14 +84,15 @@ namespace logger
 
     /**
      * @brief Logs warning message to console.
-     * 
-     * @param message 
+     *
+     * @param message
      */
     void warn(const std::string &message)
     {
         handle_logger_count();
-        std::cout << colors["yellow"]
+        std::cout << colors["orange"]
                   << "[warning]: "
+                  << colors["reset"]
                   << message
                   << "\n";
     }

@@ -104,6 +104,6 @@ namespace misc
             if (flag.find(content) != std::string::npos)
                 return flag.substr(content.size(), flag.size() - 1);
 
-        return "PLACEHOLDER";
+        return "";
     }
 }

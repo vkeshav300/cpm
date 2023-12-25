@@ -36,7 +36,7 @@ namespace commands
     int init(const std::string language, const std::vector<std::string> &flags)
     {
         // * All folders and files to be created
-        std::vector<std::string> default_folders = {"assets", "src", "include", "build", "tests", "docs"};
+        std::vector<std::string> default_folders = {"src", "include", "build", "tests", "docs"};
         std::vector<std::string> default_files = {".gitignore", "CMakeLists.txt", "README.md", "LICENSE", ".cpm", "src/main." + language};
         std::vector<std::string> files_to_erase;
 
@@ -52,9 +52,12 @@ namespace commands
         misc::erase_from_vector(default_files, files_to_erase);
 
         // * Project name
-        std::string project_name = "PLACEHOLDER";
+        std::string project_name;
 
         project_name = misc::get_flag_defined(flags, "n=");
+
+        if (project_name.empty())
+            project_name = "PLACEHOLDER";
 
         // * Create files and folders
         for (auto &folder : default_folders)
@@ -70,7 +73,7 @@ namespace commands
             std::string addon = (language == "c") ? "" : "XX";
             std::string version = misc::get_flag_defined(flags, "v=");
 
-            if (version == "PLACEHOLDER")
+            if (version.empty())
                 version = (language == "c") ? "17" : "20";
 
             std::ofstream file_cmake("./CMakeLists.txt");
@@ -266,6 +269,7 @@ namespace commands
                   << "--version || version --> tells current version of cpm you are using\n\n"
                   << "init <language> --> sets up a new C or C++ project\n"
                   << "init flag : -post --> sets up CPM in a preexisting project\n"
+                  << "init flag : -nogit --> sets up CPM without git support (also accepts \"-no-git\" and \"-no_git\")\n"
                   << "init flag : -v=<version> --> specifies custom version of programming language to be used for compiling\n"
                   << "init flag : -n=<project name> --> specifies project name to be used in lieu of placeholders\n\n"
                   << "pair new <name> --> creates header/source file pair\n"

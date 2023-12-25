@@ -54,14 +54,7 @@ namespace commands
         // * Project name
         std::string project_name = "PLACEHOLDER";
 
-        for (auto &flag : flags)
-        {
-            if (flag.find("n=") != std::string::npos)
-            {
-                project_name = flag.substr(2, flag.size() - 1);
-                break;
-            }
-        }
+        project_name = misc::get_flag_defined(flags, "n=");
 
         // * Create files and folders
         for (auto &folder : default_folders)
@@ -75,7 +68,10 @@ namespace commands
         {
             // * Language-specific variables
             std::string addon = (language == "c") ? "" : "XX";
-            std::string version = (language == "c") ? "21" : "20";
+            std::string version = misc::get_flag_defined(flags, "v=");
+
+            if (version == "PLACEHOLDER")
+                version = (language == "c") ? "17" : "20";
 
             std::ofstream file_cmake("./CMakeLists.txt");
             file_cmake << "# Minimum required version of CMake (cmake --version)\n"
@@ -263,21 +259,22 @@ namespace commands
         logger::custom("https://github.com/vkeshav300/cpm\n\n\n", "source code", "red");
 
         // * Usage
-        logger::custom("cpm <command> <args> <opt (optional) flags>", "usage", "blue");
+        logger::custom("cpm <command> <args> <flags>\n", "usage", "blue");
 
         // * Commands
-        std::cout << "help --> lists commands + other useful information related to CPM.\n\n"
-                  << "--version || version --> tells current version of cpm you are using.\n\n"
-                  << "init <language> --> sets up a new C or C++ project.\n"
-                  << "init <language> -post --> sets up CPM in a preexisting project.\n"
-                  << "init <language> -n=<project name> --> -n flag specifies project name to be used in lieu of placeholders.\n\n"
-                  << "pair new <name> --> creates header/source file pair.\n"
-                  << "pair new <name> -hpp --> creates header/source file pair (header file will be in .hpp format).\n"
-                  << "pair remove <name> --> gets rid of header/source file pair.\n\n"
-                  << "contents copy <copy from> <copy to> --> copies contents of one file to another (will erase all data from copy to file).\n"
-                  << "contents copy <copy from> <copy to> -app/-append --> copies contents of one file to another (will not erase contents of copy to file).\n"
-                  << "contents erase <file> --> erases all contents from a file.\n"
-                  << "contents switch <file 1> <file 2> --> switches the contents of the two files\n\n";
+        std::cout << "help --> lists commands + other useful information related to CPM\n\n"
+                  << "--version || version --> tells current version of cpm you are using\n\n"
+                  << "init <language> --> sets up a new C or C++ project\n"
+                  << "init flag : -post --> sets up CPM in a preexisting project\n"
+                  << "init flag : -v=<version> --> specifies custom version of programming language to be used for compiling\n"
+                  << "init flag : -n=<project name> --> specifies project name to be used in lieu of placeholders\n\n"
+                  << "pair new <name> --> creates header/source file pair\n"
+                  << "pair remove <name> --> gets rid of header/source file pair\n"
+                  << "pair flag : -hpp --> (if applicable to the sub-command), command will use .hpp files instead of .h files\n\n"
+                  << "contents copy <copy from> <copy to> --> copies contents of one file to another (will erase all data from copy to file)\n"
+                  << "contents erase <file> --> erases all contents from a file\n"
+                  << "contents switch <file 1> <file 2> --> switches the contents of the two files\n"
+                  << "contents flag : -app/-append --> (if applicable to the sub-command), will use append mode\n\n";
 
         // * Other
         logger::custom("arguments must be in order, but flags can be placed anywhere after the command.", "note", "yellow");

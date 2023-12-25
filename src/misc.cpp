@@ -51,8 +51,8 @@ namespace misc
 
     /**
      * @brief Removes whitespaces at the beginning and end of strings.
-     * 
-     * @param str 
+     *
+     * @param str
      */
     void trim(std::string &str)
     {
@@ -80,7 +80,7 @@ namespace misc
         {
             std::string content = _content;
             trim(content);
-            
+
             auto location = std::find(main_vector.begin(), main_vector.end(), content);
 
             // * Content does not exist in vector
@@ -89,5 +89,21 @@ namespace misc
 
             main_vector.erase(location);
         }
+    }
+
+    /**
+     * @brief Check if flags contains a flag with specific content, then removes content from flag and returns it.
+     * 
+     * @param flags 
+     * @param content 
+     * @return std::string 
+     */
+    std::string get_flag_defined(const std::vector<std::string> &flags, const std::string &content)
+    {
+        for (auto &flag : flags)
+            if (flag.find(content) != std::string::npos)
+                return flag.substr(content.size(), flag.size() - 1);
+
+        return "PLACEHOLDER";
     }
 }

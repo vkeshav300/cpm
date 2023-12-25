@@ -145,7 +145,9 @@ namespace commands
 
         // * Provided information
         logger::custom("to best utilize this project structure, it is recommended that you know how to use CMake.", "important", "yellow");
-        logger::custom("make sure to edit all the placeholders in your \"CMakeLists.txt\" file.", "important", "yellow");
+        
+        if (project_name == "PLACEHOLDER")
+            logger::custom("make sure to edit all the placeholders in your \"CMakeLists.txt\" file.", "important", "yellow");
 
         return 0;
     }

@@ -130,57 +130,47 @@ int main(int argc, char *argv[])
     if (!misc::find_in_vector(all_commands, command))
     {
         logger::error_q("is not a valid command", command);
+        logger::flush_buffer();
+        
         return 1;
     }
 
     // * Checking initialized status
     bool initialized = commands::verify_init();
+    bool command_is_exception = false;
 
     // * All commands that don't need the directory to be initialized.
     std::vector<std::string> init_exceptions = {
+        "init",
         "help",
         "version",
         "contents",
     };
 
-    bool cmd_is_exception = false;
-
     if (misc::find_in_vector(init_exceptions, command))
-    {
-        initialized = true;
-        cmd_is_exception = true;
-    }
+        command_is_exception = true;
+
+    // * All commands that have the first argument as language
+    std::vector<std::string> get_lang_from_first_arg = {
+        "init"
+    };
 
     std::string language;
 
-    if (!cmd_is_exception && initialized)
+    if (initialized)
     {
         std::string contents_cpm = directory::slurp("./", ".cpm");
-        language = (contents_cpm.find("language: c")) ? "c" : "cpp";
+        language = (contents_cpm.find("language: c")) ? "c" : "cpp"; // ? Language is stored in .cpm file
     }
-    else if (arguments.size() >= 1 && !cmd_is_exception)
+    else if (misc::find_in_vector(get_lang_from_first_arg, command))
+        language = arguments[0]; // ? Language is provided in the first argument
+    else if (misc::find_in_vector(init_exceptions, command))
+        language = "c"; // ? Placeholder - doesn't actually matter
+    else 
     {
-        if (arguments[0] != "c" && arguments[0] != "cpp" && arguments[0] != "c++")
-        {
-            logger::error_q("is not a supported programming language", arguments[0]);
-            logger::flush_buffer();
-            return 1;
-        }
-        language = (arguments[0] == "c") ? "c" : "cpp";
-        arguments.erase(arguments.begin(), arguments.begin() + 1);
-    }
-    else if (!cmd_is_exception && arguments.size() < 1 && !initialized)
-    {
-        logger::error("could not discern programming language. Try using \'cpm init <language> -post\' to post-initialize your project with cpm, or specifying the programming language in the first argument.");
+        logger::warn("directory must be initialized with cpm (use cpm help for more info)");
         logger::flush_buffer();
-        return 1;
-    }
-    else if (cmd_is_exception)
-        language = "c";
-    else
-    {
-        logger::error("could not discern programming language");
-        logger::flush_buffer();
+
         return 1;
     }
 

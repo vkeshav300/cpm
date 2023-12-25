@@ -1,4 +1,4 @@
-# CMake related files and directories
+# CMake artifacts
 build/*
 tests
 CMakeFiles/
@@ -7,7 +7,7 @@ CMakeScripts/
 cmake_install.cmake
 Makefile
 
-# Doxygen generation artifacts
+# Doxygen artifacts
 docs/html
 docs/latex
 

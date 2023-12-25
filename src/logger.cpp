@@ -50,7 +50,7 @@ namespace logger
      *
      * @param message Text to be logged.
      */
-    void success(std::string message)
+    void success(const std::string &message)
     {
         handle_logger_count();
         std::cout << colors["green"]
@@ -65,7 +65,7 @@ namespace logger
      *
      * @param message Text to be logged.
      */
-    void error(std::string message)
+    void error(const std::string &message)
     {
         handle_logger_count();
         std::cerr << colors["red"]
@@ -75,7 +75,7 @@ namespace logger
                   << "\n";
     }
 
-    void error_q(std::string message, std::string quote)
+    void error_q(const std::string &message, const std::string &quote)
     {
         error("\'" + quote + "\' " + message);
     }
@@ -85,7 +85,7 @@ namespace logger
      * 
      * @param message 
      */
-    void warn(std::string message)
+    void warn(const std::string &message)
     {
         handle_logger_count();
         std::cout << colors["yellow"]
@@ -101,7 +101,7 @@ namespace logger
      * @param mtype The type of message (the text in between the square brackets).
      * @param color The color of the message.
      */
-    void custom(std::string message, std::string mtype, std::string color)
+    void custom(const std::string &message, const std::string &mtype, const std::string &color)
     {
         handle_logger_count();
         std::cout << colors[color]

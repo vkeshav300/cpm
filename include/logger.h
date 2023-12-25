@@ -20,24 +20,17 @@ namespace logger
     // ? Message count
     extern int logger_count;
 
-    // ? Injects logger count into stream + increments variable
     void handle_logger_count();
 
-    // ? Success output
-    void success(std::string message);
+    void success(const std::string &message);
 
-    // ? Error output
-    void error(std::string message);
+    void error(const std::string &message);
 
-    // ? Error message "enquoting" certain string
-    void error_q(std::string message, std::string quote);
+    void error_q(const std::string &message, const std::string &quote);
 
-    // ? Warning output
-    void warn(std::string message);
+    void warn(const std::string &message);
 
-    // ? Custom output
-    void custom(std::string message, std::string mtype, std::string color);
+    void custom(const std::string &message, const std::string &mtype, const std::string &color);
 
-    // ? Flushes buffer
     void flush_buffer();
 }

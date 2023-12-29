@@ -20,9 +20,9 @@ namespace misc
     /**
      * @brief Creates sub-vector from a std::vector
      *
-     * @param main_vector
-     * @param begin_index
-     * @param end_index
+     * @param main_vector Initial vector.
+     * @param begin_index Start index.
+     * @param end_index End index.
      * @return std::vector<std::string>
      */
     std::vector<std::string> sub_vector(const std::vector<std::string> &main_vector, int begin_index, int end_index)
@@ -39,8 +39,8 @@ namespace misc
     /**
      * @brief Checks if a string exists in a std::vector.
      *
-     * @param main_vector
-     * @param content
+     * @param main_vector Initial vector.
+     * @param content Search for.
      * @return true
      * @return false
      */
@@ -52,7 +52,7 @@ namespace misc
     /**
      * @brief Removes whitespaces at the beginning and end of strings.
      *
-     * @param str
+     * @param str Content.
      */
     void trim(std::string &str)
     {
@@ -70,8 +70,8 @@ namespace misc
     /**
      * @brief Erases contents from std::vector.
      *
-     * @param main_vector
-     * @param contents
+     * @param main_vector Initial vector.
+     * @param contents Contents to remove.
      * @return int
      */
     void erase_from_vector(std::vector<std::string> &main_vector, const std::vector<std::string> &contents)
@@ -94,7 +94,7 @@ namespace misc
     /**
      * @brief Check if flags contains a flag with specific content, then removes content from flag and returns it.
      * 
-     * @param flags 
+     * @param flags Command flags.
      * @param content 
      * @return std::string 
      */

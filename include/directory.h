@@ -14,10 +14,8 @@
 
 namespace directory
 {
-    // ? Convert file into string
     std::string slurp(std::string dir, std::string filename);
 
-    // ? Check if a string has specific contents
     bool has_contents(std::string text, std::string contents);
 
     bool has_file(std::string dir, std::string filename);

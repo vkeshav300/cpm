@@ -27,10 +27,11 @@ namespace logger
         {"white", "\x1b[1;38;5;15m"},
         {"orange", "\x1b[1;38;5;202m"},
         {"purple", "\x1b[1;38;5;129m"},
-        {"default", "\x1b[39m"}
+        {"default", "\x1b[39m"},
     };
 
     int logger_count = 0;
+
     /**
      * @brief Handles logger count.
      *
@@ -101,8 +102,8 @@ namespace logger
      * @brief Logs custom message to console.
      *
      * @param message Text to be logged.
-     * @param mtype The type of message (the text in between the square brackets).
-     * @param color The color of the message.
+     * @param mtype Message type.
+     * @param color Message color.
      */
     void custom(const std::string &message, const std::string &mtype, const std::string &color)
     {

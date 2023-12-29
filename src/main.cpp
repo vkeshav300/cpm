@@ -42,7 +42,8 @@ std::vector<std::string> all_commands = {
     "help",
     "version",
     "contents",
-    "insert"};
+    "insert",
+};
 
 /**
  * @brief Processes command.
@@ -131,7 +132,7 @@ int main(int argc, char *argv[])
     {
         logger::error_q("is not a valid command", command);
         logger::flush_buffer();
-        
+
         return 1;
     }
 
@@ -152,7 +153,7 @@ int main(int argc, char *argv[])
 
     // * All commands that have the first argument as language
     std::vector<std::string> get_lang_from_first_arg = {
-        "init"
+        "init",
     };
 
     std::string language;
@@ -166,7 +167,7 @@ int main(int argc, char *argv[])
         language = arguments[0]; // ? Language is provided in the first argument
     else if (misc::find_in_vector(init_exceptions, command))
         language = "c"; // ? Placeholder - doesn't actually matter
-    else 
+    else
     {
         logger::warn("directory must be initialized with cpm (use cpm help for more info)");
         logger::flush_buffer();

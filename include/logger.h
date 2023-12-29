@@ -14,10 +14,7 @@
 
 namespace logger
 {
-    // ? ANSI escape codes
     extern std::map<std::string, std::string> colors;
-
-    // ? Message count
     extern int logger_count;
 
     void handle_logger_count();

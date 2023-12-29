@@ -13,7 +13,7 @@
 #include "logger.h"
 #include "misc.h"
 
-// ? Standard library
+// ? Libraries
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -21,8 +21,6 @@
 #include <vector>
 #include <cstdio>
 #include <filesystem>
-
-// ? Libraries
 #include <curl/curl.h>
 
 namespace commands
@@ -30,7 +28,7 @@ namespace commands
     /**
      * @brief Initializes CPM in a directory, and creates all the files needed for a basic project.
      *
-     * @param language The primary language the project will be coded in.
+     * @param language Programming language.
      * @return int
      */
     int init(const std::string language, const std::vector<std::string> &flags)
@@ -155,7 +153,7 @@ namespace commands
     /**
      * @brief Initializes CPM in a pre-existing project.
      *
-     * @param language The primary language the project is coded in.
+     * @param language Programming language.
      * @return int
      */
     int post_init(const std::string language)
@@ -184,9 +182,9 @@ namespace commands
     /**
      * @brief Creates header/source file pair.
      *
-     * @param arguments
-     * @param hpp
-     * @param language
+     * @param arguments Command arguments.
+     * @param hpp Create .hpp header or .h header.
+     * @param language Programming language.
      * @return int
      */
     int file_pair(const std::vector<std::string> &arguments, const bool hpp, const std::string language)
@@ -302,9 +300,10 @@ namespace commands
 
     /**
      * @brief Uses contents of files to execute sub-commands.
-     *
-     * @param arguments
-     * @return int
+     * 
+     * @param arguments Command arguments.
+     * @param flags Command flags.
+     * @return int 
      */
     int contents(const std::vector<std::string> &arguments, const std::vector<std::string> &flags)
     {
@@ -488,9 +487,9 @@ namespace commands
     /**
      * @brief Installs package from github link
      *
-     * @param arguments
-     * @param flags
-     * @param language
+     * @param arguments Command arguments.
+     * @param flags Command flags.
+     * @param language Programming language.
      * @return int
      */
     int install(const std::vector<std::string> &arguments, const std::vector<std::string> &flags, const std::string language)
@@ -560,7 +559,7 @@ namespace commands
     /**
      * @brief Uninstalls package
      *
-     * @param arguments
+     * @param arguments Command arguments.
      * @return int
      */
     int uninstall(std::vector<std::string> &arguments)

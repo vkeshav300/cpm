@@ -54,7 +54,7 @@ int process_command(std::string command, std::vector<std::string> arguments, std
     // * Return status of command
     int r_code = 1;
 
-    if (command == "init")
+    if ("init" == command)
     {
         if (misc::find_in_vector(flags, "post"))
         {
@@ -64,13 +64,13 @@ int process_command(std::string command, std::vector<std::string> arguments, std
 
         r_code = commands::init(language, flags);
     }
-    else if (command == "pair")
+    else if ("pair" == command)
         r_code = commands::file_pair(arguments, (misc::find_in_vector(flags, "hpp")) ? true : false, language);
-    else if (command == "help")
+    else if ("help" == command)
         r_code = commands::help();
-    else if (command == "version")
+    else if ("version" == command)
         r_code = commands::version();
-    else if (command == "contents")
+    else if ("contents" == command)
         r_code = commands::contents(arguments, flags);
 
     return r_code;
@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
     for (int i = 0; i < argc; i++)
     {
         std::string arg = argv[i];
-        if (arg.substr(0, 1) == "-" && arg.size() >= 2)
+        if ("-" == arg.substr(0, 1) && arg.size() >= 2)
             flags.push_back(arg.substr(1, arg.size()));
     }
 
@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
     logger::success("parsed command");
 
     // * Changing '--version' to 'version' for simplicity
-    if (command == "--version")
+    if ("--version" == command)
         command = "version";
 
     // * Validating command
@@ -170,7 +170,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    if (language == "c++")
+    if ("c++" == language)
         language = "cpp";
 
     logger::custom("command \'" + command + "\' with " + std::to_string(arguments.size()) + " argument(s) and " + std::to_string(flags.size()) + " flag(s)", "received", "blue");

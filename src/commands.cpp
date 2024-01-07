@@ -69,11 +69,11 @@ namespace commands
 
         {
             // * Language-specific variables
-            std::string addon = (language == "c") ? "" : "XX";
+            std::string addon = ("c" == language) ? "" : "XX";
             std::string version = misc::get_flag_defined(flags, "v=");
 
             if (version.empty())
-                version = (language == "c") ? "17" : "20";
+                version = ("c" == language) ? "17" : "20";
 
             std::ofstream file_cmake("./CMakeLists.txt");
             file_cmake << "# Minimum required version of CMake (cmake --version)\n"
@@ -145,7 +145,7 @@ namespace commands
         // * Provided information
         logger::custom("to best utilize this project structure, it is recommended that you know how to use CMake.", "important", "yellow");
         
-        if (project_name == "PLACEHOLDER")
+        if ("PLACEHOLDER" == project_name)
             logger::custom("make sure to edit all the placeholders in your \"CMakeLists.txt\" file.", "important", "yellow");
 
         return 0;
@@ -200,10 +200,10 @@ namespace commands
 
         std::string sub_command = arguments[0];
         std::string header_file_extention = (hpp) ? ".hpp" : ".h";
-        std::string src_file_extention = (language == "c") ? ".c" : ".cpp";
+        std::string src_file_extention = ("c" == language) ? ".c" : ".cpp";
         const std::vector<std::string> pair_names = misc::sub_vector(arguments, 1, arguments.size());
 
-        if (sub_command == "new")
+        if ("new" == sub_command)
         {
             for (auto &pair_name : pair_names)
             {
@@ -224,7 +224,7 @@ namespace commands
                 }
             }
         }
-        else if (sub_command == "remove")
+        else if ("remove" == sub_command)
         {
             for (auto &pair_name : pair_names)
             {
@@ -317,7 +317,7 @@ namespace commands
             return 1;
         }
 
-        if (sub_command == "copy")
+        if ("copy" == sub_command)
         {
             // * Min amt of arguments (for sub command)
             if (arguments_amt < 3)
@@ -372,7 +372,7 @@ namespace commands
 
             logger::success((misc::find_in_vector(flags, "append") || misc::find_in_vector(flags, "app")) ? "copied " + file_primary_s + " to " + file_target_s + " with append mode" : "copied " + file_primary_s + " to " + file_target_s + " without append mode");
         }
-        else if (sub_command == "erase")
+        else if ("erase" == sub_command)
         {
             for (int i = 1; i < arguments.size(); i++)
             {
@@ -390,7 +390,7 @@ namespace commands
                 logger::custom(file_s, "erased", "magenta");
             }
         }
-        else if (sub_command == "switch")
+        else if ("switch" == sub_command)
         {
             // * Min amt of arguments (for sub command)
             if (arguments_amt < 3)

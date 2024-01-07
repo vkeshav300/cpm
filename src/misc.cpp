@@ -7,11 +7,8 @@
  * @copyright Copyright (c) 2023
  *
  */
-// ? Project headers
 #include "misc.h"
 #include "logger.h"
-
-// ? Libraries
 #include <algorithm>
 #include <cctype>
 

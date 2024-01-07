@@ -7,13 +7,10 @@
  * @copyright Copyright (c) 2023
  *
  */
-// ? Project headers
 #include "commands.h"
 #include "directory.h"
 #include "logger.h"
 #include "misc.h"
-
-// ? Libraries
 #include <iostream>
 #include <fstream>
 #include <string>

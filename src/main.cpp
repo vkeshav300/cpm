@@ -7,21 +7,16 @@
  * @copyright Copyright (c) 2023
  *
  */
-// ? Project headers
 #include "commands.h"
 #include "directory.h"
 #include "logger.h"
 #include "misc.h"
-
-// ? Standard library
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
 #include <algorithm>
 #include <chrono>
-
-// ? Libraries
 #include <curl/curl.h>
 
 // * Finding OS
@@ -180,7 +175,7 @@ int main(int argc, char *argv[])
 
     logger::custom("command \'" + command + "\' with " + std::to_string(arguments.size()) + " argument(s) and " + std::to_string(flags.size()) + " flag(s)", "received", "blue");
 
-    // * CURL init global
+    // * CURL init
     curl_global_init(CURL_GLOBAL_DEFAULT);
 
     // * Running command

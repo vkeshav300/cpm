@@ -11,11 +11,14 @@
 
 #include <string>
 #include <map>
+#include <vector>
 
 namespace logger
 {
     extern std::map<std::string, std::string> colors;
     extern int logger_count;
+
+    void flush_buffer();
 
     void handle_logger_count();
 
@@ -29,5 +32,5 @@ namespace logger
 
     void custom(const std::string &message, const std::string &mtype, const std::string &color);
 
-    void flush_buffer();
+    bool prompt(const std::string &message);
 }

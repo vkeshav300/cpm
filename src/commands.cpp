@@ -39,13 +39,14 @@ namespace commands
         std::vector<std::string> files_to_erase;
 
         // * Different project structures
-        if (misc::find_in_vector(flags, "nogit") || misc::find_in_vector(flags, "no-git") || misc::find_in_vector(flags, "no_git"))
+        if (true == logger::prompt("initialize with git support"))
         {
             logger::success("initializing project without git support");
 
             files_to_erase.emplace_back(".gitignore");
             files_to_erase.emplace_back("README.md");
         }
+
 
         misc::erase_from_vector(default_files, files_to_erase);
 
@@ -58,10 +59,10 @@ namespace commands
             project_name = "PLACEHOLDER";
 
         // * Create files and folders
-        for (auto &folder : default_folders)
+        for (const auto &folder : default_folders)
             directory::create_folder("./", folder);
 
-        for (auto &file : default_files)
+        for (const auto &file : default_files)
             directory::create_file("./", file);
 
         // * Populates files with default code / text
@@ -269,7 +270,6 @@ namespace commands
                   << "--version || version --> tells current version of cpm you are using\n\n"
                   << "init <language> --> sets up a new C or C++ project\n"
                   << "init flag : -post --> sets up CPM in a preexisting project\n"
-                  << "init flag : -nogit --> sets up CPM without git support (also accepts \"-no-git\" and \"-no_git\")\n"
                   << "init flag : -v=<version> --> specifies custom version of programming language to be used for compiling\n"
                   << "init flag : -n=<project name> --> specifies project name to be used in lieu of placeholders\n\n"
                   << "pair new <name> --> creates header/source file pair\n"

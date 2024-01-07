@@ -11,7 +11,7 @@
 #include "misc.h"
 #include "logger.h"
 
-// ? Standard library
+// ? Libraries
 #include <algorithm>
 #include <cctype>
 
@@ -79,7 +79,6 @@ namespace misc
         for (auto &_content : contents)
         {
             std::string content = _content;
-            trim(content);
 
             auto location = std::find(main_vector.begin(), main_vector.end(), content);
 

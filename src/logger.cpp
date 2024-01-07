@@ -7,10 +7,7 @@
  * @copyright Copyright (c) 2023
  *
  */
-// ? Project headers
 #include "logger.h"
-
-// ? Standard library
 #include <iostream>
 
 namespace logger
@@ -33,12 +30,22 @@ namespace logger
     int logger_count = 0;
 
     /**
+     * @brief Flushes output buffer.
+     *
+     */
+    void flush_buffer() { std::cout.flush(); }
+
+    /**
      * @brief Handles logger count.
      *
      */
     void handle_logger_count()
     {
-        std::cout << colors["cyan"] << "[" << logger_count << "]";
+        std::cout << colors["cyan"]
+                  << "["
+                  << logger_count
+                  << "]"
+                  << colors["reset"];
         if (logger_count < 10)
             std::cout << " ";
 
@@ -116,10 +123,32 @@ namespace logger
                   << message
                   << "\n";
     }
-
+    
     /**
-     * @brief Flushes output buffer.
-     *
+     * @brief Logs y/n prompt to console.
+     * 
+     * @param message 
+     * @return true 
+     * @return false 
      */
-    void flush_buffer() { std::cout << std::endl; }
+    bool prompt(const std::string &message)
+    {
+        while (true)
+        {
+            handle_logger_count();
+
+            std::string _prompt = colors["green"] + "[prompt]: " + colors["reset"] + message + "? [y/n]: ";
+            std::cout << _prompt;
+
+            std::string line;
+            getline(std::cin, line);
+
+            if ("y" == line || "yes" == line)
+                return true;
+            else if ("n" == line || "no" == line)
+                return false;
+            else
+                warn("\"" + line + "\" is not a valid response, try again");
+        }
+    }
 }

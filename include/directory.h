@@ -11,6 +11,7 @@
 
 #include <string>
 #include <fstream>
+#include <map>
 
 namespace directory
 {
@@ -27,4 +28,6 @@ namespace directory
     void create_folder(std::string dir, std::string foldername);
 
     void delete_file(std::string dir, std::string filename);
+
+    std::map<std::string, std::string> parse_cpm(std::string dir, std::string filename);
 };

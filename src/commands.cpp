@@ -306,7 +306,7 @@ namespace commands
     int contents(const std::vector<std::string> &arguments, const std::vector<std::string> &flags)
     {
         std::string sub_command = arguments[0];
-        int arguments_amt = arguments.size();
+        std::size_t arguments_amt = arguments.size();
 
         // * Min amt of arguments (for entire command)
         if (arguments_amt < 2)
@@ -473,11 +473,11 @@ namespace commands
      * @param size
      * @param nmemb
      * @param output
-     * @return size_t
+     * @return std::size_t
      */
-    size_t write_callback(void *contents, size_t size, size_t nmemb, std::string *output)
+    std::size_t write_callback(void *contents, std::size_t size, std::size_t nmemb, std::string *output)
     {
-        size_t total_size = size * nmemb;
+        std::size_t total_size = size * nmemb;
         output->append(static_cast<char *>(contents), total_size);
         return total_size;
     }

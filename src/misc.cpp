@@ -54,12 +54,12 @@ namespace misc
     void trim(std::string &str)
     {
         // * Trim leading whitespaces
-        size_t start = str.find_first_not_of(' ');
+        std::size_t start = str.find_first_not_of(' ');
         if (start != std::string::npos)
             str = str.substr(start);
 
         // * Trim trailing whitespaces
-        size_t end = str.find_last_not_of(' ');
+        std::size_t end = str.find_last_not_of(' ');
         if (end != std::string::npos)
             str = str.substr(0, end + 1);
     }

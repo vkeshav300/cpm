@@ -9,10 +9,12 @@
  */
 #include "directory.h"
 #include "logger.h"
+#include "misc.h"
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <filesystem>
+#include <sstream>
 
 namespace directory
 {
@@ -39,6 +41,12 @@ namespace directory
 
         std::ifstream file;
         file.open(filepath);
+
+        if (!file.is_open())
+        {
+            logger::error("failed to open file");
+            return filename;
+        }
 
         // * Reading contents of the file
         std::string contents;
@@ -168,5 +176,42 @@ namespace directory
         }
 
         logger::custom(filepath, "deleted", "magenta");
+    }
+
+    std::map<std::string, std::string> parse_cpm(std::string dir, std::string filename)
+    {
+        std::ifstream cpm_file;
+        cpm_file.open(dir + filename);
+
+        std::map<std::string, std::string> parsed_file;
+
+        if (!cpm_file.is_open())
+        {
+            logger::error("failed to open file");
+            parsed_file["file"] = filename;
+            return parsed_file;
+        }
+
+        std::string line;
+
+        while (std::getline(cpm_file, line))
+        {
+            std::istringstream iss;
+            iss.str(line);
+
+            std::string key, value;
+
+            if (std::getline(iss, key, ':') && std::getline(iss, value, ','))
+            {
+                misc::trim(key);
+                misc::trim(value);
+
+                parsed_file[key] = value;
+            }
+
+            cpm_file.close();
+        }
+
+        return parsed_file;
     }
 }

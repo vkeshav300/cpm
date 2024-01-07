@@ -15,6 +15,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <map>
 #include <algorithm>
 #include <chrono>
 #include <curl/curl.h>
@@ -155,8 +156,16 @@ int main(int argc, char *argv[])
 
     if (initialized)
     {
-        std::string contents_cpm = directory::slurp("./", ".cpm");
-        language = (contents_cpm.find("language: c")) ? "c" : "cpp"; // ? Language is stored in .cpm file
+        std::map<std::string, std::string> cpm_file = directory::parse_cpm("./", ".cpm"); // ? Language is in .cpm file
+        
+        if (cpm_file.count("language") == false)
+        {
+            logger::error("directory contains invalid .cpm file");
+
+            return 1;
+        }
+
+        language = cpm_file["language"];
     }
     else if (misc::find_in_vector(get_lang_from_first_arg, command))
         language = arguments[0]; // ? Language is provided in the first argument
@@ -172,6 +181,12 @@ int main(int argc, char *argv[])
 
     if ("c++" == language)
         language = "cpp";
+
+    if ("c" != language && "cpp" != language)
+    {
+        logger::error("invalid language provided");
+        return 1;
+    }
 
     logger::custom("command \'" + command + "\' with " + std::to_string(arguments.size()) + " argument(s) and " + std::to_string(flags.size()) + " flag(s)", "received", "blue");
 

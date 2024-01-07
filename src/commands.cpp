@@ -36,14 +36,15 @@ namespace commands
         std::vector<std::string> files_to_erase;
 
         // * Different project structures
-        if (true == logger::prompt("initialize with git support"))
+        if (false == logger::prompt("initialize with git support"))
         {
             logger::success("initializing project without git support");
 
             files_to_erase.emplace_back(".gitignore");
             files_to_erase.emplace_back("README.md");
         }
-
+        else
+            logger::success("initializing project with git support");
 
         misc::erase_from_vector(default_files, files_to_erase);
 
@@ -141,7 +142,7 @@ namespace commands
 
         // * Provided information
         logger::custom("to best utilize this project structure, it is recommended that you know how to use CMake.", "important", "yellow");
-        
+
         if ("PLACEHOLDER" == project_name)
             logger::custom("make sure to edit all the placeholders in your \"CMakeLists.txt\" file.", "important", "yellow");
 
@@ -297,10 +298,10 @@ namespace commands
 
     /**
      * @brief Uses contents of files to execute sub-commands.
-     * 
+     *
      * @param arguments Command arguments.
      * @param flags Command flags.
-     * @return int 
+     * @return int
      */
     int contents(const std::vector<std::string> &arguments, const std::vector<std::string> &flags)
     {

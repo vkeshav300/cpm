@@ -89,10 +89,10 @@ namespace misc
 
     /**
      * @brief Check if flags contains a flag with specific content, then removes content from flag and returns it.
-     * 
+     *
      * @param flags Command flags.
-     * @param content 
-     * @return std::string 
+     * @param content
+     * @return std::string
      */
     std::string get_flag_defined(const std::vector<std::string> &flags, const std::string &content)
     {

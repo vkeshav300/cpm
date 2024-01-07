@@ -123,13 +123,13 @@ namespace logger
                   << message
                   << "\n";
     }
-    
+
     /**
      * @brief Logs y/n prompt to console.
-     * 
-     * @param message 
-     * @return true 
-     * @return false 
+     *
+     * @param message
+     * @return true
+     * @return false
      */
     bool prompt(const std::string &message)
     {

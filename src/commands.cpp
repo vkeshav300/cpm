@@ -30,12 +30,10 @@ namespace commands
      */
     int init(const std::string language, const std::vector<std::string> &flags)
     {
-        // * All folders and files to be created
         std::vector<std::string> default_folders = {"src", "include", "build", "tests", "docs"};
         std::vector<std::string> default_files = {".gitignore", "CMakeLists.txt", "README.md", "LICENSE", ".cpm", "src/main." + language};
         std::vector<std::string> files_to_erase;
 
-        // * Different project structures
         if (false == logger::prompt("initialize with git support"))
         {
             logger::success("initializing project without git support");
@@ -48,7 +46,6 @@ namespace commands
 
         misc::erase_from_vector(default_files, files_to_erase);
 
-        // * Project name
         std::string project_name;
 
         project_name = misc::get_flag_defined(flags, "n=");
@@ -56,17 +53,13 @@ namespace commands
         if (project_name.empty())
             project_name = "PLACEHOLDER";
 
-        // * Create files and folders
         for (const auto &folder : default_folders)
             directory::create_folder("./", folder);
 
         for (const auto &file : default_files)
             directory::create_file("./", file);
 
-        // * Populates files with default code / text
-
         {
-            // * Language-specific variables
             std::string addon = ("c" == language) ? "" : "XX";
             std::string version = misc::get_flag_defined(flags, "v=");
 
@@ -140,7 +133,6 @@ namespace commands
 
         logger::success("populated files");
 
-        // * Provided information
         logger::custom("to best utilize this project structure, it is recommended that you know how to use CMake.", "important", "yellow");
 
         if ("PLACEHOLDER" == project_name)
@@ -205,7 +197,6 @@ namespace commands
         {
             for (auto &pair_name : pair_names)
             {
-                // * Create header and source files, then populate them
                 directory::create_file("./include/", pair_name + header_file_extention);
 
                 {
@@ -226,7 +217,6 @@ namespace commands
         {
             for (auto &pair_name : pair_names)
             {
-                // * Delete files
                 directory::delete_file("./include/", pair_name + ".h");
                 directory::delete_file("./include/", pair_name + ".hpp");
                 directory::delete_file("./src/", pair_name + src_file_extention);
@@ -234,7 +224,6 @@ namespace commands
         }
         else
         {
-            // * Invalid "method" of dealing with files
             logger::error_q("is not a valid sub command", sub_command);
 
             return 1;
@@ -250,7 +239,6 @@ namespace commands
      */
     int help()
     {
-        // * CPM ASCII Art
         std::cout << "\n"
                   << " ██████ ██████  ███    ███\n"
                   << "██      ██   ██ ████  ████\n"
@@ -260,10 +248,8 @@ namespace commands
 
         logger::custom("https://github.com/vkeshav300/cpm\n\n\n", "source code", "red");
 
-        // * Usage
         logger::custom("cpm <command> <args> <flags>\n", "usage", "blue");
 
-        // * Commands
         std::cout << "help --> lists commands + other useful information related to CPM\n\n"
                   << "--version || version --> tells current version of cpm you are using\n\n"
                   << "init <language> --> sets up a new C or C++ project\n"
@@ -278,7 +264,6 @@ namespace commands
                   << "contents switch <file 1> <file 2> --> switches the contents of the two files\n"
                   << "contents flag : -app/-append --> (if applicable to the sub-command), will use append mode\n\n";
 
-        // * Other
         logger::custom("arguments must be in order, but flags can be placed anywhere after the command.", "note", "yellow");
 
         return 0;
@@ -308,7 +293,6 @@ namespace commands
         std::string sub_command = arguments[0];
         std::size_t arguments_amt = arguments.size();
 
-        // * Min amt of arguments (for entire command)
         if (arguments_amt < 2)
         {
             logger::error("minimum amount of arguments not met");
@@ -317,18 +301,15 @@ namespace commands
 
         if ("copy" == sub_command)
         {
-            // * Min amt of arguments (for sub command)
             if (arguments_amt < 3)
             {
                 logger::error("minimum amount of arguments not met");
                 return 1;
             }
 
-            // * The file to copy from and write to
             std::string file_primary_s = arguments[1];
             std::string file_target_s = arguments[2];
 
-            // * Checking if files exist
             if (!directory::has_file("./", file_primary_s))
             {
                 logger::error_q("does not exist", file_primary_s);
@@ -344,7 +325,6 @@ namespace commands
             if (!directory::has_file("./", file_target_s))
                 directory::create_file("./", file_target_s);
 
-            // * Copying file
             std::ifstream file_primary;
             file_primary.open(file_primary_s);
 
@@ -356,7 +336,6 @@ namespace commands
                 else
                     file_target.open(file_target_s);
 
-                // * Reading / Writing
                 char ch;
 
                 while (file_primary.get(ch))
@@ -365,7 +344,6 @@ namespace commands
                 file_target.close();
             }
 
-            // * Closing files
             file_primary.close();
 
             logger::success((misc::find_in_vector(flags, "append") || misc::find_in_vector(flags, "app")) ? "copied " + file_primary_s + " to " + file_target_s + " with append mode" : "copied " + file_primary_s + " to " + file_target_s + " without append mode");
@@ -390,18 +368,15 @@ namespace commands
         }
         else if ("switch" == sub_command)
         {
-            // * Min amt of arguments (for sub command)
             if (arguments_amt < 3)
             {
                 logger::error("minimum amount of arguments not met");
                 return 1;
             }
 
-            // * The file to copy from and write to
             std::string file_primary_s = arguments[1];
             std::string file_target_s = arguments[2];
 
-            // * Checking if files exist
             if (!directory::has_file("./", file_primary_s))
             {
                 logger::error_q("does not exist", file_primary_s);
@@ -420,19 +395,15 @@ namespace commands
                 return 1;
             }
 
-            // * Opening files
             std::ifstream ifs_primary, ifs_target;
             std::ofstream ofs_primary, ofs_target;
 
-            // * Opening files to read
             ifs_primary.open(file_primary_s);
             ifs_target.open(file_target_s);
 
-            // * Opening files to write
             ofs_primary.open(file_primary_s + ".tmp");
             ofs_target.open(file_target_s + ".tmp");
 
-            // * Reading & writing
             char ch;
 
             while (ifs_primary.get(ch))
@@ -441,17 +412,14 @@ namespace commands
             while (ifs_target.get(ch))
                 ofs_primary.put(ch);
 
-            // * Cleaning up
             ifs_primary.close();
             ifs_target.close();
             ofs_primary.close();
             ofs_target.close();
 
-            // * Deleting original files (not using directory namespace to avoid the delete messages in console)
             std::filesystem::remove(file_primary_s.c_str());
             std::filesystem::remove(file_target_s.c_str());
 
-            // * Renaming temporary files to original files
             std::filesystem::rename((file_primary_s + ".tmp").c_str(), file_primary_s.c_str());
             std::filesystem::rename((file_target_s + ".tmp").c_str(), file_target_s.c_str());
 
@@ -492,14 +460,12 @@ namespace commands
      */
     int install(const std::vector<std::string> &arguments, const std::vector<std::string> &flags, const std::string language)
     {
-        // * Assert proper amount of arguments
         if (arguments.size() < 1)
         {
             logger::error("invalid amount of arguments");
             return 1;
         }
 
-        // * CURL setup
         std::string package_url = arguments[0];
 
         CURL *curl;
@@ -507,7 +473,6 @@ namespace commands
 
         curl = curl_easy_init();
 
-        // * Assert CURL
         if (!curl)
         {
             logger::error("failed to init curl");
@@ -517,17 +482,14 @@ namespace commands
         curl_easy_setopt(curl, CURLOPT_URL, package_url.c_str());
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 
-        // * Request timeout
         curl_easy_setopt(curl, CURLOPT_TIMEOUT, 5L);
 
-        // * Configures response
         std::string response;
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
 
         res = curl_easy_perform(curl);
 
-        // * Assert curl_easy_perform didn't fail
         if (res != CURLE_OK)
         {
             logger::error_q(": curl_easy_perform() failed", curl_easy_strerror(res));
@@ -535,7 +497,6 @@ namespace commands
             return 1;
         }
 
-        // * Check response code
         long http_code = 0;
         curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
 
@@ -548,7 +509,6 @@ namespace commands
             return 1;
         }
 
-        // * CURL cleanup
         curl_easy_cleanup(curl);
 
         return 0;

@@ -28,7 +28,6 @@ namespace directory
      */
     std::string slurp(std::string dir, std::string filename)
     {
-        // * Checking if file exists
         if (!has_file(dir, filename))
         {
             logger::error("\'" + filename + "\' does not exist at \'" + dir + "\'");
@@ -36,7 +35,6 @@ namespace directory
             return NULL;
         }
 
-        // * Opening the file
         std::string filepath = dir + filename;
 
         std::ifstream file;
@@ -48,7 +46,6 @@ namespace directory
             return filename;
         }
 
-        // * Reading contents of the file
         std::string contents;
         char ch;
 
@@ -178,6 +175,13 @@ namespace directory
         logger::custom(filepath, "deleted", "magenta");
     }
 
+    /**
+     * @brief Parses files in cpm-style format.
+     * 
+     * @param dir Directory file is located in.
+     * @param filename Name of the file.
+     * @return std::map<std::string, std::string> 
+     */
     std::map<std::string, std::string> parse_cpm(std::string dir, std::string filename)
     {
         std::ifstream cpm_file;

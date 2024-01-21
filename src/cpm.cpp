@@ -31,7 +31,6 @@
 #define OS_NAME "null"
 #endif
 
-// * All commands
 std::vector<std::string> all_commands = {
     "init",
     "pair",
@@ -39,6 +38,17 @@ std::vector<std::string> all_commands = {
     "version",
     "contents",
     "insert",
+};
+
+std::vector<std::string> init_exceptions = {
+    "init",
+    "help",
+    "version",
+    "contents",
+};
+
+std::vector<std::string> get_lang_from_first_arg = {
+    "init",
 };
 
 /**
@@ -52,7 +62,6 @@ std::vector<std::string> all_commands = {
  */
 int process_command(std::string command, std::vector<std::string> arguments, std::vector<std::string> flags, std::string language)
 {
-    // * Return status of command
     int r_code = 1;
 
     if ("init" == command)
@@ -86,10 +95,8 @@ int process_command(std::string command, std::vector<std::string> arguments, std
  */
 int main(int argc, char *argv[])
 {
-    // * Start time
     auto start = std::chrono::high_resolution_clock::now();
 
-    // * Assertations
     if (argc <= 1)
     {
         logger::error("no command provided");
@@ -98,7 +105,6 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    // * Parsing command
     std::string command = argv[1];
     std::vector<std::string> arguments;
     std::vector<std::string> flags;
@@ -119,11 +125,9 @@ int main(int argc, char *argv[])
 
     logger::success("parsed command");
 
-    // * Changing '--version' to 'version' for simplicity
     if ("--version" == command)
         command = "version";
 
-    // * Validating command
     if (!misc::find_in_vector(all_commands, command))
     {
         logger::error_q("is not a valid command", command);
@@ -132,32 +136,18 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    // * Checking initialized status
     bool initialized = commands::verify_init();
     bool command_is_exception = false;
 
-    // * All commands that don't need the directory to be initialized.
-    std::vector<std::string> init_exceptions = {
-        "init",
-        "help",
-        "version",
-        "contents",
-    };
-
     if (misc::find_in_vector(init_exceptions, command))
         command_is_exception = true;
-
-    // * All commands that have the first argument as language
-    std::vector<std::string> get_lang_from_first_arg = {
-        "init",
-    };
 
     std::string language;
 
     if (initialized)
     {
-        std::map<std::string, std::string> cpm_file = directory::parse_cpm("./", ".cpm"); // ? Language is in .cpm file
-        
+        std::map<std::string, std::string> cpm_file = directory::parse_cpm("./", ".cpm");
+
         if (cpm_file.count("language") == false)
         {
             logger::error("directory contains invalid .cpm file");
@@ -168,7 +158,7 @@ int main(int argc, char *argv[])
         language = cpm_file["language"];
     }
     else if (misc::find_in_vector(get_lang_from_first_arg, command))
-        language = arguments[0]; // ? Language is provided in the first argument
+        language = arguments[0];
     else if (misc::find_in_vector(init_exceptions, command))
         language = "c"; // ? Placeholder - doesn't actually matter
     else
@@ -190,19 +180,15 @@ int main(int argc, char *argv[])
 
     logger::custom("command \'" + command + "\' with " + std::to_string(arguments.size()) + " argument(s) and " + std::to_string(flags.size()) + " flag(s)", "received", "blue");
 
-    // * CURL init
     curl_global_init(CURL_GLOBAL_DEFAULT);
 
-    // * Running command
     int result = process_command(command, arguments, flags, language);
 
-    // * End time
     auto end = std::chrono::high_resolution_clock::now();
 
     logger::custom("command \'" + command + "\' with exit code " + std::to_string(result) + " in " + std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count()) + " ms", "finished", "blue");
     logger::flush_buffer();
 
-    // * CURL cleanup
     curl_global_cleanup();
 
     return 0;

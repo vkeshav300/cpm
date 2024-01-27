@@ -34,7 +34,7 @@ namespace commands
         std::vector<std::string> default_files = {".gitignore", "CMakeLists.txt", "README.md", "LICENSE", ".cpm", "src/main." + language};
         std::vector<std::string> files_to_erase;
 
-        if (false == logger::prompt("initialize with git support"))
+        if (false == logger::yn_prompt("initialize with git support"))
         {
             logger::success("initializing project without git support");
 
@@ -46,12 +46,7 @@ namespace commands
 
         misc::erase_from_vector(default_files, files_to_erase);
 
-        std::string project_name;
-
-        project_name = misc::get_flag_defined(flags, "n=");
-
-        if (project_name.empty())
-            project_name = "PLACEHOLDER";
+        std::string project_name = logger::input("project name");
 
         for (const auto &folder : default_folders)
             directory::create_folder("./", folder);
@@ -255,7 +250,6 @@ namespace commands
                   << "init <language> --> sets up a new C or C++ project\n"
                   << "init flag : -post --> sets up CPM in a preexisting project\n"
                   << "init flag : -v=<version> --> specifies custom version of programming language to be used for compiling\n"
-                  << "init flag : -n=<project name> --> specifies project name to be used in lieu of placeholders\n\n"
                   << "pair new <name> --> creates header/source file pair\n"
                   << "pair remove <name> --> gets rid of header/source file pair\n"
                   << "pair flag : -hpp --> (if applicable to the sub-command), command will use .hpp files instead of .h files\n\n"

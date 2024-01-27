@@ -24,11 +24,15 @@ namespace logger
 
     void success(const std::string &message);
 
+    void success_q(const std::string &message, const std::string &quote);
+
     void error(const std::string &message);
 
     void error_q(const std::string &message, const std::string &quote);
 
     void warn(const std::string &message);
+
+    void warn_q(const std::string &message, const std::string &quote);
 
     void custom(const std::string &message, const std::string &mtype, const std::string &color);
 

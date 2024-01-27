@@ -71,6 +71,17 @@ namespace logger
     }
 
     /**
+     * @brief Logs success message with quote to console.
+     *
+     * @param message Text to be logged.
+     * @param quote Text in quote.
+     */
+    void success_q(const std::string &message, const std::string &quote)
+    {
+        success("\'" + quote + "\' " + message);
+    }
+
+    /**
      * @brief Logs error message to console.
      *
      * @param message Text to be logged.
@@ -85,6 +96,12 @@ namespace logger
                   << "\n";
     }
 
+    /**
+     * @brief Logs error message with quote to console.
+     *
+     * @param message Text to be logged.
+     * @param quote Text in quote.
+     */
     void error_q(const std::string &message, const std::string &quote)
     {
         error("\'" + quote + "\' " + message);
@@ -103,6 +120,17 @@ namespace logger
                   << colors["reset"]
                   << message
                   << "\n";
+    }
+
+    /**
+     * @brief Logs warning message with quote to console.
+     *
+     * @param message Text to be logged.
+     * @param quote Text in quote.
+     */
+    void warn_q(const std::string &message, const std::string &quote)
+    {
+        warn("\'" + quote + "\' " + message);
     }
 
     /**
@@ -126,21 +154,22 @@ namespace logger
 
     /**
      * @brief Logs input to console.
-     * 
-     * @param message 
-     * @return std::string 
+     *
+     * @param message Input prompt.
+     * @return std::string
      */
     std::string input(const std::string &message)
     {
         handle_logger_count();
-        
+
         std::string _input = colors["red"] + "[input]: " + colors["reset"] + message + ": ";
         std::cout << _input;
 
         std::string line;
         getline(std::cin, line);
 
-        if (line.empty()) line = "PLACEHOLDER";
+        if (line.empty())
+            line = "PLACEHOLDER";
 
         return line;
     }
@@ -148,7 +177,7 @@ namespace logger
     /**
      * @brief Logs y/n prompt to console.
      *
-     * @param message
+     * @param message Prompt.
      * @return true
      * @return false
      */

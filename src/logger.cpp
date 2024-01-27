@@ -198,7 +198,7 @@ namespace logger
             else if ("n" == line || "no" == line)
                 return false;
             else
-                warn("\"" + line + "\" is not a valid response, try again");
+                warn_q("is not a valid response, try again", line);
         }
     }
 }

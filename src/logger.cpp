@@ -125,13 +125,34 @@ namespace logger
     }
 
     /**
+     * @brief Logs input to console.
+     * 
+     * @param message 
+     * @return std::string 
+     */
+    std::string input(const std::string &message)
+    {
+        handle_logger_count();
+        
+        std::string _input = colors["red"] + "[input]: " + colors["reset"] + message + ": ";
+        std::cout << _input;
+
+        std::string line;
+        getline(std::cin, line);
+
+        if (line.empty()) line = "PLACEHOLDER";
+
+        return line;
+    }
+
+    /**
      * @brief Logs y/n prompt to console.
      *
      * @param message
      * @return true
      * @return false
      */
-    bool prompt(const std::string &message)
+    bool yn_prompt(const std::string &message)
     {
         while (true)
         {

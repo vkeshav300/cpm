@@ -32,5 +32,7 @@ namespace logger
 
     void custom(const std::string &message, const std::string &mtype, const std::string &color);
 
-    bool prompt(const std::string &message);
+    std::string input(const std::string &message);
+
+    bool yn_prompt(const std::string &message);
 }

@@ -37,6 +37,7 @@ jobs:
         run: |
           sudo apt-get install curl
           sudo apt-get install libssl-dev libcurl4-openssl-dev
+          sudo apt-get install libjsoncpp-dev
 
       - name: Configure CMake
         run: cmake -Bbuild -S.

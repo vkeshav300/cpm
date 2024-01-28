@@ -38,6 +38,8 @@ std::vector<std::string> all_commands = {
     "version",
     "contents",
     "insert",
+    "install",
+    "uninstall",
 };
 
 std::vector<std::string> init_exceptions = {
@@ -82,6 +84,10 @@ int process_command(std::string command, std::vector<std::string> arguments, std
         r_code = commands::version();
     else if ("contents" == command)
         r_code = commands::contents(arguments, flags);
+    else if ("install" == command)
+        r_code = commands::install(arguments, flags, language);
+    else if ("uninstall" == command)
+        r_code = commands::uninstall(arguments);
 
     return r_code;
 }

@@ -19,6 +19,7 @@
 #include <cstdio>
 #include <filesystem>
 #include <curl/curl.h>
+// #include <json/json.h>
 
 namespace commands
 {
@@ -256,7 +257,9 @@ namespace commands
                   << "contents copy <copy from> <copy to> --> copies contents of one file to another (will erase all data from copy to file)\n"
                   << "contents erase <file> --> erases all contents from a file\n"
                   << "contents switch <file 1> <file 2> --> switches the contents of the two files\n"
-                  << "contents flag : -app/-append --> (if applicable to the sub-command), will use append mode\n\n";
+                  << "contents flag : -app/-append --> (if applicable to the sub-command), will use append mode\n\n"
+                  << "install <repository> --> <STILL BEING PROGRAMMED>\n"
+                  << "uninstall <package_name> --> <STILL BEING PROGRAMMED>\n\n";
 
         logger::custom("arguments must be in order, but flags can be placed anywhere after the command.", "note", "yellow");
 
@@ -445,7 +448,7 @@ namespace commands
     }
 
     /**
-     * @brief Installs package from github link
+     * @brief Installs package from github.
      *
      * @param arguments Command arguments.
      * @param flags Command flags.
@@ -456,11 +459,14 @@ namespace commands
     {
         if (arguments.size() < 1)
         {
-            logger::error("invalid amount of arguments");
+            logger::error("minimum amount of arguments not met");
             return 1;
         }
 
         std::string package_url = arguments[0];
+
+        if (!misc::has_contents(package_url, "https://github.com/"))
+            package_url = "https://github.com/" + package_url;
 
         CURL *curl;
         CURLcode res;
@@ -469,9 +475,11 @@ namespace commands
 
         if (!curl)
         {
-            logger::error("failed to init curl");
+            logger::error("failed to init CURL");
             return 1;
         }
+
+        logger::success("initialized CURL");
 
         curl_easy_setopt(curl, CURLOPT_URL, package_url.c_str());
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
@@ -491,6 +499,8 @@ namespace commands
             return 1;
         }
 
+        logger::success("setup CURL");
+
         long http_code = 0;
         curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
 
@@ -505,6 +515,8 @@ namespace commands
 
         curl_easy_cleanup(curl);
 
+        logger::success("cleaned up CURL");
+
         return 0;
     }
 
@@ -514,7 +526,7 @@ namespace commands
      * @param arguments Command arguments.
      * @return int
      */
-    int uninstall(std::vector<std::string> &arguments)
+    int uninstall(const std::vector<std::string> &arguments)
     {
         return 0;
     }

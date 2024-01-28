@@ -19,7 +19,7 @@
 #include <cstdio>
 #include <filesystem>
 #include <curl/curl.h>
-// #include <json/json.h>
+#include <json/json.h>
 
 namespace commands
 {
@@ -236,11 +236,13 @@ namespace commands
     int help()
     {
         std::cout << "\n"
+                  << logger::colors["blue"]
                   << " ██████ ██████  ███    ███\n"
                   << "██      ██   ██ ████  ████\n"
                   << "██      ██████  ██ ████ ██\n"
                   << "██      ██      ██  ██  ██\n"
-                  << " ██████ ██      ██      ██\n\n";
+                  << " ██████ ██      ██      ██\n\n"
+                  << logger::colors["reset"];
 
         logger::custom("https://github.com/vkeshav300/cpm\n\n\n", "source code", "red");
 

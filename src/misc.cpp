@@ -11,6 +11,7 @@
 #include "logger.h"
 #include <algorithm>
 #include <cctype>
+#include <fstream>
 
 namespace misc
 {
@@ -111,5 +112,37 @@ namespace misc
                 return flag.substr(content.size(), flag.size() - 1);
 
         return "";
+    }
+
+    /**
+     * @brief CURL --> Calculates total size of received data and writes it to a string.
+     *
+     * @param contents
+     * @param size
+     * @param nmemb
+     * @param output
+     * @return std::size_t
+     */
+    std::size_t write_callback(void *contents, std::size_t size, std::size_t nmemb, std::string *output)
+    {
+        std::size_t total_size = size * nmemb;
+        output->append(static_cast<char *>(contents), total_size);
+        return total_size;
+    }
+
+    /**
+     * @brief CURL --> Calculates total size of received data and writes it to file stream.
+     * 
+     * @param contents 
+     * @param size 
+     * @param nmemb 
+     * @param outputFile 
+     * @return std::size_t 
+     */
+    std::size_t write_file_callback(void *contents, std::size_t size, std::size_t nmemb, std::ofstream *output_file)
+    {
+        std::size_t total_size = size * nmemb;
+        output_file->write(static_cast<char *>(contents), total_size);
+        return total_size;
     }
 }

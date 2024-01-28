@@ -28,8 +28,6 @@ namespace commands
 
     int contents(const std::vector<std::string> &arguments, const std::vector<std::string> &flags);
 
-    size_t WriteCallback(void *contents, size_t size, size_t nmemb, std::string *output);
-
     int install(const std::vector<std::string> &arguments, const std::vector<std::string> &flags, const std::string language);
 
     int uninstall(const std::vector<std::string> &arguments);

@@ -419,6 +419,12 @@ namespace commands
             std::filesystem::remove(file_primary_s.c_str());
             std::filesystem::remove(file_target_s.c_str());
 
+            if (directory::has_file("./", file_primary_s))
+                logger::error_q("could not be deleted", file_primary_s);
+
+            if (directory::has_file("./", file_target_s))
+                logger::error_q("could not be deleted", file_target_s);
+
             std::filesystem::rename((file_primary_s + ".tmp").c_str(), file_primary_s.c_str());
             std::filesystem::rename((file_target_s + ".tmp").c_str(), file_target_s.c_str());
 
@@ -434,23 +440,7 @@ namespace commands
     }
 
     /**
-     * @brief CURL --> Calculates total size of received data and appends it to a string
-     *
-     * @param contents
-     * @param size
-     * @param nmemb
-     * @param output
-     * @return std::size_t
-     */
-    std::size_t write_callback(void *contents, std::size_t size, std::size_t nmemb, std::string *output)
-    {
-        std::size_t total_size = size * nmemb;
-        output->append(static_cast<char *>(contents), total_size);
-        return total_size;
-    }
-
-    /**
-     * @brief Installs package from github.
+     * @brief Installs package from provided git repository.
      *
      * @param arguments Command arguments.
      * @param flags Command flags.
@@ -465,10 +455,13 @@ namespace commands
             return 1;
         }
 
-        std::string package_url = arguments[0];
+        std::string target_url = arguments[0];
 
-        if (!misc::has_contents(package_url, "https://github.com/"))
-            package_url = "https://github.com/" + package_url;
+        if (!misc::has_contents(target_url, "https://github.com/"))
+            target_url = "https://github.com/" + target_url;
+
+        if (!misc::has_contents(target_url, "/releases/latest"))
+            target_url += "/releases/latest";
 
         CURL *curl;
         CURLcode res;
@@ -483,13 +476,13 @@ namespace commands
 
         logger::success("initialized CURL");
 
-        curl_easy_setopt(curl, CURLOPT_URL, package_url.c_str());
+        curl_easy_setopt(curl, CURLOPT_URL, target_url.c_str());
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 
         curl_easy_setopt(curl, CURLOPT_TIMEOUT, 5L);
 
         std::string response;
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, misc::write_callback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
 
         res = curl_easy_perform(curl);
@@ -515,8 +508,31 @@ namespace commands
             return 1;
         }
 
-        curl_easy_cleanup(curl);
+        Json::CharReaderBuilder json_reader;
+        Json::Value release_info;
+        std::istringstream json_stream(response);
+        Json::parseFromStream(json_reader, json_stream, &release_info, nullptr);
 
+        curl_easy_setopt(curl, CURLOPT_URL, release_info["assets"][0]["browser_download_url"].asString().c_str());
+
+        std::ofstream output_file("cpm_install.tmp.zip", std::ios::binary);
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, misc::write_file_callback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &output_file);
+
+        res = curl_easy_perform(curl);
+        output_file.close();
+
+        if (res != CURLE_OK)
+        {
+            logger::error_q(": curl_easy_perform() : asset download failed", curl_easy_strerror(res));
+            logger::custom("try seeing if the latest release on the repository contains a 'cpm_install.zip' file", "hint", "yellow");
+            curl_easy_cleanup(curl);
+            return 1;
+        }
+
+        logger::success("located installation files");
+
+        curl_easy_cleanup(curl);
         logger::success("cleaned up CURL");
 
         return 0;

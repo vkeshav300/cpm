@@ -58,19 +58,6 @@ namespace directory
     }
 
     /**
-     * @brief Checks if a file has specific contents.
-     *
-     * @param text Text to search in.
-     * @param contents Contents to search for.
-     * @return true
-     * @return false
-     */
-    bool has_contents(std::string text, std::string contents)
-    {
-        return (text.find(contents) != std::string::npos);
-    }
-
-    /**
      * @brief Checks if directory has a file.
      *
      * @param dir Directory file is located in.

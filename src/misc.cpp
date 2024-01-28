@@ -15,6 +15,19 @@
 namespace misc
 {
     /**
+     * @brief Checks if a file has specific contents.
+     *
+     * @param text Text to search in.
+     * @param contents Contents to search for.
+     * @return true
+     * @return false
+     */
+    bool has_contents(std::string text, std::string contents)
+    {
+        return (text.find(contents) != std::string::npos);
+    }
+
+    /**
      * @brief Creates sub-vector from a std::vector
      *
      * @param main_vector Initial vector.
@@ -94,7 +107,7 @@ namespace misc
     std::string get_flag_defined(const std::vector<std::string> &flags, const std::string &content)
     {
         for (auto &flag : flags)
-            if (flag.find(content) != std::string::npos)
+            if (has_contents(flag, content))
                 return flag.substr(content.size(), flag.size() - 1);
 
         return "";

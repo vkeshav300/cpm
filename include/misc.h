@@ -16,6 +16,8 @@ namespace misc
 {
     std::vector<std::string> sub_vector(const std::vector<std::string> &main_vector, const int begin_index, const int end_index);
 
+    bool has_contents(std::string text, std::string contents);
+
     bool find_in_vector(const std::vector<std::string> &main_vector, std::string content);
 
     void trim(std::string &str);

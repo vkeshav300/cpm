@@ -17,8 +17,6 @@ namespace directory
 {
     std::string slurp(std::string dir, std::string filename);
 
-    bool has_contents(std::string text, std::string contents);
-
     bool has_file(std::string dir, std::string filename);
 
     bool has_folder(std::string dir, std::string foldername);

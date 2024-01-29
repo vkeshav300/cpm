@@ -477,7 +477,28 @@ namespace commands
 
         logger::success("initialized CURL");
 
-        curl_easy_setopt(curl, CURLOPT_URL, target_url.c_str());
+        auto cleanup = [&]()
+        {
+            curl_easy_cleanup(curl);
+            logger::success("cleaned up CURL");
+        };
+
+        auto perform = [&](const std::string &url)
+        {
+            curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+
+            res = curl_easy_perform(curl);
+
+            if (res != CURLE_OK)
+            {
+                logger::error_q(": curl_easy_perform() failed : " + target_url, curl_easy_strerror(res));
+                cleanup();
+                return 1;
+            }
+
+            return 0;
+        };
+        // curl_easy_setopt(curl, CURLOPT_URL, target_url.c_str());
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
         curl_easy_setopt(curl, CURLOPT_TIMEOUT, 5L);
 
@@ -485,28 +506,30 @@ namespace commands
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, misc::write_callback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
 
-        res = curl_easy_perform(curl);
-
-        if (res != CURLE_OK)
-        {
-            logger::error_q(": curl_easy_perform() failed", curl_easy_strerror(res));
-            curl_easy_cleanup(curl);
-            return 1;
-        }
+        perform(target_url);
 
         logger::success("setup CURL");
 
         long http_code = 0;
-        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
 
-        if (http_code >= 200 && http_code < 300)
-            logger::success("validated package url");
-        else
+        auto validate_url = [&]()
         {
-            logger::error("invalid package url");
-            curl_easy_cleanup(curl);
+            curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
+
+            if (http_code >= 200 && http_code < 300)
+                logger::success_q("passed validation", target_url);
+            else
+            {
+                logger::error_q("is an invalid url", target_url);
+                cleanup();
+                return 1;
+            }
+
+            return 0;
+        };
+
+        if (validate_url())
             return 1;
-        }
 
         std::unique_ptr<char[]> final_url(nullptr);
         curl_easy_getinfo(curl, CURLINFO_EFFECTIVE_URL, &final_url);
@@ -514,52 +537,29 @@ namespace commands
         if (!final_url.get())
         {
             logger::error("failed to retrieve final url");
-            curl_easy_cleanup(curl);
+            cleanup();
             return 1;
         }
 
         target_url = std::string(final_url.get()) + "/cpm-example.zip";
-        curl_easy_setopt(curl, CURLOPT_URL, target_url.c_str());
 
-        res = curl_easy_perform(curl);
+        perform(target_url);
 
-        if (res != CURLE_OK)
-        {
-            logger::error_q(": curl_easy_perform() failed", curl_easy_strerror(res));
-            curl_easy_cleanup(curl);
+        if (validate_url())
             return 1;
-        }
 
-        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
+        // Json::CharReaderBuilder json_reader;
+        // Json::Value release_info;
+        // std::istringstream json_stream(response);
+        // std::string errs;
 
-        if (http_code >= 200 && http_code < 300)
-            logger::success("package url contains installation file");
-        else
-        {
-            logger::error_q("was not found at final package url", "cpm-install.zip");
-            curl_easy_cleanup(curl);
-            return 1;
-        }
-
-        if (misc::has_contents(response, "<html"))
-        {
-            logger::warn("received HTML instead of expected JSON : check repository or URL");
-            curl_easy_cleanup(curl);
-            return 1;
-        }
-
-        Json::CharReaderBuilder json_reader;
-        Json::Value release_info;
-        std::istringstream json_stream(response);
-        std::string errs;
-
-        if (!Json::parseFromStream(json_reader, json_stream, &release_info, &errs))
-        {
-            misc::replace(errs, "\n", " : ");
-            logger::error_q("failed to parse", errs);
-            curl_easy_cleanup(curl);
-            return 1;
-        }
+        // if (!Json::parseFromStream(json_reader, json_stream, &release_info, &errs))
+        // {
+        //     misc::replace(errs, "\n", " : ");
+        //     logger::error_q("failed to parse", errs);
+        //     cleanup();
+        //     return 1;
+        // }
 
         // curl_easy_setopt(curl, CURLOPT_URL, release_info["assets"][0]["browser_download_url"].asString().c_str());
 
@@ -574,7 +574,7 @@ namespace commands
         {
             logger::error_q(": curl_easy_perform() : asset download failed", curl_easy_strerror(res));
             logger::custom("try seeing if the latest release on the repository contains a 'cpm_install.zip' file", "hint", "yellow");
-            curl_easy_cleanup(curl);
+            cleanup();
             return 1;
         }
 
@@ -583,14 +583,13 @@ namespace commands
         if (!directory::has_file("./", "cpm_install.tmp.zip"))
         {
             logger::error("unable to download installation files");
-            curl_easy_cleanup(curl);
+            cleanup();
             return 1;
         }
 
         logger::success("downloaded installation files");
 
-        curl_easy_cleanup(curl);
-        logger::success("cleaned up CURL");
+        cleanup();
 
         return 0;
     }

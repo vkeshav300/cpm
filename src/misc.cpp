@@ -145,4 +145,22 @@ namespace misc
         output_file->write(static_cast<char *>(contents), total_size);
         return total_size;
     }
+
+    /**
+     * @brief Replaces all occurances of a with b in text.
+     * 
+     * @param text 
+     * @param a To replace
+     * @param b Replace with
+     */
+    void replace(std::string &text, const std::string &a, const std::string &b)
+    {
+        std::size_t start_pos = 0;
+
+        while ((start_pos = text.find(a, start_pos)) != std::string::npos)
+        {
+            text.replace(start_pos, a.length(), b);
+            start_pos += b.length();
+        }
+    }
 }

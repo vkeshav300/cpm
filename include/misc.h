@@ -29,4 +29,6 @@ namespace misc
     std::size_t write_callback(void *contents, std::size_t size, std::size_t nmemb, std::string *output);
 
     std::size_t write_file_callback(void *contents, std::size_t size, std::size_t nmemb, std::ofstream *output_file);
+
+    void replace(std::string &text, const std::string &a, const std::string &b);
 }

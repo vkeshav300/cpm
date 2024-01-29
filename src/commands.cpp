@@ -18,6 +18,7 @@
 #include <vector>
 #include <cstdio>
 #include <filesystem>
+#include <memory>
 #include <curl/curl.h>
 #include <json/json.h>
 
@@ -478,7 +479,6 @@ namespace commands
 
         curl_easy_setopt(curl, CURLOPT_URL, target_url.c_str());
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-
         curl_easy_setopt(curl, CURLOPT_TIMEOUT, 5L);
 
         std::string response;
@@ -508,12 +508,60 @@ namespace commands
             return 1;
         }
 
+        std::unique_ptr<char[]> final_url(nullptr);
+        curl_easy_getinfo(curl, CURLINFO_EFFECTIVE_URL, &final_url);
+
+        if (!final_url.get())
+        {
+            logger::error("failed to retrieve final url");
+            curl_easy_cleanup(curl);
+            return 1;
+        }
+
+        target_url = std::string(final_url.get()) + "/cpm-example.zip";
+        curl_easy_setopt(curl, CURLOPT_URL, target_url.c_str());
+
+        res = curl_easy_perform(curl);
+
+        if (res != CURLE_OK)
+        {
+            logger::error_q(": curl_easy_perform() failed", curl_easy_strerror(res));
+            curl_easy_cleanup(curl);
+            return 1;
+        }
+
+        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
+
+        if (http_code >= 200 && http_code < 300)
+            logger::success("package url contains installation file");
+        else
+        {
+            logger::error_q("was not found at final package url", "cpm-install.zip");
+            curl_easy_cleanup(curl);
+            return 1;
+        }
+
+        if (misc::has_contents(response, "<html"))
+        {
+            logger::warn("received HTML instead of expected JSON : check repository or URL");
+            curl_easy_cleanup(curl);
+            return 1;
+        }
+
         Json::CharReaderBuilder json_reader;
         Json::Value release_info;
         std::istringstream json_stream(response);
-        Json::parseFromStream(json_reader, json_stream, &release_info, nullptr);
+        std::string errs;
 
-        curl_easy_setopt(curl, CURLOPT_URL, release_info["assets"][0]["browser_download_url"].asString().c_str());
+        if (!Json::parseFromStream(json_reader, json_stream, &release_info, &errs))
+        {
+            misc::replace(errs, "\n", " : ");
+            logger::error_q("failed to parse", errs);
+            curl_easy_cleanup(curl);
+            return 1;
+        }
+
+        // curl_easy_setopt(curl, CURLOPT_URL, release_info["assets"][0]["browser_download_url"].asString().c_str());
 
         std::ofstream output_file("cpm_install.tmp.zip", std::ios::binary);
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, misc::write_file_callback);
@@ -531,6 +579,15 @@ namespace commands
         }
 
         logger::success("located installation files");
+
+        if (!directory::has_file("./", "cpm_install.tmp.zip"))
+        {
+            logger::error("unable to download installation files");
+            curl_easy_cleanup(curl);
+            return 1;
+        }
+
+        logger::success("downloaded installation files");
 
         curl_easy_cleanup(curl);
         logger::success("cleaned up CURL");

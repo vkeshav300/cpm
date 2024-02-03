@@ -456,20 +456,12 @@ namespace commands
             return 1;
         }
 
-        std::string target_url = arguments[0];
+        std::string target_url = "https://github.com/" + arguments[0] + "/releases/latest";
 
-        if (!misc::has_contents(target_url, "https://github.com/"))
-            target_url = "https://github.com/" + target_url;
-
-        if (!misc::has_contents(target_url, "/releases/latest"))
-            target_url += "/releases/latest";
-
-        CURL *curl;
+        std::unique_ptr<CURL, decltype(&curl_easy_cleanup)> curl(curl_easy_init(), &curl_easy_cleanup);
         CURLcode res;
 
-        curl = curl_easy_init();
-
-        if (!curl)
+        if (!curl || !curl.get())
         {
             logger::error("failed to init CURL");
             return 1;
@@ -477,104 +469,72 @@ namespace commands
 
         logger::success("initialized CURL");
 
-        auto cleanup = [&]()
-        {
-            curl_easy_cleanup(curl);
-            logger::success("cleaned up CURL");
-        };
+        curl_easy_setopt(curl.get(), CURLOPT_FOLLOWLOCATION, 1L);
+        curl_easy_setopt(curl.get(), CURLOPT_TIMEOUT, 5L);
 
-        auto perform = [&](const std::string &url)
-        {
-            curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-
-            res = curl_easy_perform(curl);
-
-            if (res != CURLE_OK)
-            {
-                logger::error_q(": curl_easy_perform() failed : " + target_url, curl_easy_strerror(res));
-                cleanup();
-                return 1;
-            }
-
-            return 0;
-        };
-        // curl_easy_setopt(curl, CURLOPT_URL, target_url.c_str());
-        curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-        curl_easy_setopt(curl, CURLOPT_TIMEOUT, 5L);
-
-        std::string response;
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, misc::write_callback);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
-
-        perform(target_url);
+        if (misc::curl_perform(curl, target_url))
+            return 1;
 
         logger::success("setup CURL");
 
-        long http_code = 0;
-
-        auto validate_url = [&]()
-        {
-            curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
-
-            if (http_code >= 200 && http_code < 300)
-                logger::success_q("passed validation", target_url);
-            else
-            {
-                logger::error_q("is an invalid url", target_url);
-                cleanup();
-                return 1;
-            }
-
-            return 0;
-        };
-
-        if (validate_url())
+        if (misc::validate_url(curl, target_url))
             return 1;
 
         std::unique_ptr<char[]> final_url(nullptr);
-        curl_easy_getinfo(curl, CURLINFO_EFFECTIVE_URL, &final_url);
+        curl_easy_getinfo(curl.get(), CURLINFO_EFFECTIVE_URL, &final_url);
 
         if (!final_url.get())
         {
             logger::error("failed to retrieve final url");
-            cleanup();
             return 1;
         }
 
-        target_url = std::string(final_url.get()) + "/cpm-example.zip";
+        target_url = std::string(final_url.get()) + "/cpm-install.zip";
 
-        perform(target_url);
-
-        if (validate_url())
+        if (misc::curl_perform(curl, target_url))
             return 1;
 
-        // Json::CharReaderBuilder json_reader;
-        // Json::Value release_info;
-        // std::istringstream json_stream(response);
-        // std::string errs;
+        if (misc::validate_url(curl, target_url))
+            return 1;
 
-        // if (!Json::parseFromStream(json_reader, json_stream, &release_info, &errs))
-        // {
-        //     misc::replace(errs, "\n", " : ");
-        //     logger::error_q("failed to parse", errs);
-        //     cleanup();
-        //     return 1;
-        // }
+        target_url = "https://api.github.com/repos/" + arguments[0] + "/releases";
 
-        // curl_easy_setopt(curl, CURLOPT_URL, release_info["assets"][0]["browser_download_url"].asString().c_str());
+        std::string response;
+        curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, misc::write_callback);
+        curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, &response);
+
+        if (misc::curl_perform(curl, target_url))
+            return 1;
+
+        Json::CharReaderBuilder json_reader;
+        Json::Value release_info;
+        std::istringstream json_stream(response);
+        std::string errs;
+
+        if (!Json::parseFromStream(json_reader, json_stream, &release_info, &errs))
+        {
+            std::cout << response << "\n";
+            std::cout << release_info.toStyledString() << "\n"; // ! prints null -- no data read?
+            misc::replace(errs, "\n", " : ");
+            logger::error_q("failed to parse", errs);
+            return 1;
+        }
+
+        curl_easy_setopt(curl.get(), CURLOPT_URL, release_info[0]["assets"][0]["browser_download_url"].asString().c_str());
 
         std::ofstream output_file("cpm_install.tmp.zip", std::ios::binary);
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, misc::write_file_callback);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &output_file);
+        curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, misc::write_file_callback);
+        curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, &output_file);
 
-        res = curl_easy_perform(curl);
+        // TODO https://api.github.com/repos/{argument[0]}/releases -- validate api and download data from API
+
+        res = curl_easy_perform(curl.get());
         output_file.close();
 
         if (res != CURLE_OK)
         {
             logger::error_q(": curl_easy_perform() : asset download failed", curl_easy_strerror(res));
             logger::custom("try seeing if the latest release on the repository contains a 'cpm_install.zip' file", "hint", "yellow");
-            cleanup();
             return 1;
         }
 
@@ -583,13 +543,10 @@ namespace commands
         if (!directory::has_file("./", "cpm_install.tmp.zip"))
         {
             logger::error("unable to download installation files");
-            cleanup();
             return 1;
         }
 
         logger::success("downloaded installation files");
-
-        cleanup();
 
         return 0;
     }

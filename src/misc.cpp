@@ -115,6 +115,24 @@ namespace misc
     }
 
     /**
+     * @brief Replaces all occurances of a with b in text.
+     *
+     * @param text
+     * @param a To replace
+     * @param b Replace with
+     */
+    void replace(std::string &text, const std::string &a, const std::string &b)
+    {
+        std::size_t start_pos = 0;
+
+        while ((start_pos = text.find(a, start_pos)) != std::string::npos)
+        {
+            text.replace(start_pos, a.length(), b);
+            start_pos += b.length();
+        }
+    }
+
+    /**
      * @brief CURL --> Calculates total size of received data and writes it to a string.
      *
      * @param contents
@@ -132,12 +150,12 @@ namespace misc
 
     /**
      * @brief CURL --> Calculates total size of received data and writes it to file stream.
-     * 
-     * @param contents 
-     * @param size 
-     * @param nmemb 
-     * @param outputFile 
-     * @return std::size_t 
+     *
+     * @param contents
+     * @param size
+     * @param nmemb
+     * @param outputFile
+     * @return std::size_t
      */
     std::size_t write_file_callback(void *contents, std::size_t size, std::size_t nmemb, std::ofstream *output_file)
     {
@@ -147,20 +165,50 @@ namespace misc
     }
 
     /**
-     * @brief Replaces all occurances of a with b in text.
-     * 
-     * @param text 
-     * @param a To replace
-     * @param b Replace with
+     * @brief CURL --> Validates URL, return true if URL is invalid.
+     *
+     * @param curl
+     * @param target_url
+     * @return true
+     * @return false
      */
-    void replace(std::string &text, const std::string &a, const std::string &b)
+    bool validate_url(const std::unique_ptr<CURL, decltype(&curl_easy_cleanup)> &curl, const std::string &target_url)
     {
-        std::size_t start_pos = 0;
+        long http_code = 0;
 
-        while ((start_pos = text.find(a, start_pos)) != std::string::npos)
+        curl_easy_getinfo(curl.get(), CURLINFO_RESPONSE_CODE, &http_code);
+
+        if (http_code >= 200 && http_code < 300)
+            logger::success_q("passed validation", target_url);
+        else
         {
-            text.replace(start_pos, a.length(), b);
-            start_pos += b.length();
+            logger::error_q("is an invalid url", target_url);
+            return true;
         }
+
+        return false;
     }
+
+    /**
+     * @brief CURL --> Uses curl_easy_perform() on a provided link.
+     * 
+     * @param curl 
+     * @param url 
+     * @return true 
+     * @return false 
+     */
+    bool curl_perform(const std::unique_ptr<CURL, decltype(&curl_easy_cleanup)> &curl, const std::string &url)
+    {
+        curl_easy_setopt(curl.get(), CURLOPT_URL, url.c_str());
+
+        CURLcode res = curl_easy_perform(curl.get());
+
+        if (res != CURLE_OK)
+        {
+            logger::error_q(": curl_easy_perform() failed : " + url, curl_easy_strerror(res));
+            return true;
+        }
+
+        return false;
+    };
 }

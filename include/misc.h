@@ -11,6 +11,8 @@
 
 #include <vector>
 #include <string>
+#include <curl/curl.h>
+#include <memory>
 
 namespace misc
 {
@@ -24,11 +26,15 @@ namespace misc
 
     void erase_from_vector(std::vector<std::string> &main_vector, const std::vector<std::string> &contents);
 
+    void replace(std::string &text, const std::string &a, const std::string &b);
+
     std::string get_flag_defined(const std::vector<std::string> &flags, const std::string &content);
 
     std::size_t write_callback(void *contents, std::size_t size, std::size_t nmemb, std::string *output);
 
     std::size_t write_file_callback(void *contents, std::size_t size, std::size_t nmemb, std::ofstream *output_file);
 
-    void replace(std::string &text, const std::string &a, const std::string &b);
+    bool validate_url(const std::unique_ptr<CURL, decltype(&curl_easy_cleanup)> &curl, const std::string &target_url);
+
+    bool curl_perform(const std::unique_ptr<CURL, decltype(&curl_easy_cleanup)> &curl, const std::string &url);
 }

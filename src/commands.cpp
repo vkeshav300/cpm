@@ -291,7 +291,7 @@ namespace commands
     int contents(const std::vector<std::string> &arguments, const std::vector<std::string> &flags)
     {
         std::string sub_command = arguments[0];
-        std::size_t arguments_amt = arguments.size();
+        size_t arguments_amt = arguments.size();
 
         if (arguments_amt < 2)
         {
@@ -459,7 +459,6 @@ namespace commands
         std::string target_url = "https://github.com/" + arguments[0] + "/releases/latest";
 
         std::unique_ptr<CURL, decltype(&curl_easy_cleanup)> curl(curl_easy_init(), &curl_easy_cleanup);
-        CURLcode res;
 
         if (!curl || !curl.get())
         {
@@ -471,6 +470,11 @@ namespace commands
 
         curl_easy_setopt(curl.get(), CURLOPT_FOLLOWLOCATION, 1L);
         curl_easy_setopt(curl.get(), CURLOPT_TIMEOUT, 5L);
+        curl_easy_setopt(curl.get(), CURLOPT_USERAGENT, "request");
+
+        std::string response;
+        curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, misc::write_callback);
+        curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, &response);
 
         if (misc::curl_perform(curl, target_url))
             return 1;
@@ -499,52 +503,51 @@ namespace commands
 
         target_url = "https://api.github.com/repos/" + arguments[0] + "/releases";
 
-        std::string response;
-        curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, misc::write_callback);
-        curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, &response);
-
         if (misc::curl_perform(curl, target_url))
             return 1;
 
-        Json::CharReaderBuilder json_reader;
-        Json::Value release_info;
-        std::istringstream json_stream(response);
-        std::string errs;
-
-        if (!Json::parseFromStream(json_reader, json_stream, &release_info, &errs))
-        {
-            std::cout << response << "\n";
-            std::cout << release_info.toStyledString() << "\n"; // ! prints null -- no data read?
-            misc::replace(errs, "\n", " : ");
-            logger::error_q("failed to parse", errs);
+        if (misc::validate_url(curl, target_url))
             return 1;
-        }
 
-        curl_easy_setopt(curl.get(), CURLOPT_URL, release_info[0]["assets"][0]["browser_download_url"].asString().c_str());
+        // Json::CharReaderBuilder json_reader;
+        // Json::Value release_info;
+        // std::istringstream json_stream(response);
+        // std::string errs;
 
-        std::ofstream output_file("cpm_install.tmp.zip", std::ios::binary);
-        curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, misc::write_file_callback);
-        curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, &output_file);
+        // if (!Json::parseFromStream(json_reader, json_stream, &release_info, &errs))
+        // {
+        //     misc::replace(errs, "\n", " : ");
+        //     logger::error_q("failed to parse", errs);
+        //     return 1;
+        // }
+        // else
+        //     logger::success_q("passed validation", target_url);
 
-        // TODO https://api.github.com/repos/{argument[0]}/releases -- validate api and download data from API
+        // curl_easy_setopt(curl.get(), CURLOPT_URL, release_info[0]["assets"][0]["browser_download_url"].asString().c_str());
 
-        res = curl_easy_perform(curl.get());
-        output_file.close();
+        // std::ofstream output_file("cpm_install.tmp.zip", std::ios::binary);
+        // curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, misc::write_file_callback);
+        // curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, &output_file);
 
-        if (res != CURLE_OK)
-        {
-            logger::error_q(": curl_easy_perform() : asset download failed", curl_easy_strerror(res));
-            logger::custom("try seeing if the latest release on the repository contains a 'cpm_install.zip' file", "hint", "yellow");
-            return 1;
-        }
+        // // TODO https://api.github.com/repos/{argument[0]}/releases -- validate api and download data from API
 
-        logger::success("located installation files");
+        // CURLcode res(curl_easy_perform(curl.get()));
+        // output_file.close();
 
-        if (!directory::has_file("./", "cpm_install.tmp.zip"))
-        {
-            logger::error("unable to download installation files");
-            return 1;
-        }
+        // if (res != CURLE_OK)
+        // {
+        //     logger::error_q(": curl_easy_perform() : asset download failed", curl_easy_strerror(res));
+        //     logger::custom("try seeing if the latest release on the repository contains a 'cpm_install.zip' file", "hint", "yellow");
+        //     return 1;
+        // }
+
+        // logger::success("located installation files");
+
+        // if (!directory::has_file("./", "cpm_install.tmp.zip"))
+        // {
+        //     logger::error("unable to download installation files");
+        //     return 1;
+        // }
 
         logger::success("downloaded installation files");
 

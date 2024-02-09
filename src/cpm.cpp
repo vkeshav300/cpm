@@ -137,7 +137,7 @@ int main(int argc, char *argv[])
     if (!misc::find_in_vector(all_commands, command))
     {
         logger::error_q("is not a valid command", command);
-        logger::flush_buffer();
+        logger::flush_buffer(); 
 
         return 1;
     }
@@ -189,13 +189,14 @@ int main(int argc, char *argv[])
     curl_global_init(CURL_GLOBAL_DEFAULT);
 
     int result = process_command(command, arguments, flags, language);
+    logger::success("e");
+    
+    curl_global_cleanup();
 
     auto end = std::chrono::high_resolution_clock::now();
 
     logger::custom("command \'" + command + "\' with exit code " + std::to_string(result) + " in " + std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count()) + " ms", "finished", "blue");
     logger::flush_buffer();
-
-    curl_global_cleanup();
 
     return 0;
 }

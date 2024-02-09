@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
 
     if (initialized)
     {
-        std::map<std::string, std::string> cpm_file = directory::parse_cpm("./", ".cpm");
+        const std::map<std::string, std::string> cpm_file = directory::parse_cpm("./", ".cpm");
 
         if (cpm_file.count("language") == false)
         {

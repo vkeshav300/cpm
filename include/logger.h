@@ -16,7 +16,7 @@
 namespace logger
 {
     extern std::map<std::string, std::string> colors;
-    extern int logger_count;
+    extern size_t logger_count;
 
     void flush_buffer();
 

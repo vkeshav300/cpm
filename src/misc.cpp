@@ -133,33 +133,33 @@ namespace misc
     }
 
     /**
-     * @brief CURL --> Calculates total size of received data and writes it to a string.
+     * @brief Writes contents to string.
      *
      * @param contents
      * @param size
      * @param nmemb
      * @param output
-     * @return std::size_t
+     * @return size_t
      */
-    std::size_t write_callback(void *contents, std::size_t size, std::size_t nmemb, std::string *output)
+    size_t write_callback(void *contents, size_t size, size_t nmemb, std::string *output)
     {
-        std::size_t total_size = size * nmemb;
+        size_t total_size = size * nmemb;
         output->append(static_cast<char *>(contents), total_size);
         return total_size;
     }
 
     /**
-     * @brief CURL --> Calculates total size of received data and writes it to file stream.
+     * @brief Writes contents to file.
      *
      * @param contents
      * @param size
      * @param nmemb
      * @param outputFile
-     * @return std::size_t
+     * @return size_t
      */
-    std::size_t write_file_callback(void *contents, std::size_t size, std::size_t nmemb, std::ofstream *output_file)
+    size_t write_file_callback(void *contents, size_t size, size_t nmemb, std::ofstream *output_file)
     {
-        std::size_t total_size = size * nmemb;
+        size_t total_size = size * nmemb;
         output_file->write(static_cast<char *>(contents), total_size);
         return total_size;
     }
@@ -174,15 +174,15 @@ namespace misc
      */
     bool validate_url(const std::unique_ptr<CURL, decltype(&curl_easy_cleanup)> &curl, const std::string &target_url)
     {
-        long http_code = 0;
+        long http_code(0);
 
         curl_easy_getinfo(curl.get(), CURLINFO_RESPONSE_CODE, &http_code);
 
         if (http_code >= 200 && http_code < 300)
-            logger::success_q("passed validation", target_url);
+            logger::success_q("passed validation with http code " + std::to_string(http_code), target_url);
         else
         {
-            logger::error_q("is an invalid url", target_url);
+            logger::error_q("failed validation with http code " + std::to_string(http_code), target_url);
             return true;
         }
 

@@ -27,7 +27,7 @@ namespace logger
         {"default", "\x1b[39m"},
     };
 
-    int logger_count = 0;
+    size_t logger_count = 0;
 
     /**
      * @brief Flushes output buffer.

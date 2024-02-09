@@ -30,9 +30,9 @@ namespace misc
 
     std::string get_flag_defined(const std::vector<std::string> &flags, const std::string &content);
 
-    std::size_t write_callback(void *contents, std::size_t size, std::size_t nmemb, std::string *output);
+    size_t write_callback(void *contents, size_t size, size_t nmemb, std::string *output);
 
-    std::size_t write_file_callback(void *contents, std::size_t size, std::size_t nmemb, std::ofstream *output_file);
+    size_t write_file_callback(void *contents, size_t size, size_t nmemb, std::ofstream *output_file);
 
     bool validate_url(const std::unique_ptr<CURL, decltype(&curl_easy_cleanup)> &curl, const std::string &target_url);
 

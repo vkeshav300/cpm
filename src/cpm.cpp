@@ -154,14 +154,23 @@ int main(int argc, char *argv[])
     {
         const std::map<std::string, std::string> cpm_file = directory::parse_cpm("./", ".cpm");
 
-        if (cpm_file.count("language") == false)
+        if (!cpm_file.count("language"))
         {
             logger::error("directory contains invalid .cpm file");
 
             return 1;
         }
 
-        language = cpm_file["language"];
+        try
+        {
+            language = cpm_file.at("language");
+        }
+        catch(const std::out_of_range &e)
+        {
+            logger::error(e.what());
+            return 1;
+        }
+        
     }
     else if (misc::find_in_vector(get_lang_from_first_arg, command))
         language = arguments[0];

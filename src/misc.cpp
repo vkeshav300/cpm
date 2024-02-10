@@ -133,7 +133,7 @@ namespace misc
     }
 
     /**
-     * @brief Writes contents to string.
+     * @brief Writes CURL callback to string.
      *
      * @param contents
      * @param size
@@ -149,7 +149,7 @@ namespace misc
     }
 
     /**
-     * @brief Writes contents to file.
+     * @brief Writes CURL callback to file.
      *
      * @param contents
      * @param size

@@ -484,10 +484,10 @@ namespace commands
         if (misc::validate_url(curl, target_url))
             return 1;
 
-        std::unique_ptr<char[]> final_url(nullptr);
+        std::unique_ptr<char, decltype(&curl_free)> final_url(nullptr, &curl_free);
         curl_easy_getinfo(curl.get(), CURLINFO_EFFECTIVE_URL, &final_url);
 
-        if (!final_url.get())
+        if (!final_url || !final_url.get())
         {
             logger::error("failed to retrieve final url");
             return 1;

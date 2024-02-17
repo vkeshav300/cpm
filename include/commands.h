@@ -1,6 +1,6 @@
 /**
  * @file commands.h
- * @brief This file outlines commands.cpp.
+ * @brief Outlines commands.cpp.
  * @version 0.1
  * @date 2023-09-29
  *

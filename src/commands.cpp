@@ -1,6 +1,6 @@
 /**
  * @file commands.cpp
- * @brief This file contains the functionality of all commands.
+ * @brief Contains the functionality of all commands.
  * @version 0.1
  * @date 2023-09-29
  *

@@ -1,6 +1,6 @@
 /**
  * @file logger.h
- * @brief This file outlines logger.cpp.
+ * @brief Outlines logger.cpp.
  * @version 0.1
  * @date 2023-09-30
  *

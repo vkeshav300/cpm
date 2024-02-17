@@ -1,6 +1,6 @@
 /**
  * @file main.cpp
- * @brief This file puts together all the other files.
+ * @brief Puts together all the other files.
  * @version 0.1
  * @date 2023-09-29
  *
@@ -11,6 +11,7 @@
 #include "directory.h"
 #include "logger.h"
 #include "misc.h"
+#include "cpm_store.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -19,17 +20,6 @@
 #include <algorithm>
 #include <chrono>
 #include <curl/curl.h>
-
-// * Finding OS
-#ifdef _WIN32
-#define OS_NAME "windows"
-#elif __APPLE__
-#define OS_NAME "macOS"
-#elif __linux__
-#define OS_NAME "linux"
-#else
-#define OS_NAME "null"
-#endif
 
 std::vector<std::string> all_commands = {
     "init",
@@ -40,6 +30,7 @@ std::vector<std::string> all_commands = {
     "insert",
     "install",
     "uninstall",
+    "test",
 };
 
 std::vector<std::string> init_exceptions = {
@@ -47,6 +38,7 @@ std::vector<std::string> init_exceptions = {
     "help",
     "version",
     "contents",
+    "test",
 };
 
 std::vector<std::string> get_lang_from_first_arg = {
@@ -88,6 +80,9 @@ int process_command(std::string command, std::vector<std::string> arguments, std
         r_code = commands::install(arguments, flags, language);
     else if ("uninstall" == command)
         r_code = commands::uninstall(arguments);
+    else if ("test" == command)
+    {
+    }
 
     return r_code;
 }
@@ -137,7 +132,7 @@ int main(int argc, char *argv[])
     if (!misc::find_in_vector(all_commands, command))
     {
         logger::error_q("is not a valid command", command);
-        logger::flush_buffer(); 
+        logger::flush_buffer();
 
         return 1;
     }
@@ -165,12 +160,11 @@ int main(int argc, char *argv[])
         {
             language = cpm_file.at("language");
         }
-        catch(const std::out_of_range &e)
+        catch (const std::out_of_range &e)
         {
             logger::error(e.what());
             return 1;
         }
-        
     }
     else if (misc::find_in_vector(get_lang_from_first_arg, command))
         language = arguments[0];
@@ -198,8 +192,7 @@ int main(int argc, char *argv[])
     curl_global_init(CURL_GLOBAL_DEFAULT);
 
     int result = process_command(command, arguments, flags, language);
-    logger::success("e");
-    
+
     curl_global_cleanup();
 
     auto end = std::chrono::high_resolution_clock::now();

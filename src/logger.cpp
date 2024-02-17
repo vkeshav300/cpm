@@ -1,6 +1,6 @@
 /**
  * @file logger.cpp
- * @brief CPM's custom logger.
+ * @brief Contains console logging code.
  * @version 0.1
  * @date 2023-11-11
  *

@@ -1,6 +1,6 @@
 /**
  * @file directory.h
- * @brief This file outlines directory.cpp.
+ * @brief Outlines directory.cpp.
  * @version 0.1
  * @date 2023-09-29
  *

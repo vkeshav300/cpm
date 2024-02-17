@@ -77,6 +77,17 @@ namespace misc
     }
 
     /**
+     * @brief Removes character(s) from string.
+     * 
+     * @param str 
+     * @param delimiter 
+     */
+    void remove_ch(std::string &str, const char &delimiter)
+    {
+        str.erase(std::remove(str.begin(), str.end(), delimiter), str.end());
+    }
+
+    /**
      * @brief Erases contents from std::vector.
      *
      * @param main_vector Initial vector.
@@ -130,6 +141,31 @@ namespace misc
             text.replace(start_pos, a.length(), b);
             start_pos += b.length();
         }
+    }
+
+    /**
+     * @brief Splits string based on inputted delimiter.
+     * 
+     * @param str 
+     * @param delimiter 
+     * @return std::vector<std::string> 
+     */
+    std::vector<std::string> split(const std::string &str, const std::string &delimiter)
+    {
+        std::vector<std::string> tokens;
+        size_t start = 0;
+        size_t end = str.find(delimiter);
+
+        while (end != std::string::npos)
+        {
+            tokens.push_back(str.substr(start, end - start));
+            start = end + delimiter.length();
+            end = str.find(delimiter, start);
+        }
+
+        tokens.push_back(str.substr(start, end));
+
+        return tokens;
     }
 
     /**
@@ -191,11 +227,11 @@ namespace misc
 
     /**
      * @brief CURL --> Uses curl_easy_perform() on a provided link.
-     * 
-     * @param curl 
-     * @param url 
-     * @return true 
-     * @return false 
+     *
+     * @param curl
+     * @param url
+     * @return true
+     * @return false
      */
     bool curl_perform(const std::unique_ptr<CURL, decltype(&curl_easy_cleanup)> &curl, const std::string &url)
     {

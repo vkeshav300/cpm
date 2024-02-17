@@ -1,6 +1,6 @@
 /**
  * @file directory.cpp
- * @brief This file contains most directory-related functions that aren't commands.
+ * @brief Contains most directory-related functions that aren't commands.
  * @version 0.1
  * @date 2023-09-29
  *
@@ -164,10 +164,10 @@ namespace directory
 
     /**
      * @brief Parses files in cpm-style format.
-     * 
+     *
      * @param dir Directory file is located in.
      * @param filename Name of the file.
-     * @return std::map<std::string, std::string> 
+     * @return std::map<std::string, std::string>
      */
     std::map<std::string, std::string> parse_cpm(std::string dir, std::string filename)
     {

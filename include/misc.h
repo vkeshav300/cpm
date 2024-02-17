@@ -24,9 +24,13 @@ namespace misc
 
     void trim(std::string &str);
 
+    void remove_ch(std::string &str, const char &delimiter);
+
     void erase_from_vector(std::vector<std::string> &main_vector, const std::vector<std::string> &contents);
 
     void replace(std::string &text, const std::string &a, const std::string &b);
+
+    std::vector<std::string> split(const std::string &str, const std::string &delimiter);
 
     std::string get_flag_defined(const std::vector<std::string> &flags, const std::string &content);
 

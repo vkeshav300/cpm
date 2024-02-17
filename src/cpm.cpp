@@ -21,28 +21,71 @@
 #include <chrono>
 #include <curl/curl.h>
 
-std::vector<std::string> all_commands = {
-    "init",
-    "pair",
-    "help",
-    "version",
-    "contents",
-    "insert",
-    "install",
-    "uninstall",
-    "test",
-};
-
-std::vector<std::string> init_exceptions = {
-    "init",
-    "help",
-    "version",
-    "contents",
-    "test",
-};
-
-std::vector<std::string> get_lang_from_first_arg = {
-    "init",
+std::map<std::string, std::map<std::string, int>> command_info = {
+    {
+        "init",
+        {
+            {"init_exception", 1},
+            {"first_arg_lang", 1},
+            {"min_args", 1},
+        },
+    },
+    {
+        "pair",
+        {
+            {"init_exception", 0},
+            {"first_arg_lang", 0},
+            {"min_args", 2},
+        },
+    },
+    {
+        "help",
+        {
+            {"init_exception", 1},
+            {"first_arg_lang", 0},
+            {"min_args", 0},
+        },
+    },
+    {
+        "version",
+        {
+            {"init_exception", 1},
+            {"first_arg_lang", 0},
+            {"min_args", 0},
+        },
+    },
+    {
+        "contents",
+        {
+            {"init_exception", 1},
+            {"first_arg_lang", 0},
+            {"min_args", 2},
+        },
+    },
+    {
+        "install",
+        {
+            {"init_exception", 0},
+            {"first_arg_lang", 0},
+            {"min_args", 1},
+        },
+    },
+    {
+        "uninstall",
+        {
+            {"init_exception", 0},
+            {"first_arg_lang", 0},
+            {"min_args", 1},
+        },
+    },
+    {
+        "test",
+        {
+            {"init_exception", 1},
+            {"first_arg_lang", 0},
+            {"min_args", 0},
+        },
+    },
 };
 
 /**
@@ -54,7 +97,8 @@ std::vector<std::string> get_lang_from_first_arg = {
  * @param language
  * @return int
  */
-int process_command(std::string command, std::vector<std::string> arguments, std::vector<std::string> flags, std::string language)
+int
+process_command(std::string command, std::vector<std::string> arguments, std::vector<std::string> flags, std::string language)
 {
     int r_code = 1;
 
@@ -129,7 +173,7 @@ int main(int argc, char *argv[])
     if ("--version" == command)
         command = "version";
 
-    if (!misc::find_in_vector(all_commands, command))
+    if (!command_info.count(command))
     {
         logger::error_q("is not a valid command", command);
         logger::flush_buffer();
@@ -140,7 +184,7 @@ int main(int argc, char *argv[])
     bool initialized = commands::verify_init();
     bool command_is_exception = false;
 
-    if (misc::find_in_vector(init_exceptions, command))
+    if (true == command_info[command]["init_exception"])
         command_is_exception = true;
 
     std::string language;
@@ -166,9 +210,9 @@ int main(int argc, char *argv[])
             return 1;
         }
     }
-    else if (misc::find_in_vector(get_lang_from_first_arg, command))
+    else if (true == command_info[command]["first_arg_land"])
         language = arguments[0];
-    else if (misc::find_in_vector(init_exceptions, command))
+    else if (command_is_exception)
         language = "c"; // ? Placeholder - doesn't actually matter
     else
     {
@@ -188,6 +232,12 @@ int main(int argc, char *argv[])
     }
 
     logger::custom("command \'" + command + "\' with " + std::to_string(arguments.size()) + " argument(s) and " + std::to_string(flags.size()) + " flag(s)", "received", "blue");
+
+    if (arguments.size() < command_info[command]["min_args"])
+    {
+        logger::error("minimum amount of arguments not met");
+        return 1;
+    }
 
     curl_global_init(CURL_GLOBAL_DEFAULT);
 

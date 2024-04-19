@@ -98,17 +98,21 @@ std::map<std::string, std::map<std::string, int>> command_info = {
  * @return int
  */
 int process_command(std::string command, std::vector<std::string> arguments,
-                    std::vector<std::string> flags, std::string language) {
+                    std::vector<std::string> flags, std::string language)
+{
   int r_code = 1;
 
-  if ("init" == command) {
-    if (misc::find_in_vector(flags, "post")) {
+  if ("init" == command)
+  {
+    if (misc::find_in_vector(flags, "post"))
+    {
       r_code = commands::post_init(language);
       return r_code;
     }
 
     r_code = commands::init(language, flags);
-  } else if ("pair" == command)
+  }
+  else if ("pair" == command)
     r_code = commands::file_pair(
         arguments, (misc::find_in_vector(flags, "hpp")) ? true : false,
         language);
@@ -122,7 +126,8 @@ int process_command(std::string command, std::vector<std::string> arguments,
     r_code = commands::install(arguments, flags, language);
   else if ("uninstall" == command)
     r_code = commands::uninstall(arguments);
-  else if ("test" == command) {
+  else if ("test" == command)
+  {
   }
 
   return r_code;
@@ -135,10 +140,12 @@ int process_command(std::string command, std::vector<std::string> arguments,
  * @param argv
  * @return int
  */
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
   auto start = std::chrono::high_resolution_clock::now();
 
-  if (argc <= 1) {
+  if (argc <= 1)
+  {
     logger::error("no command provided");
     logger::flush_buffer();
 
@@ -149,13 +156,15 @@ int main(int argc, char *argv[]) {
   std::vector<std::string> arguments;
   std::vector<std::string> flags;
 
-  for (int i = 0; i < argc; i++) {
+  for (int i = 0; i < argc; i++)
+  {
     std::string arg = argv[i];
     if ("-" == arg.substr(0, 1) && arg.size() >= 2)
       flags.push_back(arg.substr(1, arg.size()));
   }
 
-  for (int i = 2; i < argc; i++) {
+  for (int i = 2; i < argc; i++)
+  {
     std::string arg = argv[i];
     if (arg.substr(0, 1) != "-")
       arguments.push_back(arg);
@@ -166,7 +175,8 @@ int main(int argc, char *argv[]) {
   if ("--version" == command)
     command = "version";
 
-  if (!command_info.count(command)) {
+  if (!command_info.count(command))
+  {
     logger::error_q("is not a valid command", command);
     logger::flush_buffer();
 
@@ -181,27 +191,34 @@ int main(int argc, char *argv[]) {
 
   std::string language;
 
-  if (initialized) {
+  if (initialized)
+  {
     const std::map<std::string, std::string> cpm_file =
         directory::parse_cpm("./", ".cpm");
 
-    if (!cpm_file.count("language")) {
+    if (!cpm_file.count("language"))
+    {
       logger::error("directory contains invalid .cpm file");
 
       return 1;
     }
 
-    try {
+    try
+    {
       language = cpm_file.at("language");
-    } catch (const std::out_of_range &e) {
+    }
+    catch (const std::out_of_range &e)
+    {
       logger::error(e.what());
       return 1;
     }
-  } else if (true == command_info[command]["first_arg_lang"])
+  }
+  else if (true == command_info[command]["first_arg_lang"])
     language = arguments[0];
   else if (command_is_exception)
     language = "c"; // ? Placeholder - doesn't actually matter
-  else {
+  else
+  {
     logger::warn(
         "directory must be initialized with cpm (use cpm help for more info)");
     logger::flush_buffer();
@@ -212,7 +229,8 @@ int main(int argc, char *argv[]) {
   if ("c++" == language)
     language = "cpp";
 
-  if ("c" != language && "cpp" != language) {
+  if ("c" != language && "cpp" != language)
+  {
     logger::error("invalid language provided");
     return 1;
   }
@@ -222,7 +240,8 @@ int main(int argc, char *argv[]) {
                      std::to_string(flags.size()) + " flag(s)",
                  "received", "blue");
 
-  if (arguments.size() < command_info[command]["min_args"]) {
+  if (arguments.size() < command_info[command]["min_args"])
+  {
     logger::error("minimum amount of arguments not met");
     return 1;
   }

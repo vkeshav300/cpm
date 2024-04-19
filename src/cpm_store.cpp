@@ -18,7 +18,8 @@
  *
  * @param filepath
  */
-cpm_store::cpm_store(const std::string &filepath) {
+cpm_store::cpm_store(const std::string &filepath)
+{
   size = 0;
   load(filepath);
 }
@@ -28,10 +29,12 @@ cpm_store::cpm_store(const std::string &filepath) {
  *
  * @param filepath
  */
-void cpm_store::load(const std::string &filepath) {
+void cpm_store::load(const std::string &filepath)
+{
   std::ifstream load_file(filepath);
 
-  for (std::string line; std::getline(load_file, line);) {
+  for (std::string line; std::getline(load_file, line);)
+  {
     if (misc::has_contents(line, "\n"))
       line = line.substr(0, line.size() - 2);
 
@@ -42,8 +45,11 @@ void cpm_store::load(const std::string &filepath) {
 
     if (_line.size() >= 2)
       data[_line[0]] = _line[1];
-    else if (1 == _line.size()) {
-    } else if ('[' == _line[1][0]) {
+    else if (1 == _line.size())
+    {
+    }
+    else if ('[' == _line[1][0])
+    {
       data[_line[0]] = std::vector<std::string>();
 
       misc::remove_ch(_line[1], '[');

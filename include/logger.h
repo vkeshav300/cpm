@@ -16,6 +16,7 @@
 namespace logger {
 extern std::map<std::string, std::string> colors;
 extern size_t logger_count;
+extern size_t debug_count;
 
 void flush_buffer();
 
@@ -32,6 +33,8 @@ void error_q(const std::string &message, const std::string &quote);
 void warn(const std::string &message);
 
 void warn_q(const std::string &message, const std::string &quote);
+
+void debug();
 
 void custom(const std::string &message, const std::string &mtype,
             const std::string &color);

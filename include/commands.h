@@ -12,25 +12,23 @@
 #include <string>
 #include <vector>
 
-namespace commands {
-int init(const std::string language, const std::vector<std::string> &flags);
+namespace commands
+{
+    int init(const std::string language, const std::vector<std::string> &flags);
 
-int post_init(const std::string language);
+    int post_init(const std::string language);
 
-bool verify_init();
+    bool verify_init();
 
-int file_pair(const std::vector<std::string> &arguments, const bool hpp,
-              const std::string language);
+    int file_pair(const std::vector<std::string> &arguments, const bool hpp, const std::string language);
 
-int help();
+    int help();
 
-int version();
+    int version();
 
-int contents(const std::vector<std::string> &arguments,
-             const std::vector<std::string> &flags);
+    int contents(const std::vector<std::string> &arguments, const std::vector<std::string> &flags);
 
-int install(const std::vector<std::string> &arguments,
-            const std::vector<std::string> &flags, const std::string language);
+    int install(const std::vector<std::string> &arguments, const std::vector<std::string> &flags, const std::string language);
 
-int uninstall(const std::vector<std::string> &arguments);
-}; // namespace commands
+    int uninstall(const std::vector<std::string> &arguments);
+};

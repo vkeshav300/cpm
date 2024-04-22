@@ -123,7 +123,7 @@ namespace logger
 
   /**
    * @brief Logs debug message, acting as a "checkpoint" in the code.
-   * 
+   *
    */
   void debug()
   {
@@ -138,12 +138,10 @@ namespace logger
    * @param mtype Message type.
    * @param color Message color.
    */
-  void custom(const std::string &message, const std::string &mtype,
-              const std::string &color)
+  void custom(const std::string &message, const std::string &mtype, const std::string &color)
   {
     handle_logger_count();
-    std::cout << colors[color] << "[" << mtype << "]: " << colors["reset"]
-              << message << "\n";
+    std::cout << colors[color] << "[" << mtype << "]: " << colors["reset"] << message << "\n";
   }
 
   /**

@@ -87,8 +87,7 @@ namespace directory
   {
     std::string folderpath = dir + foldername;
 
-    return std::filesystem::exists(folderpath) &&
-           std::filesystem::is_directory(folderpath);
+    return std::filesystem::exists(folderpath) && std::filesystem::is_directory(folderpath);
   }
 
   /**
@@ -173,8 +172,7 @@ namespace directory
    * @param filename Name of the file.
    * @return std::map<std::string, std::string>
    */
-  std::map<std::string, std::string> parse_cpm(std::string dir,
-                                               std::string filename)
+  std::map<std::string, std::string> parse_cpm(std::string dir, std::string filename)
   {
     std::ifstream cpm_file;
     cpm_file.open(dir + filename);

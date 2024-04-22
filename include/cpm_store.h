@@ -14,11 +14,10 @@
 #include <variant>
 #include <vector>
 
-typedef std::map<std::string,
-                 std::variant<std::string, std::vector<std::string>>>
-    storage_type;
+typedef std::map<std::string, std::variant<std::string, std::vector<std::string>>> storage_type;
 
-class cpm_store {
+class cpm_store
+{
 private:
   storage_type data;
   size_t size;

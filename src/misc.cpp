@@ -250,21 +250,18 @@ namespace misc
    * @return true
    * @return false
    */
-  bool curl_perform(
-      const std::unique_ptr<CURL, decltype(&curl_easy_cleanup)> &curl,
-      const std::string &url)
+  bool curl_perform(const std::unique_ptr<CURL, decltype(&curl_easy_cleanup)> &curl, const std::string &url)
   {
     // ! --> Double free of object
     curl_easy_setopt(curl.get(), CURLOPT_URL, url.c_str());
     CURLcode res = curl_easy_perform(curl.get());
-    
+
     if (res != CURLE_OK)
     {
-      logger::error_q(": curl_easy_perform() failed : " + url,
-                      curl_easy_strerror(res));
+      logger::error_q(": curl_easy_perform() failed : " + url, curl_easy_strerror(res));
       return true;
     }
-    
+
     return false;
   };
 } // namespace misc

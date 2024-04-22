@@ -188,8 +188,7 @@ namespace commands
    * @param language Programming language.
    * @return int
    */
-  int file_pair(const std::vector<std::string> &arguments, const bool hpp,
-                const std::string language)
+  int file_pair(const std::vector<std::string> &arguments, const bool hpp, const std::string language)
   {
     if (arguments.size() < 1)
     {
@@ -313,8 +312,7 @@ namespace commands
    * @param flags Command flags.
    * @return int
    */
-  int contents(const std::vector<std::string> &arguments,
-               const std::vector<std::string> &flags)
+  int contents(const std::vector<std::string> &arguments, const std::vector<std::string> &flags)
   {
     std::string sub_command = arguments[0];
     size_t arguments_amt = arguments.size();
@@ -483,8 +481,7 @@ namespace commands
    * @param language Programming language.
    * @return int
    */
-  int install(const std::vector<std::string> &arguments,
-              const std::vector<std::string> &flags, const std::string language)
+  int install(const std::vector<std::string> &arguments, const std::vector<std::string> &flags, const std::string language)
   {
     if (arguments.size() < 1)
     {
@@ -524,35 +521,35 @@ namespace commands
 
     char *final_url = nullptr;
     curl_easy_getinfo(curl.get(), CURLINFO_EFFECTIVE_URL, &final_url);
-    
+
     if (NULL == final_url || '\0' == final_url[0])
     {
       logger::error("failed to retrieve final url");
       curl_free(final_url);
       return 1;
     }
-    
+
     target_url = std::string(final_url);
     target_url += "/cpm-install.zip";
-    
+
     logger::warn(target_url);
-    
+
     curl_free(final_url);
-    
+
     // ! Double free of object --> in conditional
     if (misc::curl_perform(curl, target_url))
       return 1;
-      
+
     if (misc::validate_url(curl, target_url))
       return 1;
-    
+
     target_url = "https://api.github.com/repos/" + arguments[0] + "/releases";
     if (misc::curl_perform(curl, target_url))
       return 1;
-    
+
     if (misc::validate_url(curl, target_url))
       return 1;
-    
+
     // Json::CharReaderBuilder json_reader;
     // Json::Value release_info;
     // std::istringstream json_stream(response);
@@ -598,7 +595,7 @@ namespace commands
     // }
 
     logger::success("downloaded installation files");
-    
+
     return 0;
   }
 

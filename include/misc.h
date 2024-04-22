@@ -14,41 +14,35 @@
 #include <string>
 #include <vector>
 
-namespace misc {
-std::vector<std::string> sub_vector(const std::vector<std::string> &main_vector,
-                                    const int begin_index, const int end_index);
+namespace misc
+{
+    std::vector<std::string> sub_vector(const std::vector<std::string> &main_vector, const int begin_index, const int end_index);
 
-bool has_contents(std::string text, std::string contents);
+    bool has_contents(std::string text, std::string contents);
 
-bool find_in_vector(const std::vector<std::string> &main_vector,
-                    std::string content);
+    bool find_in_vector(const std::vector<std::string> &main_vector, std::string content);
 
-void trim(std::string &str);
+    void trim(std::string &str);
 
-void remove_ch(std::string &str, const char &delimiter);
+    void remove_ch(std::string &str, const char &delimiter);
 
-void erase_from_vector(std::vector<std::string> &main_vector,
-                       const std::vector<std::string> &contents);
+    void erase_from_vector(std::vector<std::string> &main_vector, const std::vector<std::string> &contents);
 
-void replace(std::string &text, const std::string &a, const std::string &b);
+    void replace(std::string &text, const std::string &a, const std::string &b);
 
-std::vector<std::string> split(const std::string &str,
-                               const std::string &delimiter);
+    std::vector<std::string> split(const std::string &str, const std::string &delimiter);
 
-std::string get_flag_defined(const std::vector<std::string> &flags,
-                             const std::string &content);
+    std::string get_flag_defined(const std::vector<std::string> &flags, const std::string &content);
 
-size_t write_callback(void *contents, size_t size, size_t nmemb,
-                      std::string *output);
+    size_t write_callback(void *contents, size_t size, size_t nmemb, std::string *output);
 
-size_t write_file_callback(void *contents, size_t size, size_t nmemb,
-                           std::ofstream *output_file);
+    size_t write_file_callback(void *contents, size_t size, size_t nmemb, std::ofstream *output_file);
 
-bool validate_url(
-    const std::unique_ptr<CURL, decltype(&curl_easy_cleanup)> &curl,
-    const std::string &target_url);
+    bool validate_url(
+        const std::unique_ptr<CURL, decltype(&curl_easy_cleanup)> &curl,
+        const std::string &target_url);
 
-bool curl_perform(
-    const std::unique_ptr<CURL, decltype(&curl_easy_cleanup)> &curl,
-    const std::string &url);
+    bool curl_perform(
+        const std::unique_ptr<CURL, decltype(&curl_easy_cleanup)> &curl,
+        const std::string &url);
 } // namespace misc

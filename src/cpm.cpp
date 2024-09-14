@@ -12,77 +12,37 @@
 #include "directory.h"
 #include "logger.h"
 #include "misc.h"
-#include <algorithm>
 #include <chrono>
-#include <curl/curl.h>
-#include <fstream>
-#include <iostream>
 #include <map>
 #include <string>
 #include <vector>
 
 std::map<std::string, std::map<std::string, int>> command_info = {
     {
-        "init",
+        "create",
         {
-            {"init_exception", 1},
-            {"first_arg_lang", 1},
+            {"init_exception", true},
             {"min_args", 1},
-        },
-    },
-    {
-        "pair",
-        {
-            {"init_exception", 0},
-            {"first_arg_lang", 0},
-            {"min_args", 2},
         },
     },
     {
         "help",
         {
-            {"init_exception", 1},
-            {"first_arg_lang", 0},
+            {"init_exception", true},
             {"min_args", 0},
         },
     },
     {
         "version",
         {
-            {"init_exception", 1},
-            {"first_arg_lang", 0},
+            {"init_exception", true},
             {"min_args", 0},
-        },
-    },
-    {
-        "contents",
-        {
-            {"init_exception", 1},
-            {"first_arg_lang", 0},
-            {"min_args", 2},
-        },
-    },
-    {
-        "install",
-        {
-            {"init_exception", 0},
-            {"first_arg_lang", 0},
-            {"min_args", 1},
-        },
-    },
-    {
-        "uninstall",
-        {
-            {"init_exception", 0},
-            {"first_arg_lang", 0},
-            {"min_args", 1},
         },
     },
     {
         "test",
         {
-            {"init_exception", 1},
-            {"first_arg_lang", 0},
+            {"init_exception", true},
             {"min_args", 0},
         },
     },
@@ -97,42 +57,6 @@ std::map<std::string, std::map<std::string, int>> command_info = {
  * @param language
  * @return int
  */
-int process_command(std::string command, std::vector<std::string> arguments,
-                    std::vector<std::string> flags, std::string language)
-{
-  int r_code = 1;
-
-  if ("init" == command)
-  {
-    if (misc::find_in_vector(flags, "post"))
-    {
-      r_code = commands::post_init(language);
-      return r_code;
-    }
-
-    r_code = commands::init(language, flags);
-  }
-  else if ("pair" == command)
-    r_code = commands::file_pair(
-        arguments, (misc::find_in_vector(flags, "hpp")) ? true : false,
-        language);
-  else if ("help" == command)
-    r_code = commands::help();
-  else if ("version" == command)
-    r_code = commands::version();
-  else if ("contents" == command)
-    r_code = commands::contents(arguments, flags);
-  else if ("install" == command)
-    r_code = commands::install(arguments, flags, language);
-  else if ("uninstall" == command)
-    r_code = commands::uninstall(arguments);
-  else if ("test" == command)
-  {
-  }
-
-  return r_code;
-}
-
 /**
  * @brief Main function.
  *
@@ -142,8 +66,10 @@ int process_command(std::string command, std::vector<std::string> arguments,
  */
 int main(int argc, char *argv[])
 {
+  // Start time
   auto start = std::chrono::high_resolution_clock::now();
 
+  // Verifies command is inputted
   if (argc <= 1)
   {
     logger::error("no command provided");
@@ -152,10 +78,30 @@ int main(int argc, char *argv[])
     return 1;
   }
 
+  // Parses command & converts argv into vectors of arguments and flags
   std::string command = argv[1];
+  bool command_found = false;
+
+  // Checks if command is valid
+  for (const auto &[k, v] : command_info)
+  {
+    if (k == command)
+    {
+      command_found = true;
+      break;
+    }
+  }
+
+  if (not command_found)
+  {
+    logger::error_q("is not a valid command", command);
+    return 1;
+  }
+
   std::vector<std::string> arguments;
   std::vector<std::string> flags;
 
+  // Flags
   for (int i = 0; i < argc; i++)
   {
     std::string arg = argv[i];
@@ -163,6 +109,7 @@ int main(int argc, char *argv[])
       flags.push_back(arg.substr(1, arg.size()));
   }
 
+  // Arguments
   for (int i = 2; i < argc; i++)
   {
     std::string arg = argv[i];
@@ -172,99 +119,28 @@ int main(int argc, char *argv[])
 
   logger::success("parsed command");
 
-  if ("--version" == command)
-    command = "version";
-
-  if (!command_info.count(command))
-  {
-    logger::error_q("is not a valid command", command);
-    logger::flush_buffer();
-
-    return 1;
-  }
-
-  bool initialized = commands::verify_init();
-  bool command_is_exception = false;
-
-  if (true == command_info[command]["init_exception"])
-    command_is_exception = true;
-
-  std::string language;
-
-  if (initialized)
-  {
-    const std::map<std::string, std::string> cpm_file =
-        directory::parse_cpm("./", ".cpm");
-
-    if (!cpm_file.count("language"))
-    {
-      logger::error("directory contains invalid .cpm file");
-
-      return 1;
-    }
-
-    try
-    {
-      language = cpm_file.at("language");
-    }
-    catch (const std::out_of_range &e)
-    {
-      logger::error(e.what());
-      return 1;
-    }
-  }
-  else if (true == command_info[command]["first_arg_lang"])
-    language = arguments[0];
-  else if (command_is_exception)
-    language = "c"; // ? Placeholder - doesn't actually matter
-  else
-  {
-    logger::warn(
-        "directory must be initialized with cpm (use cpm help for more info)");
-    logger::flush_buffer();
-
-    return 1;
-  }
-
-  if ("c++" == language)
-    language = "cpp";
-
-  if ("c" != language && "cpp" != language)
-  {
-    logger::error("invalid language provided");
-    return 1;
-  }
-
-  logger::custom("command \'" + command + "\' with " +
-                     std::to_string(arguments.size()) + " argument(s) and " +
-                     std::to_string(flags.size()) + " flag(s)",
-                 "received", "blue");
-
+  // Minimum arguments
   if (arguments.size() < command_info[command]["min_args"])
   {
-    logger::error("minimum amount of arguments not met");
-    return 1;
+    logger::error_q("requires more than " + std::to_string(arguments.size()) + " arguments", command);
   }
 
-  logger::success(language);
+  // Command processing
+  int result = 0;
 
-  curl_global_init(CURL_GLOBAL_DEFAULT);
+  if (command == "help")
+    result = commands::help();
+  else if (command == "version")
+    result = commands::version();
+  else if (command == "create")
+    result = commands::create(arguments);
+  
 
-  int result = process_command(command, arguments, flags, language);
-
-  curl_global_cleanup();
-
+  // Measure process time
   auto end = std::chrono::high_resolution_clock::now();
 
-  logger::custom(
-      "command \'" + command + "\' with exit code " + std::to_string(result) +
-          " in " +
-          std::to_string(
-              std::chrono::duration_cast<std::chrono::milliseconds>(end - start)
-                  .count()) +
-          " ms",
-      "finished", "blue");
+  logger::custom("command \'" + command + "\' with exit code " + std::to_string(result) + " in " + std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count()) + " ms", "finished", "blue");
   logger::flush_buffer();
 
-  return 0;
+  return result;
 }

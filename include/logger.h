@@ -13,6 +13,8 @@
 #include <string>
 #include <vector>
 
+#include <iostream>
+
 namespace logger
 {
     extern std::map<std::string, std::string> colors;
@@ -41,5 +43,7 @@ namespace logger
 
     std::string input(const std::string &message);
 
-    bool yn_prompt(const std::string &message);
+    std::string prompt(const std::string &message);
+
+    bool prompt_yn(const std::string &message);
 } // namespace logger

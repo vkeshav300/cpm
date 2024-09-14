@@ -8,10 +8,13 @@
  *
  */
 #include "logger.h"
-#include <iostream>
 
 namespace logger
 {
+  /**
+   * @brief All the ANSI escape code colors.
+   * 
+   */
   std::map<std::string, std::string> colors = {
       {"reset", "\x1b[0m"},
       {"black", "\x1b[1;38;5;0m"},
@@ -60,8 +63,7 @@ namespace logger
   void success(const std::string &message)
   {
     handle_logger_count();
-    std::cout << colors["green"] << "[success]: " << colors["reset"] << message
-              << "\n";
+    std::cout << colors["green"] << "[success]: " << colors["reset"] << message << "\n";
   }
 
   /**
@@ -83,8 +85,7 @@ namespace logger
   void error(const std::string &message)
   {
     handle_logger_count();
-    std::cerr << colors["red"] << "[error]: " << colors["reset"] << message
-              << "\n";
+    std::cerr << colors["red"] << "[error]: " << colors["reset"] << message << "\n";
   }
 
   /**
@@ -106,8 +107,7 @@ namespace logger
   void warn(const std::string &message)
   {
     handle_logger_count();
-    std::cout << colors["orange"] << "[warning]: " << colors["reset"] << message
-              << "\n";
+    std::cout << colors["orange"] << "[warning]: " << colors["reset"] << message << "\n";
   }
 
   /**
@@ -168,31 +168,42 @@ namespace logger
   }
 
   /**
+   * @brief Logs an input prompt to console.
+   * 
+   * @param message Prompt.
+   * @return std::string 
+   */
+  std::string prompt(const std::string &message)
+  {
+    handle_logger_count();
+
+    std::cout << colors["yellow"] + "[prompt]: " + colors["reset"] + message + ": ";
+
+    std::string line;
+    getline(std::cin, line);
+
+    return line;
+  }
+
+  /**
    * @brief Logs y/n prompt to console.
    *
    * @param message Prompt.
    * @return true
    * @return false
    */
-  bool yn_prompt(const std::string &message)
+  bool prompt_yn(const std::string &message)
   {
     while (true)
     {
-      handle_logger_count();
+      std::string line = prompt(message + " [y/n]");
 
-      std::string _prompt =
-          colors["red"] + "[prompt]: " + colors["reset"] + message + "? [y/n]: ";
-      std::cout << _prompt;
-
-      std::string line;
-      getline(std::cin, line);
-
-      if ("y" == line || "yes" == line)
+      if (line == "y" || line == "yes")
         return true;
-      else if ("n" == line || "no" == line)
+      else if (line == "n" || line == "no")
         return false;
       else
-        warn_q("is not a valid response, try again", line);
+        logger::warn_q("is not a valid response, try again", line);
     }
   }
 } // namespace logger

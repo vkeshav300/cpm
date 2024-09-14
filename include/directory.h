@@ -9,23 +9,15 @@
  */
 #pragma once
 
-#include <fstream>
-#include <map>
 #include <string>
 
 namespace directory
 {
-    std::string slurp(std::string dir, std::string filename);
+    bool has_directory(const std::string &path);
 
-    bool has_file(std::string dir, std::string filename);
+    bool has_file(const std::string &path);
 
-    bool has_folder(std::string dir, std::string foldername);
+    void create_directory(const std::string &path);
 
-    void create_file(std::string dir, std::string filename);
-
-    void create_folder(std::string dir, std::string foldername);
-
-    void delete_file(std::string dir, std::string filename);
-
-    std::map<std::string, std::string> parse_cpm(std::string dir, std::string filename);
+    void create_file(const std::string &path);
 }; // namespace directory

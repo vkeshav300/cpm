@@ -18,11 +18,7 @@ set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 file(GLOB SOURCES "${SOURCE_DIR}/*.cpp")
 
 # Find packages / libraries
-find_package(CURL REQUIRED)
-find_package(PkgConfig REQUIRED)
-
-pkg_check_modules(JSONCPP REQUIRED jsoncpp)
-link_directories(${JSONCPP_LIBRARY_DIRS})
+# None
 
 # Add executable
 add_executable(${PROJECT_NAME}
@@ -38,9 +34,8 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 )
 
 # Packages / libraries
-target_link_libraries(${PROJECT_NAME} PRIVATE
-    ${CURL_LIBRARIES}
-    jsoncpp
+target_link_libraries(
+    ${PROJECT_NAME} PRIVATE
 )
 
 if (CMAKE_SYSTEM_NAME MATCHES "Darwin" OR CMAKE_SYSTEM_NAME MATCHES "Linux")

@@ -1,6 +1,5 @@
 # CMake artifacts
-build/*
-tests
+build
 CMakeFiles/
 CMakeCache.txt
 CMakeScripts/
@@ -10,6 +9,9 @@ Makefile
 # Doxygen artifacts
 docs/html
 docs/latex
+
+# Testing
+tests
 
 # Other
 .exe

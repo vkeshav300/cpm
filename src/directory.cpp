@@ -18,10 +18,10 @@ namespace directory
 {
     /**
      * @brief Checks if directory exists at path.
-     * 
-     * @param path 
-     * @return true 
-     * @return false 
+     *
+     * @param path
+     * @return true
+     * @return false
      */
     bool has_directory(const std::string &path)
     {
@@ -30,10 +30,10 @@ namespace directory
 
     /**
      * @brief Checks if file exists at a path.
-     * 
-     * @param file 
-     * @return true 
-     * @return false 
+     *
+     * @param file
+     * @return true
+     * @return false
      */
     bool has_file(const std::string &path)
     {
@@ -42,19 +42,21 @@ namespace directory
 
     /**
      * @brief Creates directory at path.
-     * 
-     * @param path 
+     *
+     * @param path
      */
     void create_directory(const std::string &path)
     {
-        if (has_directory(path)) return;
+        if (has_directory(path))
+            return;
 
         std::filesystem::create_directory(path);
     }
 
     void create_file(const std::string &path)
     {
-        if (has_file(path)) return;
+        if (has_file(path))
+            return;
 
         std::ofstream file(path);
         file.close();

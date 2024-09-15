@@ -8,7 +8,6 @@
  *
  */
 #include "commands.h"
-#include "cpm_store.h"
 #include "directory.h"
 #include "logger.h"
 #include "misc.h"
@@ -16,6 +15,11 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <mutex>
+
+// Static logger initialization
+Logger *Logger::instance_ptr = nullptr;
+std::mutex Logger::mtx;
 
 std::map<std::string, std::map<std::string, int>> command_info = {
     {
@@ -69,11 +73,30 @@ int main(int argc, char *argv[])
   // Start time
   auto start = std::chrono::high_resolution_clock::now();
 
+  // Logger initialization
+  Logger *logger = Logger::get();
+
+  logger->set_colors(
+      {
+          {"reset", "\x1b[0m"},
+          {"black", "\x1b[1;38;5;0m"},
+          {"red", "\x1b[1;38;5;9m"},
+          {"green", "\x1b[1;38;5;10m"},
+          {"yellow", "\x1b[1;38;5;11m"},
+          {"blue", "\x1b[1;38;5;12m"},
+          {"magenta", "\x1b[1;38;5;13m"},
+          {"cyan", "\x1b[1;38;5;14m"},
+          {"white", "\x1b[1;38;5;15m"},
+          {"orange", "\x1b[1;38;5;202m"},
+          {"purple", "\x1b[1;38;5;129m"},
+          {"default", "\x1b[39m"},
+      });
+
   // Verifies command is inputted
   if (argc <= 1)
   {
-    logger::error("no command provided");
-    logger::flush_buffer();
+    logger->error("no command provided");
+    logger->flush_buffer();
 
     return 1;
   }
@@ -94,7 +117,7 @@ int main(int argc, char *argv[])
 
   if (not command_found)
   {
-    logger::error_q("is not a valid command", command);
+    logger->error_q("is not a valid command", command);
     return 1;
   }
 
@@ -117,12 +140,12 @@ int main(int argc, char *argv[])
       arguments.push_back(arg);
   }
 
-  logger::success("parsed command");
+  logger->success("parsed command");
 
   // Minimum arguments
   if (arguments.size() < command_info[command]["min_args"])
   {
-    logger::error_q("requires more than " + std::to_string(arguments.size()) + " arguments", command);
+    logger->error_q("requires more than " + std::to_string(arguments.size()) + " arguments", command);
   }
 
   // Command processing
@@ -134,13 +157,12 @@ int main(int argc, char *argv[])
     result = commands::version();
   else if (command == "create")
     result = commands::create(arguments);
-  
 
   // Measure process time
   auto end = std::chrono::high_resolution_clock::now();
 
-  logger::custom("command \'" + command + "\' with exit code " + std::to_string(result) + " in " + std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count()) + " ms", "finished", "blue");
-  logger::flush_buffer();
+  logger->custom("command \'" + command + "\' with exit code " + std::to_string(result) + " in " + std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count()) + " ms", "finished", "blue");
+  logger->flush_buffer();
 
   return result;
 }

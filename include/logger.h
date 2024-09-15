@@ -12,14 +12,28 @@
 #include <map>
 #include <string>
 #include <vector>
-
 #include <iostream>
+#include <mutex>
 
-namespace logger
+class Logger
 {
-    extern std::map<std::string, std::string> colors;
-    extern size_t logger_count;
-    extern size_t debug_count;
+private:
+    size_t logger_count = 0;
+
+    static Logger *instance_ptr;
+
+    static std::mutex mtx;
+
+    Logger() {}
+
+public:
+    std::map<std::string, std::string> colors;
+
+    Logger(const Logger &obj) = delete;
+
+    static Logger *get();
+
+    void set_colors(const std::map<std::string, std::string> &new_colors);
 
     void flush_buffer();
 
@@ -37,8 +51,6 @@ namespace logger
 
     void warn_q(const std::string &message, const std::string &quote);
 
-    void debug();
-
     void custom(const std::string &message, const std::string &mtype, const std::string &color);
 
     std::string input(const std::string &message);
@@ -46,4 +58,4 @@ namespace logger
     std::string prompt(const std::string &message);
 
     bool prompt_yn(const std::string &message);
-} // namespace logger
+};

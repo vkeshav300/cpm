@@ -1,39 +1,31 @@
-# Minimum required version of CMake (cmake --version)
 cmake_minimum_required(VERSION 3.27.6)
 
-# Project info
 project(
-    cpm 
-    VERSION 0.1.0
+    cpm
     LANGUAGES CXX
 )
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Giving CMake file structure info
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-# Get all the source files in the SOURCE_DIR
 file(GLOB SOURCES "${SOURCE_DIR}/*.cpp")
 
-# Find packages / libraries
-# None
-
-# Add executable
 add_executable(${PROJECT_NAME}
     ${SOURCES}
 )
 
-# Include directories
 target_include_directories(
     ${PROJECT_NAME} PRIVATE 
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-# Packages / libraries
+find_package(nlohmann_json 3.2.3 REQUIRED)
+
 target_link_libraries(
     ${PROJECT_NAME} PRIVATE
+    nlohmann_json::nlohmann_json
 )
 
 if (CMAKE_SYSTEM_NAME MATCHES "Darwin" OR CMAKE_SYSTEM_NAME MATCHES "Linux")

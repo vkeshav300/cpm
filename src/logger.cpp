@@ -177,7 +177,7 @@ namespace logger
   {
     handle_logger_count();
 
-    std::cout << colors["yellow"] + "[prompt]: " + colors["reset"] + message + ": ";
+    std::cout << colors["magenta"] + "[prompt]: " + colors["reset"] + message + ": ";
 
     std::string line;
     getline(std::cin, line);

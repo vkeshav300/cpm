@@ -32,25 +32,32 @@ namespace commands
   {
     std::cout << "\n"
               << logger::colors["blue"]
-              << " ██████ ██████  ███    ███\n"
-              << "██      ██   ██ ████  ████\n"
-              << "██      ██████  ██ ████ ██\n"
-              << "██      ██      ██  ██  ██\n"
-              << " ██████ ██      ██      ██\n\n"
+              << "      ___           ___         ___     \n"
+              << "     /  /\\         /  /\\       /__/\\    \n"
+              << "    /  /:/        /  /::\\     |  |::\\   \n"
+              << "   /  /:/        /  /:/\\:\\    |  |:|:\\  \n"
+              << "  /  /:/  ___   /  /:/~/:/  __|__|:|\\:\\ \n"
+              << " /__/:/  /  /\\ /__/:/ /:/  /__/::::| \\:\n"
+              << " \\  \\:\\ /  /:/ \\  \\:\\/:/   \\  \\:\\~~\\__\\/\n"
+              << "  \\  \\:\\  /:/   \\  \\::/     \\  \\:\\      \n"
+              << "   \\  \\:\\/:/     \\  \\:\\      \\  \\:\\     \n"
+              << "    \\  \\::/       \\  \\:\\      \\  \\:\\    \n"
+              << "     \\__\\/         \\__\\/       \\__\\/    \n\n\n"
               << logger::colors["reset"];
 
-    logger::custom("https://github.com/vkeshav300/cpm\n\n\n", "source code",
+    logger::custom("https://github.com/vkeshav300/cpm\n\n\n", "github",
                    "red");
 
-    logger::custom("cpm <command> <args> <flags>\n", "usage", "blue");
+    logger::custom("cpm <command> <args + flags>\n", "usage", "blue");
 
-    std::cout
-        << "help --> lists commands + other useful information related to CPM\n\n"
-        << "--version || version --> tells current version of cpm you are using\n\n";
+    std::cout << "Reading Guide:\n"
+              << "[Square brackets] are required arguments\n"
+              << "{Curly brackets} are flags (not required)\n\n\n"
+              << "help --> lists commands + other useful information related to CPM\n\n"
+              << "version --> tells current version of cpm you are using\n\n"
+              << "create [language] --> creates new c/c++ project\n\n";
 
-    logger::custom("arguments must be in order, but flags can be placed anywhere "
-                   "after the command.",
-                   "note", "yellow");
+    logger::custom("arguments must be in order, but flags can be placed anywhere.", "note", "yellow");
 
     return 0;
   }

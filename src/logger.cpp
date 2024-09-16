@@ -9,24 +9,17 @@
  */
 #include "logger.h"
 
+#include <iostream>
+
 /**
  * @brief Get method for logger class.
  *
  * @return Logger*
  */
-Logger *Logger::get()
+Logger &Logger::get()
 {
-  if (instance_ptr == nullptr)
-  {
-    std::lock_guard<std::mutex> lock(mtx);
-
-    if (instance_ptr == nullptr)
-    {
-      instance_ptr = new Logger();
-    }
-  }
-
-  return instance_ptr;
+  static Logger logger;
+  return logger;
 }
 
 /**
@@ -36,7 +29,7 @@ Logger *Logger::get()
  */
 void Logger::set_colors(const std::map<std::string, std::string> &new_colors)
 {
-  this->colors = new_colors;
+  colors = new_colors;
 }
 
 /**

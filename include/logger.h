@@ -13,16 +13,11 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <mutex>
 
 class Logger
 {
 private:
     size_t logger_count = 0;
-
-    static Logger *instance_ptr;
-
-    static std::mutex mtx;
 
     Logger() {}
 
@@ -31,7 +26,7 @@ public:
 
     Logger(const Logger &obj) = delete;
 
-    static Logger *get();
+    static Logger &get();
 
     void set_colors(const std::map<std::string, std::string> &new_colors);
 

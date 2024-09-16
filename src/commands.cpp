@@ -15,7 +15,7 @@
 namespace commands
 {
   // Logger
-  Logger *logger = Logger::get();
+  Logger &logger = Logger::get();
 
   /**
    * @brief All templates supported by the create command.
@@ -34,7 +34,7 @@ namespace commands
   int help()
   {
     std::cout << "\n"
-              << logger->colors["blue"]
+              << logger.colors["blue"]
               << "      ___           ___         ___     \n"
               << "     /  /\\         /  /\\       /__/\\    \n"
               << "    /  /:/        /  /::\\     |  |::\\   \n"
@@ -46,12 +46,12 @@ namespace commands
               << "   \\  \\:\\/:/     \\  \\:\\      \\  \\:\\     \n"
               << "    \\  \\::/       \\  \\:\\      \\  \\:\\    \n"
               << "     \\__\\/         \\__\\/       \\__\\/    \n\n\n"
-              << logger->colors["reset"];
+              << logger.colors["reset"];
 
-    logger->custom("https://github.com/vkeshav300/cpm\n\n\n", "github",
+    logger.custom("https://github.com/vkeshav300/cpm\n\n\n", "github",
                    "red");
 
-    logger->custom("cpm <command> <args + flags>\n", "usage", "blue");
+    logger.custom("cpm <command> <args + flags>\n", "usage", "blue");
 
     std::cout << "Reading Guide:\n"
               << "[Square brackets] are required arguments\n"
@@ -60,7 +60,7 @@ namespace commands
               << "version --> tells current version of cpm you are using\n\n"
               << "create [language] --> creates new c/c++ project\n\n";
 
-    logger->custom("arguments must be in order, but flags can be placed anywhere.", "note", "yellow");
+    logger.custom("arguments must be in order, but flags can be placed anywhere.", "note", "yellow");
 
     return 0;
   }
@@ -72,7 +72,7 @@ namespace commands
    */
   int version()
   {
-    logger->custom("cpm version 0.1.0", "version", "red");
+    logger.custom("cpm version 0.1.0", "version", "red");
 
     return 0;
   }
@@ -104,31 +104,31 @@ namespace commands
 
     if (lang != "cpp" && lang != "c")
     {
-      logger->error_q("is not a supported language", lang);
+      logger.error_q("is not a supported language", lang);
       return 1;
     }
 
-    std::string project_name = logger->prompt("enter project name");
+    std::string project_name = logger.prompt("enter project name");
 
     std::string base = "default";
 
-    if (logger->prompt_yn("use custom template"))
+    if (logger.prompt_yn("use custom template"))
     {
       while (true)
       {
-        base = logger->prompt("enter the name of a template you would like to use");
+        base = logger.prompt("enter the name of a template you would like to use");
 
         if (misc::vector_contains(supported_bases, base))
           break;
         else
-          logger->warn_q("is an invald template name", base);
+          logger.warn_q("is an invald template name", base);
       }
     }
 
-    bool git_support = logger->prompt_yn("add git support");
+    bool git_support = logger.prompt_yn("add git support");
 
     std::vector<std::string> folders = {"src"};
-    std::vector<std::string> files = {"src/" + project_name + "." + lang, "cpm.json"};
+    std::vector<std::string> files = {"src/" + project_name + "." + lang, "cpm.data"};
 
     if (git_support)
     {

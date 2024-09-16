@@ -21,11 +21,9 @@ target_include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-find_package(nlohmann_json 3.2.3 REQUIRED)
 
 target_link_libraries(
     ${PROJECT_NAME} PRIVATE
-    nlohmann_json::nlohmann_json
 )
 
 if (CMAKE_SYSTEM_NAME MATCHES "Darwin" OR CMAKE_SYSTEM_NAME MATCHES "Linux")

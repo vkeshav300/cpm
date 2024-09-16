@@ -10,15 +10,12 @@
 #pragma once
 
 #include "logger.h"
-#include <iostream>
 #include <string>
 #include <vector>
 
 namespace commands
 {
-    extern Logger *logger;
-
-    extern std::vector<std::string> base;
+    extern std::vector<std::string> supported_bases;
     
     bool verify_init();
 

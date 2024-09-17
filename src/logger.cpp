@@ -1,6 +1,6 @@
 /**
  * @file logger.cpp
- * @brief Contains console logging code.
+ * @brief Provides majority of functionality to Logger singleton.
  * @version 0.1
  * @date 2023-11-11
  *

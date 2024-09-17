@@ -86,7 +86,7 @@ namespace commands
    */
   bool verify_init()
   {
-    return false;
+    return directory::has_file("cpm.data");
   }
 
   /**

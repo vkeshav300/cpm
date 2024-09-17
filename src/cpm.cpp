@@ -11,6 +11,7 @@
 #include "directory.h"
 #include "logger.h"
 #include "misc.h"
+#include "data.h"
 #include <chrono>
 #include <map>
 #include <string>
@@ -41,7 +42,7 @@ std::map<std::string, std::map<std::string, int>> command_info = {
     {
         "test",
         {
-            {"init_exception", true},
+            {"init_exception", false},
             {"min_args", 0},
         },
     },
@@ -70,6 +71,7 @@ int main(int argc, char *argv[])
 
   // Singleton accessing
   Logger &logger = Logger::get();
+  Data_Handler &data_handler = Data_Handler::get();
 
   logger.set_colors({
       {"reset", "\x1b[0m"},
@@ -85,6 +87,8 @@ int main(int argc, char *argv[])
       {"purple", "\x1b[1;38;5;129m"},
       {"default", "\x1b[39m"},
   });
+
+  data_handler.read();
 
   // Verifies command is inputted
   if (argc <= 1)
@@ -109,7 +113,14 @@ int main(int argc, char *argv[])
     }
   }
 
-  if (not command_found)
+  // Checks if command requires cpm.data to exist
+  if (!command_info[command]["init_exception"] && !commands::verify_init())
+  {
+    logger.error_q("requires a valid cpm.data file", command);
+    return 1;
+  }
+
+  if (!command_found)
   {
     logger.error_q("is not a valid command", command);
     return 1;
@@ -140,6 +151,7 @@ int main(int argc, char *argv[])
   if (arguments.size() < command_info[command]["min_args"])
   {
     logger.error_q("requires more than " + std::to_string(arguments.size()) + " arguments", command);
+    return 1;
   }
 
   // Command processing
@@ -151,6 +163,9 @@ int main(int argc, char *argv[])
     result = commands::version();
   else if (command == "create")
     result = commands::create(arguments);
+
+  // Save data
+  data_handler.write();
 
   // Measure process time
   auto end = std::chrono::high_resolution_clock::now();

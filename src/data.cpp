@@ -42,12 +42,12 @@ void Data_Handler::read()
             prevCh = ch;
             continue;
         }
-        else if (prevCh == ':')
+        else if (prevCh == ':') // : = switch from key to value
         {
             prevCh = ch;
             continue;
         }
-        else if (ch == ':')
+        else if (ch == ':') // space between colon and value
         {
             onKey = false;
             prevCh = ch;

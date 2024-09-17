@@ -114,14 +114,10 @@ namespace commands
 
     if (logger.prompt_yn("use custom template"))
     {
-      while (true)
+      while (!misc::vector_contains(supported_bases, base))
       {
+        logger.warn_q("is an invald template name", base);
         base = logger.prompt("enter the name of a template you would like to use");
-
-        if (misc::vector_contains(supported_bases, base))
-          break;
-        else
-          logger.warn_q("is an invald template name", base);
       }
     }
 

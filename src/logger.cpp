@@ -183,15 +183,16 @@ std::string Logger::prompt(const std::string &message)
  */
 bool Logger::prompt_yn(const std::string &message)
 {
+  std::string response;
   while (true)
   {
-    std::string line = prompt(message + " [y/n]");
+    response = prompt(message + " [y/n]");
 
-    if (line == "y" || line == "yes")
+    if (response == "y" || response == "yes")
       return true;
-    else if (line == "n" || line == "no")
+    else if (response == "n" || response == "no")
       return false;
     else
-      warn_q("is not a valid response, try again", line);
+      warn_q("is not a valid response, try again", response);
   }
 }

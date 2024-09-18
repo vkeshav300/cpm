@@ -165,7 +165,7 @@ int main(int argc, char *argv[])
     result = commands::create(arguments);
 
   // Save data
-  if (result == 0)
+  if (result == 0 && command != "help" && command != "version")
     data_handler.write();
 
   // Measure process time

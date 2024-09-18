@@ -38,6 +38,7 @@ namespace commands
    */
   int help(const std::vector<std::string> &args)
   {
+    // CPM ASCII art
     std::cout << "\n"
               << logger.colors["blue"]
               << "      ___           ___         ___     \n"
@@ -56,6 +57,7 @@ namespace commands
     logger.custom("https://github.com/vkeshav300/cpm\n\n\n", "github",
                   "red");
 
+    // Specifc command focus
     if (args.size() > 0)
     {
       std::string command = args[0];
@@ -72,6 +74,8 @@ namespace commands
                   << "  default  --> 'full' project structure, built around CMake\n"
                   << "  standard --> alias for 'default'\n"
                   << "  simple   --> only creates one main file in working directory\n\n";
+      else
+        logger.error_q("does not have any help-related information", command);
     }
     else
       std::cout << "Reading Guide:\n"

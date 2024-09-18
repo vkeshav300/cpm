@@ -19,7 +19,7 @@ namespace commands
     
     bool verify_init();
 
-    int help();
+    int help(const std::vector<std::string> &args);
 
     int version();
 

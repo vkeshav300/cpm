@@ -158,14 +158,15 @@ int main(int argc, char *argv[])
   int result = 0;
 
   if (command == "help")
-    result = commands::help();
+    result = commands::help(arguments);
   else if (command == "version")
     result = commands::version();
   else if (command == "create")
     result = commands::create(arguments);
 
   // Save data
-  data_handler.write();
+  if (result == 0)
+    data_handler.write();
 
   // Measure process time
   auto end = std::chrono::high_resolution_clock::now();

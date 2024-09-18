@@ -77,7 +77,12 @@ void Data_Handler::write()
         return;
 
     for (const auto &[k, v] : data)
+    {
+        if (k == "" || v == "")
+            continue;
+        
         data_file << k << ": " << v << "\n";
+    }
 
     data_file.close();
 }

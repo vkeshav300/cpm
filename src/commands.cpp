@@ -69,16 +69,17 @@ namespace commands
         std::cout << "create [language] --> creates new c/c++ project\n"
                   << "  [language] --> language project will be based off of, C or C++\n\n"
                   << "Different Project Templates:\n"
-                  << "  default --> 'full' project structure, built around CMake\n"
-                  << "  standard --> alias for 'default'\n\n";
+                  << "  default  --> 'full' project structure, built around CMake\n"
+                  << "  standard --> alias for 'default'\n"
+                  << "  simple   --> only creates one main file in working directory\n\n";
     }
     else
       std::cout << "Reading Guide:\n"
                 << "  [Square brackets] are required arguments\n"
                 << "  {Curly brackets} are optional arguments / flags\n\n\n"
                 << "Commands:\n"
-                << "  help {command} --> lists commands + other useful information related to CPM\n\n"
-                << "  version --> states version of CPM installed\n\n"
+                << "  help {command}    --> lists commands + other useful information related to CPM\n\n"
+                << "  version           --> states version of CPM installed\n\n"
                 << "  create [language] --> creates new c/c++ project\n\n";
 
     return 0;

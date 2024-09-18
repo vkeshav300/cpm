@@ -45,7 +45,7 @@ namespace commands
               << "    /  /:/        /  /::\\     |  |::\\   \n"
               << "   /  /:/        /  /:/\\:\\    |  |:|:\\  \n"
               << "  /  /:/  ___   /  /:/~/:/  __|__|:|\\:\\ \n"
-              << " /__/:/  /  /\\ /__/:/ /:/  /__/::::| \\:\n"
+              << " /__/:/  /  /\\ /__/:/ /:/  /__/::::| \\:\\\n"
               << " \\  \\:\\ /  /:/ \\  \\:\\/:/   \\  \\:\\~~\\__\\/\n"
               << "  \\  \\:\\  /:/   \\  \\::/     \\  \\:\\      \n"
               << "   \\  \\:\\/:/     \\  \\:\\      \\  \\:\\     \n"
@@ -78,8 +78,8 @@ namespace commands
                 << "  [Square brackets] are required arguments\n"
                 << "  {Curly brackets} are optional arguments / flags\n\n\n"
                 << "Commands:\n"
-                << "  help {command}    --> lists commands + other useful information related to CPM\n\n"
-                << "  version           --> states version of CPM installed\n\n"
+                << "  help {command}    --> lists commands + other useful information related to CPM\n"
+                << "  version           --> states version of CPM installed\n"
                 << "  create [language] --> creates new c/c++ project\n\n";
 
     return 0;

@@ -85,7 +85,8 @@ namespace commands
         std::cout << "version --> states version of CPM installed\n\n";
       else if (command == "create")
         std::cout << "create [language] --> creates new c/c++ project\n"
-                  << "  [language] --> language project will be based off of, C or C++\n\n"
+                  << "  language --> language project will be based off of, C or C++ (ex. cpp)\n"
+                  << "  -v=... --> Specify a specific language verison to use (ex. -v=17)\n\n"
                   << "Different Project Templates:\n"
                   << "  default  --> 'full' project structure, built around CMake\n"
                   << "  standard --> alias for 'default'\n"
@@ -130,10 +131,11 @@ namespace commands
   }
 
   /**
-   * @brief Initializes cpm in a directory.
-   *
-   * @param args Command arguments.
-   * @return int
+   * @brief Creates new project in working directory.
+   * 
+   * @param args 
+   * @param flags 
+   * @return int 
    */
   int create(const std::vector<std::string> &args, const std::vector<std::string> &flags)
   {
@@ -226,11 +228,12 @@ namespace commands
       writing_file.open("CMakeLists.txt");
       reading_file.open("cpm.tmp");
 
+      // Use installed CMAKE version
       std::string cmake_current_version;
       std::getline(reading_file, cmake_current_version);
       cmake_current_version = misc::split_string(cmake_current_version, " ")[2];
 
-      std::string prefix = (lang == "cpp") ? "CXX" : "C";
+      std::string cmake_lang = (lang == "cpp") ? "CXX" : "C";
       std::string version = (flags.size() > 0) ? misc::get_flag_value(flags[0]) : "23";
 
       writing_file << "cmake_minimum_required(VERSION "
@@ -241,10 +244,10 @@ namespace commands
                    << project_name
                    << "\n"
                    << "    LANGUAGES "
-                   << ((lang == "cpp") ? "CXX" : "C")
+                   << cmake_lang
                    << "\n)\n\n"
                    << "set(CMAKE_"
-                   << prefix
+                   << cmake_lang
                    << "_STANDARD "
                    << version
                    << ")\n";

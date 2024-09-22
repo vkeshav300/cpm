@@ -58,6 +58,6 @@ namespace misc
      */
     std::string get_flag_value(const std::string &flag)
     {
-        return (flag.find("=") != std::string::npos) ? flag.substr(flag.find("="), flag.length()) : "";
+        return (flag.find("=") != std::string::npos) ? flag.substr(flag.find("=") + 1, flag.length()) : "";
     }
 } // namespace misc

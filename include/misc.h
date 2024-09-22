@@ -16,4 +16,8 @@
 namespace misc
 {
     bool vector_contains(const std::vector<std::string> &vector, const std::string &content);
+
+    std::vector<std::string> split_string(const std::string &s, const std::string &delimiter);
+
+    std::string get_flag_value(const std::string &flag);
 } // namespace misc

@@ -14,6 +14,8 @@
 #include "data.h"
 
 #include <fstream>
+#include <cstdlib>
+#include <iostream>
 
 namespace commands
 {
@@ -30,6 +32,20 @@ namespace commands
       "standard",
       "simple",
   };
+
+  /**
+   * @brief Runs test code for CPM.
+   *
+   * @param args
+   * @param flags
+   * @return int
+   */
+  int test(const std::vector<std::string> &args, const std::vector<std::string> &flags)
+  {
+    logger.execute("ls -la");
+
+    return 0;
+  }
 
   /**
    * @brief Lists all commands and provides useful information about CPM.
@@ -119,7 +135,7 @@ namespace commands
    * @param args Command arguments.
    * @return int
    */
-  int create(const std::vector<std::string> &args)
+  int create(const std::vector<std::string> &args, const std::vector<std::string> &flags)
   {
     std::string lang = args[0];
 
@@ -190,19 +206,53 @@ namespace commands
       directory::create_file(file);
 
     // Writing to files
-    std::ofstream file;
+    std::ofstream writing_file;
+    std::ifstream reading_file;
 
-    file.open(main_file);
+    writing_file.open(main_file);
 
-    file << "#include <iostream>\n"
-         << "\n"
-         << "int main(int argc, char *argv[])\n"
-         << "{\n"
-         << "  std::cout << \"Hello World!\" << std::endl;"
-         << "  return 0;\n"
-         << "}";
+    writing_file << "#include <iostream>\n"
+                 << "\n"
+                 << "int main(int argc, char *argv[])\n"
+                 << "{\n"
+                 << "  std::cout << \"Hello World!\" << std::endl;"
+                 << "  return 0;\n"
+                 << "}";
 
-    file.close();
+    writing_file.close();
+
+    if (misc::vector_contains(files, "CMakeLists.txt") && logger.execute("cmake --version"))
+    {
+      writing_file.open("CMakeLists.txt");
+      reading_file.open("cpm.tmp");
+
+      std::string cmake_current_version;
+      std::getline(reading_file, cmake_current_version);
+      cmake_current_version = misc::split_string(cmake_current_version, " ")[2];
+
+      std::string prefix = (lang == "cpp") ? "CXX" : "C";
+      std::string version = (flags.size() > 0) ? misc::get_flag_value(flags[0]) : "23";
+
+      writing_file << "cmake_minimum_required(VERSION "
+                   << cmake_current_version
+                   << ")\n\n"
+                   << "project(\n"
+                   << "    "
+                   << project_name
+                   << "\n"
+                   << "    LANGUAGES "
+                   << ((lang == "cpp") ? "CXX" : "C")
+                   << "\n)\n\n"
+                   << "set(CMAKE_"
+                   << prefix
+                   << "_STANDARD "
+                   << version
+                   << ")\n";
+
+      writing_file.close();
+    }
+
+    reading_file.close();
 
     data_handler.data["language"] = lang;
 

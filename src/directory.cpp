@@ -53,6 +53,11 @@ namespace directory
         std::filesystem::create_directory(path);
     }
 
+    /**
+     * @brief Create a file at path.
+     * 
+     * @param path 
+     */
     void create_file(const std::string &path)
     {
         if (has_file(path))
@@ -60,5 +65,13 @@ namespace directory
 
         std::ofstream file(path);
         file.close();
+    }
+
+    void destroy_file(const std::string &path)
+    {
+        if (!has_file(path))
+            return;
+
+        std::filesystem::remove(path);
     }
 } // namespace directory

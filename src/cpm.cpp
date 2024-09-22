@@ -74,18 +74,13 @@ int main(int argc, char *argv[])
   Data_Handler &data_handler = Data_Handler::get();
 
   logger.set_colors({
-      {"reset", "\x1b[0m"},
-      {"black", "\x1b[1;38;5;0m"},
-      {"red", "\x1b[1;38;5;9m"},
-      {"green", "\x1b[1;38;5;10m"},
-      {"yellow", "\x1b[1;38;5;11m"},
-      {"blue", "\x1b[1;38;5;12m"},
-      {"magenta", "\x1b[1;38;5;13m"},
-      {"cyan", "\x1b[1;38;5;14m"},
-      {"white", "\x1b[1;38;5;15m"},
-      {"orange", "\x1b[1;38;5;202m"},
-      {"purple", "\x1b[1;38;5;129m"},
-      {"default", "\x1b[39m"},
+      {"success", logger.raw_colors["green"]},
+      {"error", logger.raw_colors["red"]},
+      {"warn", logger.raw_colors["orange"]},
+      {"count", logger.raw_colors["cyan"]},
+      {"prompt", logger.raw_colors["magenta"]},
+      {"execute", logger.raw_colors["cyan"]},
+      {"reset", logger.raw_colors["reset"]},
   });
 
   data_handler.read();
@@ -162,11 +157,16 @@ int main(int argc, char *argv[])
   else if (command == "version")
     result = commands::version();
   else if (command == "create")
-    result = commands::create(arguments);
+    result = commands::create(arguments, flags);
+  else if (command == "test")
+    result = commands::test(arguments, flags);
 
   // Save data
   if (result == 0 && command != "help" && command != "version")
     data_handler.write();
+
+  // Cleanup artifacts
+  directory::destroy_file("cpm.tmp");
 
   // Measure process time
   auto end = std::chrono::high_resolution_clock::now();

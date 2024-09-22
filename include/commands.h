@@ -16,12 +16,14 @@
 namespace commands
 {
     extern std::vector<std::string> supported_bases;
-    
-    bool verify_init();
+
+    int test(const std::vector<std::string> &args, const std::vector<std::string> &flags);
 
     int help(const std::vector<std::string> &args);
 
+    bool verify_init();
+
     int version();
 
-    int create(const std::vector<std::string> &args);
+    int create(const std::vector<std::string> &args, const std::vector<std::string> &flags);
 };

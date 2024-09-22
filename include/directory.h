@@ -20,4 +20,6 @@ namespace directory
     void create_directory(const std::string &path);
 
     void create_file(const std::string &path);
+
+    void destroy_file(const std::string &path);
 }; // namespace directory

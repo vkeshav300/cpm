@@ -29,15 +29,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v2
+        uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
-
-      - name: Install Dependencies
-        run: |
-          sudo apt-get install curl
-          sudo apt-get install libssl-dev libcurl4-openssl-dev
-          sudo apt-get install libjsoncpp-dev
 
       - name: Configure CMake
         run: cmake -Bbuild -S.

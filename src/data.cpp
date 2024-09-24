@@ -12,12 +12,21 @@
 
 #include <fstream>
 
+/**
+ * @brief Get method for DATA_HANDLER singleton class.
+ * 
+ * @return Data_Handler& 
+ */
 Data_Handler &Data_Handler::get()
 {
     static Data_Handler data_handler;
     return data_handler;
 }
 
+/**
+ * @brief Reads cpm.data file and stores it in data.
+ * 
+ */
 void Data_Handler::read()
 {
     std::ifstream data_file("cpm.data");
@@ -69,6 +78,10 @@ void Data_Handler::read()
     data[key] = value;
 }
 
+/**
+ * @brief Writes to cpm.data from data
+ * 
+ */
 void Data_Handler::write()
 {
     std::ofstream data_file("cpm.data");

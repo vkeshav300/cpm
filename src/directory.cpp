@@ -67,6 +67,11 @@ namespace directory
         file.close();
     }
 
+    /**
+     * @brief Destroys file at path.
+     * 
+     * @param path 
+     */
     void destroy_file(const std::string &path)
     {
         if (!has_file(path))

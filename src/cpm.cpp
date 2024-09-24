@@ -78,8 +78,8 @@ int main(int argc, char *argv[])
       {"error", logger.raw_colors["red"]},
       {"warn", logger.raw_colors["orange"]},
       {"count", logger.raw_colors["cyan"]},
-      {"prompt", logger.raw_colors["magenta"]},
-      {"execute", logger.raw_colors["cyan"]},
+      {"prompt", logger.raw_colors["yellow"]},
+      {"execute", logger.raw_colors["orange"]},
       {"reset", logger.raw_colors["reset"]},
   });
 
@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
     return 1;
   }
 
-  // Parses command & converts argv into vectors of arguments and flags
+  // Initial validations
   std::string command = argv[1];
   bool command_found = false;
 
@@ -108,6 +108,13 @@ int main(int argc, char *argv[])
     }
   }
 
+  // Checks if command exists
+  if (!command_found)
+  {
+    logger.error_q("is not a valid command", command);
+    return 1;
+  }
+
   // Checks if command requires cpm.data to exist
   if (!command_info[command]["init_exception"] && !commands::verify_init())
   {
@@ -115,12 +122,7 @@ int main(int argc, char *argv[])
     return 1;
   }
 
-  if (!command_found)
-  {
-    logger.error_q("is not a valid command", command);
-    return 1;
-  }
-
+  // Parsing
   std::vector<std::string> arguments;
   std::vector<std::string> flags;
 

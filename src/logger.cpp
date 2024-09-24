@@ -240,7 +240,7 @@ bool Logger::execute(const std::string &command, const bool &must_populate_file)
     // Checks if cpm.tmp file is empty
     if (file.peek() == std::ifstream::traits_type::eof())
     {
-      error("command failed to execute");
+      error_q("did not execute successfully", command);
       file.close();
 
       return false;
@@ -249,13 +249,7 @@ bool Logger::execute(const std::string &command, const bool &must_populate_file)
     file.close();
   }
 
-  handle_logger_count();
-  
-  std::cout << colors["execute"]
-            << "[executed]: "
-            << colors["reset"]
-            << command
-            << "\n";
+  success_q("executed successfully", command);
 
   return true;
 }

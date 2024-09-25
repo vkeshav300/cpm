@@ -25,4 +25,6 @@ public:
     void read();
 
     void write();
+
+    bool has_key(std::string key);
 };

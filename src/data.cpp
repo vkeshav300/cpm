@@ -1,6 +1,6 @@
 /**
  * @file data.cpp
- * @brief Provides majority of functionality to DataHandler singleton.
+ * @brief Provides majority of functionality to Dat_Handler singleton.
  * @version 0.1
  * @date 2024-09-15
  *
@@ -98,4 +98,19 @@ void Data_Handler::write()
     }
 
     data_file.close();
+}
+
+/**
+ * @brief Checks if data contains key.
+ * 
+ * @param key 
+ * @return true 
+ * @return false 
+ */
+bool Data_Handler::has_key(std::string key)
+{
+    if (data.find(key) != data.end())
+        return true;
+
+    return false;
 }

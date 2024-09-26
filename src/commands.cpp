@@ -288,7 +288,7 @@ namespace commands
   {
     if (!data_handler.has_key("structure"))
     {
-      logger.error("structure information lacking from cpm.store");
+      logger.error("structure information lacking from local cpm storage");
       return 1;
     }
 

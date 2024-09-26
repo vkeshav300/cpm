@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
 
     if (!data_handler.has_key("language"))
     {
-      logger.error("language information lacking from cpm.store");
+      logger.error("language information lacking from local cpm storage");
       return 1;
     }
   }

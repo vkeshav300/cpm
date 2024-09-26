@@ -9,7 +9,7 @@
  */
 #pragma once
 
-#include <map>
+#include <unordered_map>
 #include <string>
 #include <vector>
 
@@ -21,7 +21,7 @@ private:
     Logger() {}
 
 public:
-    std::map<std::string, std::string> raw_colors = {
+    std::unordered_map<std::string, std::string> raw_colors = {
         {"reset", "\x1b[0m"},
         {"black", "\x1b[1;38;5;0m"},
         {"red", "\x1b[1;38;5;9m"},
@@ -36,13 +36,13 @@ public:
         {"default", "\x1b[39m"},
     };
 
-    std::map<std::string, std::string> colors;
+    std::unordered_map<std::string, std::string> colors;
 
     Logger(const Logger &obj) = delete;
 
     static Logger &get();
 
-    void set_colors(const std::map<std::string, std::string> &new_colors);
+    void set_colors(const std::unordered_map<std::string, std::string> &new_colors);
 
     void flush_buffer();
 

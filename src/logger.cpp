@@ -30,7 +30,7 @@ Logger &Logger::get()
  *
  * @param new_colors
  */
-void Logger::set_colors(const std::map<std::string, std::string> &new_colors)
+void Logger::set_colors(const std::unordered_map<std::string, std::string> &new_colors)
 {
   colors = new_colors;
 }

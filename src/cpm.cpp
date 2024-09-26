@@ -13,11 +13,11 @@
 #include "misc.h"
 #include "data.h"
 #include <chrono>
-#include <map>
+#include <unordered_map>
 #include <string>
 #include <vector>
 
-std::map<std::string, std::map<std::string, int>> command_info = {
+std::unordered_map<std::string, std::unordered_map<std::string, int>> command_info = {
     {
         "create",
         {
@@ -77,6 +77,7 @@ int main(int argc, char *argv[])
       {"count", logger.raw_colors["cyan"]},
       {"prompt", logger.raw_colors["yellow"]},
       {"execute", logger.raw_colors["orange"]},
+      {"help", logger.raw_colors["blue"]},
       {"reset", logger.raw_colors["reset"]},
   });
 

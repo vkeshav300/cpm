@@ -56,7 +56,7 @@ namespace commands
   {
     // CPM ASCII art
     std::cout << "\n"
-              << logger.colors["blue"]
+              << logger.colors["help"]
               << "      ___           ___         ___     \n"
               << "     /  /\\         /  /\\       /__/\\    \n"
               << "    /  /:/        /  /::\\     |  |::\\   \n"
@@ -86,7 +86,7 @@ namespace commands
       else if (command == "create")
         std::cout << "create [language] --> creates new c/c++ project\n"
                   << "  language --> language project will be based off of, C or C++ (ex. cpp)\n"
-                  << "  -v=... --> Specify a specific language verison to use (ex. -v=17)"
+                  << "  -v=... --> Specify a specific language verison to use (ex. -v=17)\n\n"
                   << "Different Project Templates:\n"
                   << "  default  --> 'full' project structure, built around CMake\n"
                   << "  standard --> alias for 'default'\n"

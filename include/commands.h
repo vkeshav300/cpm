@@ -26,4 +26,6 @@ namespace commands
     int version();
 
     int create(const std::vector<std::string> &args, const std::vector<std::string> &flags);
+
+    int file_pair(const std::vector<std::string> &args, const std::vector<std::string> &flags);
 };

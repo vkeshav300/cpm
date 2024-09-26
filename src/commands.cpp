@@ -27,7 +27,7 @@ namespace commands
    * @brief All templates supported by the create command.
    *
    */
-  std::vector<std::string> supported_bases = {
+  std::vector<std::string> supported_structures = {
       "default",
       "standard",
       "simple",
@@ -80,28 +80,42 @@ namespace commands
 
       if (command == "help")
         std::cout << "help {command} --> gets information related to CPM and it's commands\n"
-                  << "  {command} --> specific command to focus information on\n\n";
+                  << "  {command} --> specific command to focus information on";
       else if (command == "version")
-        std::cout << "version --> states version of CPM installed\n\n";
+        std::cout << "version --> states version of CPM installed";
       else if (command == "create")
         std::cout << "create [language] --> creates new c/c++ project\n"
                   << "  language --> language project will be based off of, C or C++ (ex. cpp)\n"
-                  << "  -v=... --> Specify a specific language verison to use (ex. -v=17)\n\n"
+                  << "  -v=... --> Specify a specific language verison to use (ex. -v=17)"
                   << "Different Project Templates:\n"
                   << "  default  --> 'full' project structure, built around CMake\n"
                   << "  standard --> alias for 'default'\n"
-                  << "  simple   --> only creates one main file in working directory\n\n";
+                  << "  simple   --> only creates one main file in working directory";
+      else if (command == "fpair")
+        std::cout << "fpair [method] [name] --> performs method on header/source file pair\n"
+                  << "  [method] --> what operation to perform on file pair\n"
+                  << "    create --> creates new file pair\n"
+                  << "    destroy --> destroys existing file pair\n"
+                  << "  [name] --> name of file pair\n"
+                  << "  -hpp --> use hpp header format (only useful for create method)";
       else
+      {
         logger.error_q("does not have any help-related information", command);
+        return 1;
+      }
+
+      std::cout << "\n\n";
     }
     else
       std::cout << "Reading Guide:\n"
                 << "  [Square brackets] are required arguments\n"
                 << "  {Curly brackets} are optional arguments / flags\n\n\n"
                 << "Commands:\n"
-                << "  help {command}    --> lists commands + other useful information related to CPM\n"
-                << "  version           --> states version of CPM installed\n"
-                << "  create [language] --> creates new c/c++ project\n\n";
+                << "  help {command} --> lists commands + other useful information related to CPM\n"
+                << "  version --> states version of CPM installed\n"
+                << "  create [language] --> creates new c/c++ project\n"
+                << "  fpair [method] [name] --> performs method on header/source file pair\n"
+                << "\n";
 
     return 0;
   }
@@ -132,10 +146,10 @@ namespace commands
 
   /**
    * @brief Creates new project in working directory.
-   * 
-   * @param args 
-   * @param flags 
-   * @return int 
+   *
+   * @param args
+   * @param flags
+   * @return int
    */
   int create(const std::vector<std::string> &args, const std::vector<std::string> &flags)
   {
@@ -152,22 +166,22 @@ namespace commands
 
     std::string project_name = logger.prompt("enter project name");
 
-    std::string base;
+    std::string structure;
 
     if (logger.prompt_yn("use custom template"))
     {
       while (true)
       {
-        base = logger.prompt("enter the name of a template you would like to use");
+        structure = logger.prompt("enter the name of a template you would like to use");
 
-        if (!misc::vector_contains(supported_bases, base))
-          logger.warn_q("is an invald template name", base);
+        if (!misc::vector_contains(supported_structures, structure))
+          logger.warn_q("is an invald template name", structure);
         else
           break;
       }
     }
     else
-      base = "default";
+      structure = "default";
 
     bool git_support = logger.prompt_yn("add git support");
 
@@ -177,7 +191,7 @@ namespace commands
 
     std::string main_file;
 
-    if (base == "default" || base == "standard")
+    if (structure == "default" || structure == "standard")
     {
       folders.emplace_back("include");
       folders.emplace_back("build");
@@ -189,7 +203,7 @@ namespace commands
       main_file = "src/" + project_name + "." + lang;
       files.emplace_back(main_file);
     }
-    else if (base == "simple")
+    else if (structure == "simple")
     {
       main_file = project_name + "." + lang;
       files.emplace_back(main_file);
@@ -258,6 +272,85 @@ namespace commands
     reading_file.close();
 
     data_handler.data["language"] = lang;
+    data_handler.data["structure"] = structure;
+
+    return 0;
+  }
+
+  /**
+   * @brief Creates / destroys header and source file pairs.
+   *
+   * @param args
+   * @param flags
+   * @return int
+   */
+  int file_pair(const std::vector<std::string> &args, const std::vector<std::string> &flags)
+  {
+    if (!data_handler.has_key("structure"))
+    {
+      logger.error("structure information lacking from cpm.store");
+      return 1;
+    }
+
+    // Whether to use include/ src/ folders
+    bool prefix = (data_handler.data["structure"] == "simple") ? false : true;
+
+    if (args[0] == "create")
+    {
+      // File related variables
+      std::string header_extension = (misc::vector_contains(flags, "hpp")) ? ".hpp" : ".h";
+      std::string header_path = (prefix ? "include/" : "") + args[1] + header_extension;
+      std::string source_path = (prefix ? "src/" : "") + args[1] + ((data_handler.data["language"] == "cpp") ? ".cpp" : ".c");
+
+      // Creating and writing to header file
+      std::ofstream file(header_path);
+
+      if (!file.is_open())
+      {
+        logger.error_q("could not be opened", header_path);
+        return 1;
+      }
+
+      file << "#pragma once\n\n";
+
+      file.close();
+
+      // Creating and writing to source file
+      file.open(source_path);
+
+      if (!file.is_open())
+      {
+        logger.error_q("could not be opened", source_path);
+        return 1;
+      }
+
+      file << "#include \""
+           << args[1]
+           << header_extension
+           << "\"\n\n";
+    }
+    else if (args[0] == "destroy")
+    {
+      if (prefix)
+      {
+        directory::destroy_file("include/" + args[1] + ".h");
+        directory::destroy_file("include/" + args[1] + ".hpp");
+        directory::destroy_file("src/" + args[1] + ".c");
+        directory::destroy_file("src/" + args[1] + ".cpp");
+      }
+      else
+      {
+        directory::destroy_file(args[1] + ".h");
+        directory::destroy_file(args[1] + ".hpp");
+        directory::destroy_file(args[1] + ".c");
+        directory::destroy_file(args[1] + ".cpp");
+      }
+    }
+    else
+    {
+      logger.error_q("is an invalid sub-command", args[0]);
+      return 1;
+    }
 
     return 0;
   }

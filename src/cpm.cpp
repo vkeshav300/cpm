@@ -46,17 +46,14 @@ std::map<std::string, std::map<std::string, int>> command_info = {
             {"min_args", 0},
         },
     },
+    {
+        "fpair",
+        {
+            {"init_exception", false},
+            {"min_args", 2},
+        },
+    },
 };
-
-/**
- * @brief Processes command.
- *
- * @param command
- * @param arguments
- * @param flags
- * @param language
- * @return int
- */
 /**
  * @brief Main function.
  *
@@ -116,10 +113,19 @@ int main(int argc, char *argv[])
   }
 
   // Checks if command requires cpm.data to exist
-  if (!command_info[command]["init_exception"] && !commands::verify_init())
+  if (!command_info[command]["init_exception"])
   {
-    logger.error_q("requires a valid cpm.data file", command);
-    return 1;
+    if (!commands::verify_init())
+    {
+      logger.error_q("requires a valid cpm.data file", command);
+      return 1;
+    }
+
+    if (!data_handler.has_key("language"))
+    {
+      logger.error("language information lacking from cpm.store");
+      return 1;
+    }
   }
 
   // Parsing
@@ -162,6 +168,8 @@ int main(int argc, char *argv[])
     result = commands::create(arguments, flags);
   else if (command == "test")
     result = commands::test(arguments, flags);
+  else if (command == "fpair")
+    result = commands::file_pair(arguments, flags);
 
   // Save data
   if (result == 0 && command != "help" && command != "version")

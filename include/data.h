@@ -7,7 +7,7 @@
  * @copyright Copyright (c) 2024
  * 
  */
-#include <map>
+#include <unordered_map>
 #include <string>
 
 class Data_Handler
@@ -16,7 +16,7 @@ private:
     Data_Handler() {}
 
 public:
-    std::map<std::string, std::string> data;
+    std::unordered_map<std::string, std::string> data;
 
     Data_Handler(const Data_Handler &obj) = delete;
 
@@ -26,5 +26,5 @@ public:
 
     void write();
 
-    bool has_key(std::string key);
+    bool has_key(const std::string &key);
 };

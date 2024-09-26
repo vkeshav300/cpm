@@ -107,7 +107,7 @@ void Data_Handler::write()
  * @return true 
  * @return false 
  */
-bool Data_Handler::has_key(std::string key)
+bool Data_Handler::has_key(const std::string &key)
 {
     if (data.find(key) != data.end())
         return true;

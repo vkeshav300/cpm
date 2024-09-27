@@ -8,11 +8,14 @@
  *
  */
 #include "misc.h"
+#include "logger.h"
 
 #include <cstdlib>
 
 namespace misc
 {
+    Logger &logger = Logger::get();
+
     /**
      * @brief Checks if std::vector that contains std::strings has a specific string.
      * 
@@ -59,5 +62,41 @@ namespace misc
     std::string get_flag_value(const std::string &flag)
     {
         return (flag.find("=") != std::string::npos) ? flag.substr(flag.find("=") + 1, flag.length()) : "";
+    }
+
+    /**
+     * @brief Validates ofstream instance is open.
+     * 
+     * @param _ofstream 
+     * @return true 
+     * @return false 
+     */
+    bool ofstream_open(const std::ofstream &_ofstream)
+    {
+        if (!_ofstream.is_open())
+        {
+            logger.custom("failed to open file", "ofs", "red");
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @brief Validates ifstream instance is open.
+     * 
+     * @param _ifstream 
+     * @return true 
+     * @return false 
+     */
+    bool ifstream_open(const std::ifstream &_ifstream)
+    {
+        if (!_ifstream.is_open())
+        {
+            logger.custom("failed to open file", "ifs", "red");
+            return false;
+        }
+
+        return true;
     }
 } // namespace misc

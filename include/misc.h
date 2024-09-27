@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <fstream>
 
 namespace misc
 {
@@ -21,5 +22,7 @@ namespace misc
 
     std::string get_flag_value(const std::string &flag);
 
+    bool ofstream_open(const std::ofstream &_ofstream);
 
+    bool ifstream_open(const std::ifstream &_ifstream);
 } // namespace misc

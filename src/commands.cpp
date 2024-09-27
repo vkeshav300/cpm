@@ -80,9 +80,10 @@ namespace commands
 
       if (command == "help")
         std::cout << "help {command} --> gets information related to CPM and it's commands\n"
-                  << "  {command} --> specific command to focus information on";
+                  << "  {command} --> specific command to focus information on\n\n"
+                  << "Ex: cpm help create";
       else if (command == "version")
-        std::cout << "version --> states version of CPM installed";
+        std::cout << "version --> states version of CPM installed\n\n";
       else if (command == "create")
         std::cout << "create [language] --> creates new c/c++ project\n"
                   << "  language --> language project will be based off of, C or C++ (ex. cpp)\n"
@@ -90,14 +91,24 @@ namespace commands
                   << "Different Project Templates:\n"
                   << "  default  --> 'full' project structure, built around CMake\n"
                   << "  standard --> alias for 'default'\n"
-                  << "  simple   --> only creates one main file in working directory";
+                  << "  simple   --> only creates one main file in working directory\n\n"
+                  << "Ex: cpm create cpp";
       else if (command == "fpair")
         std::cout << "fpair [method] [name] --> performs method on header/source file pair\n"
                   << "  [method] --> what operation to perform on file pair\n"
                   << "    create --> creates new file pair\n"
                   << "    destroy --> destroys existing file pair\n"
                   << "  [name] --> name of file pair\n"
-                  << "  -hpp --> use hpp header format (only useful for create method)";
+                  << "  -hpp --> use hpp header format (only useful for create method)\n\n"
+                  << "Ex: cpm fpair create utils";
+      else if (command == "tmp")
+        std::cout << "tmp [template] [file name] [name] --> inserts coding template into file\n"
+                  << "  [template] --> template to be inserted\n"
+                  << "    class --> basic class template\n"
+                  << "  [file name] --> name of file to insert in (don't include extension)\n"
+                  << "    if file does not exist, a file pair will be created automatically\n"
+                  << "  [name] --> 'reference' name to be used in coding\n\n"
+                  << "Ex: cpm tmp class utils MyClass";
       else
       {
         logger.error_q("does not have any help-related information", command);
@@ -115,6 +126,7 @@ namespace commands
                 << "  version --> states version of CPM installed\n"
                 << "  create [language] --> creates new c/c++ project\n"
                 << "  fpair [method] [name] --> performs method on header/source file pair\n"
+                << "  tmp [template] [file name] [name] --> inserts coding template into file\n"
                 << "\n";
 
     return 0;
@@ -227,6 +239,9 @@ namespace commands
 
     writing_file.open(main_file);
 
+    if (!misc::ofstream_open(writing_file))
+      return 1;
+
     writing_file << "#include <iostream>\n"
                  << "\n"
                  << "int main(int argc, char *argv[])\n"
@@ -242,6 +257,9 @@ namespace commands
       writing_file.open("CMakeLists.txt");
       reading_file.open("cpm.tmp");
 
+      if (!misc::ofstream_open(writing_file) || !misc::ifstream_open(reading_file))
+        return 1;
+
       // Use installed CMAKE version
       std::string cmake_current_version;
       std::getline(reading_file, cmake_current_version);
@@ -250,6 +268,16 @@ namespace commands
       std::string cmake_lang = (lang == "cpp") ? "CXX" : "C";
       std::string version = (flags.size() > 0) ? misc::get_flag_value(flags[0]) : "23";
 
+      /*
+      cmake_minimum_required(VERSION <version>)
+
+      project(
+        <project name>
+        LANGUAGES <C/CXX>
+      )
+
+      set(CMAKE_<C/CXX>_STANDARD <version>)
+      */
       writing_file << "cmake_minimum_required(VERSION "
                    << cmake_current_version
                    << ")\n\n"
@@ -288,7 +316,7 @@ namespace commands
   {
     if (!data_handler.has_key("structure"))
     {
-      logger.error("structure information lacking from local cpm storage");
+      logger.error_q("information lacking from local cpm storage", "structure");
       return 1;
     }
 
@@ -305,29 +333,26 @@ namespace commands
       // Creating and writing to header file
       std::ofstream file(header_path);
 
-      if (!file.is_open())
-      {
-        logger.error_q("could not be opened", header_path);
+      if (!misc::ofstream_open(file))
         return 1;
-      }
 
-      file << "#pragma once\n\n";
+      file << "#pragma once";
 
       file.close();
 
       // Creating and writing to source file
       file.open(source_path);
 
-      if (!file.is_open())
-      {
-        logger.error_q("could not be opened", source_path);
+      if (!misc::ofstream_open(file))
         return 1;
-      }
 
+      /*
+      #include <name>.<extension>
+       */
       file << "#include \""
            << args[1]
            << header_extension
-           << "\"\n\n";
+           << "\"";
     }
     else if (args[0] == "destroy")
     {
@@ -351,6 +376,87 @@ namespace commands
       logger.error_q("is an invalid sub-command", args[0]);
       return 1;
     }
+
+    return 0;
+  }
+
+  /**
+   * @brief Inserts a coding template into file pair
+   *
+   * @param args
+   * @param flags
+   * @return int
+   */
+  int file_template(const std::vector<std::string> &args, const std::vector<std::string> &flags)
+  {
+    if (!data_handler.has_key("structure"))
+    {
+      logger.error_q("information lacking from local cpm storage", "structure");
+      return 1;
+    }
+
+    std::string header_path = ((data_handler.data["structure"] == "simple") ? "" : "include/") + args[1] + (misc::vector_contains(flags, "hpp") ? ".hpp" : ".h");
+
+    // If header file doesn't exist, create it
+    if (!directory::has_file(header_path) && file_pair({"create", args[1]}, flags))
+      return 1;
+
+    // Open files
+    std::ofstream header_file(header_path, std::ios::app);
+    std::ofstream source_file(((data_handler.data["structure"] == "simple") ? "" : "src/") + args[1] + ((data_handler.data["language"] == "cpp") ? ".cpp" : ".c"), std::ios::app);
+
+    if (!misc::ofstream_open(header_file) || !misc::ofstream_open(source_file))
+      return 1;
+
+    // Spacing
+    header_file << "\n\n";
+    source_file << "\n\n";
+
+    if (args[0] == "class") // Basic class
+    {
+      /*
+      class <name> {
+      private:
+      public:
+        <name>();
+        ~<name>();
+      };
+      */
+      header_file << "class "
+                  << args[2]
+                  << " {\n"
+                  << "private:\n"
+                  << "public:\n"
+                  << "  "
+                  << args[2]
+                  << "();\n\n"
+                  << "  ~"
+                  << args[2]
+                  << "();\n"
+                  << "};";
+
+      /*
+      <name>::<name>() {}
+
+      <name>::~<name>() {}
+      */
+      std::string src_prefix = args[2] + "::";
+      source_file << src_prefix
+                  << args[2]
+                  << "() {}\n\n"
+                  << src_prefix
+                  << "~"
+                  << args[2]
+                  << "() {}";
+    }
+    else
+    {
+      logger.error_q("is not a valid template", args[0]);
+      return 1;
+    }
+
+    header_file.close();
+    source_file.close();
 
     return 0;
   }

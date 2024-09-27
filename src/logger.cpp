@@ -8,7 +8,6 @@
  *
  */
 #include "logger.h"
-#include "misc.h"
 
 #include <iostream>
 #include <cstdlib>

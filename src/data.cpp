@@ -8,9 +8,11 @@
  *
  */
 #include "data.h"
-#include "logger.h"
+#include "misc.h"
+#include "directory.h"
 
 #include <fstream>
+#include <iostream>
 
 /**
  * @brief Get method for DATA_HANDLER singleton class.
@@ -29,9 +31,12 @@ Data_Handler &Data_Handler::get()
  */
 void Data_Handler::read()
 {
+    if (!directory::has_file("cpm.data"))
+        return;
+    
     std::ifstream data_file("cpm.data");
 
-    if (!data_file.is_open())
+    if (!misc::ifstream_open(data_file))
         return;
 
     // Reading variables
@@ -85,8 +90,8 @@ void Data_Handler::read()
 void Data_Handler::write()
 {
     std::ofstream data_file("cpm.data");
-
-    if (!data_file.is_open())
+    
+    if (!misc::ofstream_open(data_file))
         return;
 
     for (const auto &[k, v] : data)

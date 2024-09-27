@@ -12,7 +12,6 @@
 #include "misc.h"
 
 #include <filesystem>
-#include <fstream>
 
 namespace directory
 {

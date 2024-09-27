@@ -10,7 +10,6 @@
 #include "commands.h"
 #include "directory.h"
 #include "logger.h"
-#include "misc.h"
 #include "data.h"
 #include <chrono>
 #include <unordered_map>
@@ -52,6 +51,13 @@ std::unordered_map<std::string, std::unordered_map<std::string, int>> command_in
             {"init_exception", false},
             {"min_args", 2},
         },
+    },
+    {
+      "tmp",
+      {
+        {"init_exception", false},
+        {"min_args", 3},
+      },
     },
 };
 /**
@@ -154,7 +160,7 @@ int main(int argc, char *argv[])
   // Minimum arguments
   if (arguments.size() < command_info[command]["min_args"])
   {
-    logger.error_q("requires more than " + std::to_string(arguments.size()) + " arguments", command);
+    logger.error_q("requires at least " + std::to_string(command_info[command]["min_args"]) + " arguments", command);
     return 1;
   }
 
@@ -171,6 +177,8 @@ int main(int argc, char *argv[])
     result = commands::test(arguments, flags);
   else if (command == "fpair")
     result = commands::file_pair(arguments, flags);
+  else if (command == "tmp")
+    result = commands::file_template(arguments, flags);
 
   // Save data
   if (result == 0 && command != "help" && command != "version")

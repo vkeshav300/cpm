@@ -75,7 +75,7 @@ namespace commands
 
     // Specifc command focus
     std::cout << logger.colors["theme"];
-    
+
     if (args.size() > 0)
     {
       std::string command = args[0];
@@ -241,11 +241,21 @@ namespace commands
     std::ofstream writing_file;
     std::ifstream reading_file;
 
+    // <project-name>.c / <project-name>.cpp
     writing_file.open(main_file);
 
     if (!misc::ofstream_open(writing_file))
       return 1;
+    
+    /*
+    #include <iostream>
 
+    int main(int argc, char *argv[])
+    {
+      std::cout << "Helo World" << std::endl;
+      return 0;
+    }
+    */
     writing_file << "#include <iostream>\n"
                  << "\n"
                  << "int main(int argc, char *argv[])\n"
@@ -256,6 +266,7 @@ namespace commands
 
     writing_file.close();
 
+    // CMakeLists.txt
     if (misc::vector_contains(files, "CMakeLists.txt") && logger.execute("cmake --version"))
     {
       writing_file.open("CMakeLists.txt");
@@ -298,10 +309,59 @@ namespace commands
                    << version
                    << ")\n";
 
+      reading_file.close();
       writing_file.close();
     }
 
-    reading_file.close();
+    if (misc::vector_contains(files, ".gitignore"))
+    {
+      writing_file.open(".gitignore");
+
+      if (!misc::ofstream_open(writing_file))
+        return 1;
+
+      /*
+      # CMake artifacts
+      build
+      CMakeFiles/
+      CMakeCache.txt
+      CMakeScripts/
+      cmake_install.cmake
+      Makefile
+
+      # Doxygen artifacts
+      docs/html
+      docs/latex
+
+      # Testing
+      tests
+
+      # Other
+      .exe
+      .vscode/
+      README_tmp.html
+      README.pdf
+      .DS_Store
+      */
+      writing_file << "# CMake artifacts\n"
+                   << "build\n"
+                   << "CMakeFiles/\n"
+                   << "CMakeCache.txt\n"
+                   << "CMakeScripts/\n"
+                   << "cmake_install.cmake\n"
+                   << "Makefile\n\n"
+                   << "# Doxygen artifacts\n"
+                   << "docs/html\n"
+                   << "docs/latex\n\n"
+                   << "# Testing\n"
+                   << "tests\n\n"
+                   << "# Other\n"
+                   << ".exe\n"
+                   << ".vscode/\n"
+                   << ".DS_Store";
+      
+      writing_file.close();
+    }
 
     data_handler.data["language"] = lang;
     data_handler.data["structure"] = structure;

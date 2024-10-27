@@ -56,7 +56,7 @@ namespace commands
   {
     // CPM ASCII art
     std::cout << "\n"
-              << logger.colors["help"]
+              << logger.colors["theme"]
               << "      ___           ___         ___     \n"
               << "     /  /\\         /  /\\       /__/\\    \n"
               << "    /  /:/        /  /::\\     |  |::\\   \n"
@@ -74,6 +74,8 @@ namespace commands
                   "red");
 
     // Specifc command focus
+    std::cout << logger.colors["theme"];
+    
     if (args.size() > 0)
     {
       std::string command = args[0];
@@ -118,9 +120,9 @@ namespace commands
       std::cout << "\n\n";
     }
     else
-      std::cout << "Reading Guide:\n"
+      std::cout << "Reading Guide (for more command specific information use <help (command)>):\n"
                 << "  [Square brackets] are required arguments\n"
-                << "  {Curly brackets} are optional arguments / flags\n\n\n"
+                << "  {Curly brackets} are optional arguments\n\n\n"
                 << "Commands:\n"
                 << "  help {command} --> lists commands + other useful information related to CPM\n"
                 << "  version --> states version of CPM installed\n"
@@ -128,6 +130,8 @@ namespace commands
                 << "  fpair [method] [name] --> performs method on header/source file pair\n"
                 << "  tmp [template] [file name] [name] --> inserts coding template into file\n"
                 << "\n";
+    
+    std::cout << logger.colors["reset"];
 
     return 0;
   }

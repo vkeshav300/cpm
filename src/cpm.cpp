@@ -77,13 +77,13 @@ int main(int argc, char *argv[])
   Data_Handler &data_handler = Data_Handler::get();
 
   logger.set_colors({
+      {"theme", logger.raw_colors["blue"]},
       {"success", logger.raw_colors["green"]},
       {"error", logger.raw_colors["red"]},
       {"warn", logger.raw_colors["orange"]},
       {"count", logger.raw_colors["cyan"]},
       {"prompt", logger.raw_colors["yellow"]},
       {"execute", logger.raw_colors["orange"]},
-      {"help", logger.raw_colors["blue"]},
       {"reset", logger.raw_colors["reset"]},
   });
 

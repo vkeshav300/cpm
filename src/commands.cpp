@@ -107,6 +107,7 @@ namespace commands
         std::cout << "tmp [template] [file name] [name] --> inserts coding template into file\n"
                   << "  [template] --> template to be inserted\n"
                   << "    class --> basic class template\n"
+                  << "    singleton --> basic singleton template\n"
                   << "  [file name] --> name of file to insert in (don't include extension)\n"
                   << "    if file does not exist, a file pair will be created automatically\n"
                   << "  [name] --> 'reference' name to be used in coding\n\n"
@@ -130,7 +131,7 @@ namespace commands
                 << "  fpair [method] [name] --> performs method on header/source file pair\n"
                 << "  tmp [template] [file name] [name] --> inserts coding template into file\n"
                 << "\n";
-    
+
     std::cout << logger.colors["reset"];
 
     return 0;
@@ -246,7 +247,7 @@ namespace commands
 
     if (!misc::ofstream_open(writing_file))
       return 1;
-    
+
     /*
     #include <iostream>
 
@@ -359,7 +360,7 @@ namespace commands
                    << ".exe\n"
                    << ".vscode/\n"
                    << ".DS_Store";
-      
+
       writing_file.close();
     }
 
@@ -459,7 +460,9 @@ namespace commands
       return 1;
     }
 
-    std::string header_path = ((data_handler.data["structure"] == "simple") ? "" : "include/") + args[1] + (misc::vector_contains(flags, "hpp") ? ".hpp" : ".h");
+    std::string header_path = ((data_handler.data["structure"] == "simple") ? "" : "include/") + // if structure is simple, don't use include/ directory
+                              args[1] +
+                              (misc::vector_contains(flags, "hpp") ? ".hpp" : ".h");
 
     // If header file doesn't exist, create it
     if (!directory::has_file(header_path) && file_pair({"create", args[1]}, flags))
@@ -467,10 +470,18 @@ namespace commands
 
     // Open files
     std::ofstream header_file(header_path, std::ios::app);
-    std::ofstream source_file(((data_handler.data["structure"] == "simple") ? "" : "src/") + args[1] + ((data_handler.data["language"] == "cpp") ? ".cpp" : ".c"), std::ios::app);
+    std::ofstream source_file(
+        (
+            (data_handler.data["structure"] == "simple") ? "" : "src/") + // if structure is simple, don't use src/ directory
+            args[1] +
+            ((data_handler.data["language"] == "cpp") ? ".cpp" : ".c"),
+        std::ios::app);
 
     if (!misc::ofstream_open(header_file) || !misc::ofstream_open(source_file))
       return 1;
+
+    // ease-of-coding variables
+    std::string prefix_a;
 
     // Spacing
     header_file << "\n\n";
@@ -479,7 +490,8 @@ namespace commands
     if (args[0] == "class") // Basic class
     {
       /*
-      class <name> {
+      class <name>
+      {
       private:
       public:
         <name>();
@@ -488,7 +500,7 @@ namespace commands
       */
       header_file << "class "
                   << args[2]
-                  << " {\n"
+                  << "\n{\n"
                   << "private:\n"
                   << "public:\n"
                   << "  "
@@ -504,14 +516,65 @@ namespace commands
 
       <name>::~<name>() {}
       */
-      std::string src_prefix = args[2] + "::";
-      source_file << src_prefix
+      prefix_a = args[2] + "::";
+      source_file << prefix_a
                   << args[2]
                   << "() {}\n\n"
-                  << src_prefix
+                  << prefix_a
                   << "~"
                   << args[2]
                   << "() {}";
+    }
+    else if (args[0] == "singleton")
+    {
+      /*
+      class <name>
+      {
+      private:
+        <name>();
+
+      public:
+        <name>(const <name> &obj) = delete;
+
+        static <name> &get();
+      };
+      */
+      header_file << "class "
+                  << args[2]
+                  << "\n{\n"
+                  << "private:\n"
+                  << "  "
+                  << args[2]
+                  << "();\n\n"
+                  << "public:\n"
+                  << "  "
+                  << args[2]
+                  << "("
+                  << "const "
+                  << args[2]
+                  << " &obj) = delete;\n\n"
+                  << "  static "
+                  << args[2]
+                  << " &get();\n"
+                  << "};";
+
+      /*
+      <name> &<name>::get()
+      {
+        static <name> obj;
+        return obj;
+      }
+      */
+      source_file << args[2]
+                  << " &"
+                  << args[2]
+                  << "::get()\n"
+                  << "{\n"
+                  << "  static "
+                  << args[2]
+                  << " obj;\n"
+                  << "  return obj;\n"
+                  << "}";
     }
     else
     {

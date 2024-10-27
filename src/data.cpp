@@ -21,8 +21,8 @@
  */
 Data_Handler &Data_Handler::get()
 {
-    static Data_Handler data_handler;
-    return data_handler;
+    static Data_Handler obj;
+    return obj;
 }
 
 /**

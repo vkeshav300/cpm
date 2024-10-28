@@ -11,6 +11,27 @@
 #include "logger.h"
 
 #include <cstdlib>
+#include <filesystem>
+
+#ifdef _WIN32
+
+#include <windows.h>
+
+std::string _get_store_location()
+{
+    return "";
+}
+
+#else
+
+#include <unistd.h>
+#include <limits.h>
+
+std::string _get_store_location() {
+    return "";
+}
+
+#endif
 
 namespace misc
 {
@@ -98,5 +119,23 @@ namespace misc
         }
 
         return true;
+    }
+
+    /**
+     * @brief Returns location of cpm executable.
+     * 
+     * @return char 
+     */
+    std::string get_store_location()
+    {
+        std::string result = _get_store_location();
+
+        if (result == "-1")
+        {
+            logger.error_q(" could not retrieve cpm executable path", std::strerror(errno));
+            return "";
+        }
+
+        return result;
     }
 } // namespace misc

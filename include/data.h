@@ -16,7 +16,12 @@ private:
     Data_Handler() {}
 
 public:
+    /*
+    data: key-value
+    config: key-[keys-values]
+    */
     std::unordered_map<std::string, std::string> data;
+    std::unordered_map<std::string, std::unordered_map<std::string, std::string>> config;
 
     Data_Handler(const Data_Handler &obj) = delete;
 

@@ -33,6 +33,8 @@ void Data_Handler::read()
 {
     if (!directory::has_file("cpm.data"))
         return;
+
+    std::string store_location = misc::get_store_location();
     
     std::ifstream data_file("cpm.data");
 

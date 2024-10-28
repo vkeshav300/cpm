@@ -42,8 +42,6 @@ namespace commands
    */
   int test(const std::vector<std::string> &args, const std::vector<std::string> &flags)
   {
-    logger.execute("ls -la");
-
     return 0;
   }
 

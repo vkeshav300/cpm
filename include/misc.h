@@ -25,4 +25,6 @@ namespace misc
     bool ofstream_open(const std::ofstream &_ofstream);
 
     bool ifstream_open(const std::ifstream &_ifstream);
+
+    std::string get_store_location();
 } // namespace misc

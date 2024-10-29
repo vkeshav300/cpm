@@ -130,12 +130,6 @@ namespace misc
     {
         std::string result = _get_store_location();
 
-        if (result == "-1")
-        {
-            logger.error_q(" could not retrieve cpm executable path", std::strerror(errno));
-            return "";
-        }
-
         return result;
     }
 } // namespace misc

@@ -205,11 +205,11 @@ bool Logger::prompt_yn(const std::string &message)
 
 /**
  * @brief Executes terminal command.
- * 
+ *
  * @param command Command to execute.
  * @param must_populate_file (Optional -> default: true) whether to throw error if command does not output.
- * @return true 
- * @return false 
+ * @return true
+ * @return false
  */
 bool Logger::execute(const std::string &command, const bool &must_populate_file)
 {

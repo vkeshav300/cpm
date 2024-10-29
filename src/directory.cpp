@@ -54,8 +54,8 @@ namespace directory
 
     /**
      * @brief Create a file at path.
-     * 
-     * @param path 
+     *
+     * @param path
      */
     void create_file(const std::string &path)
     {
@@ -68,8 +68,8 @@ namespace directory
 
     /**
      * @brief Destroys file at path.
-     * 
-     * @param path 
+     *
+     * @param path
      */
     void destroy_file(const std::string &path)
     {

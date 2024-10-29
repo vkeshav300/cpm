@@ -3,9 +3,9 @@
  * @brief Defines Data_Handler singleton.
  * @version 0.1
  * @date 2024-09-15
- * 
+ *
  * @copyright Copyright (c) 2024
- * 
+ *
  */
 #include <unordered_map>
 #include <string>

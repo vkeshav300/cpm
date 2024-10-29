@@ -16,8 +16,8 @@
 
 /**
  * @brief Get method for DATA_HANDLER singleton class.
- * 
- * @return Data_Handler& 
+ *
+ * @return Data_Handler&
  */
 Data_Handler &Data_Handler::get()
 {
@@ -27,7 +27,7 @@ Data_Handler &Data_Handler::get()
 
 /**
  * @brief Reads cpm.data file and stores it in data.
- * 
+ *
  */
 void Data_Handler::read()
 {
@@ -35,7 +35,7 @@ void Data_Handler::read()
         return;
 
     std::string store_location = misc::get_store_location();
-    
+
     std::ifstream data_file("cpm.data");
 
     if (!misc::ifstream_open(data_file))
@@ -87,12 +87,12 @@ void Data_Handler::read()
 
 /**
  * @brief Writes to cpm.data from data
- * 
+ *
  */
 void Data_Handler::write()
 {
     std::ofstream data_file("cpm.data");
-    
+
     if (!misc::ofstream_open(data_file))
         return;
 
@@ -100,7 +100,7 @@ void Data_Handler::write()
     {
         if (k == "" || v == "")
             continue;
-        
+
         data_file << k << ": " << v << "\n";
     }
 
@@ -109,10 +109,10 @@ void Data_Handler::write()
 
 /**
  * @brief Checks if data contains key.
- * 
- * @param key 
- * @return true 
- * @return false 
+ *
+ * @param key
+ * @return true
+ * @return false
  */
 bool Data_Handler::has_key(const std::string &key)
 {

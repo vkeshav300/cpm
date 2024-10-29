@@ -54,11 +54,11 @@ std::unordered_map<std::string, std::unordered_map<std::string, int>> command_in
         },
     },
     {
-      "tmp",
-      {
-        {"init_exception", false},
-        {"min_args", 3},
-      },
+        "tmp",
+        {
+            {"init_exception", false},
+            {"min_args", 3},
+        },
     },
 };
 /**

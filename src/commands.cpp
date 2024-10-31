@@ -377,7 +377,7 @@ namespace commands
    */
   int file_pair(const std::vector<std::string> &args, const std::vector<std::string> &flags)
   {
-    if (!data_handler.has_key("structure"))
+    if (!data_handler.data_has_key("structure"))
     {
       logger.error_q("information lacking from local cpm storage", "structure");
       return 1;
@@ -452,7 +452,7 @@ namespace commands
    */
   int file_template(const std::vector<std::string> &args, const std::vector<std::string> &flags)
   {
-    if (!data_handler.has_key("structure"))
+    if (!data_handler.data_has_key("structure"))
     {
       logger.error_q("information lacking from local cpm storage", "structure");
       return 1;

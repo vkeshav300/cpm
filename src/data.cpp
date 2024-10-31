@@ -12,7 +12,25 @@
 #include "directory.h"
 
 #include <fstream>
-#include <iostream>
+#include <cstdlib>
+
+#ifdef _WIN32
+
+std::string get_store_location()
+{
+    return "";
+}
+
+#else
+
+std::string get_store_location()
+{
+    // /Users/<user>/.config/cpm
+    std::string home_loc = std::getenv("HOME");
+    return  home_loc + "/.config/cpm";
+}
+
+#endif
 
 /**
  * @brief Get method for DATA_HANDLER singleton class.
@@ -33,8 +51,6 @@ void Data_Handler::read()
 {
     if (!directory::has_file("cpm.data"))
         return;
-
-    std::string store_location = misc::get_store_location();
 
     std::ifstream data_file("cpm.data");
 
@@ -83,6 +99,61 @@ void Data_Handler::read()
     }
 
     data[key] = value;
+
+    data_file.close();
+
+    std::string config_location = get_store_location();
+
+    if (!directory::has_directory(config_location))
+        return;
+
+    config_location += "/cpm.data";
+
+    if (!directory::has_file(config_location))
+        return;
+
+    data_file.open(config_location);
+
+    if (!misc::ifstream_open(data_file))
+        return;
+
+    // Nearly identical to project data storage, except information stored in config instead of data
+    while (data_file.get(ch))
+    {
+        if (ch == '\n')
+        {
+            config[key] = value;
+            key = value = "";
+            onKey = true;
+
+            prevCh = ch;
+            continue;
+        }
+        else if (prevCh == ':')
+        {
+            prevCh = ch;
+            continue;
+        }
+        else if (ch == ':')
+        {
+            onKey = false;
+            prevCh = ch;
+            continue;
+        }
+
+        if (onKey)
+        {
+            key += ch;
+            prevCh = ch;
+            continue;
+        }
+
+        value += ch;
+        prevCh = ch;
+        continue;
+    }
+
+    config[key] = value;
 }
 
 /**
@@ -105,6 +176,23 @@ void Data_Handler::write()
     }
 
     data_file.close();
+
+    std::string config_location = get_store_location();
+
+    if (!directory::has_directory(config_location))
+        return;
+
+    data_file.open(config_location + "/cpm.data");
+
+    for (const auto &[k, v] : config)
+    {
+        if (k == "" || v == "")
+            continue;
+
+        data_file << k << ": " << v << "\n";
+    }
+
+    data_file.close();
 }
 
 /**
@@ -114,9 +202,24 @@ void Data_Handler::write()
  * @return true
  * @return false
  */
-bool Data_Handler::has_key(const std::string &key)
+bool Data_Handler::data_has_key(const std::string &key)
 {
     if (data.find(key) != data.end())
+        return true;
+
+    return false;
+}
+
+/**
+ * @brief Checks if config contains key.
+ * 
+ * @param key 
+ * @return true 
+ * @return false 
+ */
+bool Data_Handler::config_has_key(const std::string &key)
+{
+    if (config.find(key) != config.end())
         return true;
 
     return false;

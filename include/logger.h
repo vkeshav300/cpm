@@ -36,13 +36,24 @@ public:
         {"default", "\x1b[39m"},
     };
 
-    std::unordered_map<std::string, std::string> colors;
+    std::unordered_map<std::string, std::string> colors = {
+        {"theme", raw_colors["blue"]},
+        {"success", raw_colors["green"]},
+        {"error", raw_colors["red"]},
+        {"warn", raw_colors["orange"]},
+        {"count", raw_colors["cyan"]},
+        {"prompt", raw_colors["yellow"]},
+        {"execute", raw_colors["orange"]},
+        {"reset", raw_colors["reset"]},
+    };
 
     Logger(const Logger &obj) = delete;
 
     static Logger &get();
 
     void set_colors(const std::unordered_map<std::string, std::string> &new_colors);
+    
+    void set_color(const std::string &k, const std::string &v);
 
     void flush_buffer();
 

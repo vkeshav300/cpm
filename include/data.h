@@ -21,7 +21,7 @@ public:
     config: key-[keys-values]
     */
     std::unordered_map<std::string, std::string> data;
-    std::unordered_map<std::string, std::unordered_map<std::string, std::string>> config;
+    std::unordered_map<std::string, std::string> config;
 
     Data_Handler(const Data_Handler &obj) = delete;
 
@@ -31,5 +31,7 @@ public:
 
     void write();
 
-    bool has_key(const std::string &key);
+    bool data_has_key(const std::string &key);
+
+    bool config_has_key(const std::string &key);
 };

@@ -25,13 +25,26 @@ Logger &Logger::get()
 }
 
 /**
- * @brief Sets color map for logger.
+ * @brief Sets all given color maps for logger ui.
  *
  * @param new_colors
  */
 void Logger::set_colors(const std::unordered_map<std::string, std::string> &new_colors)
 {
-  colors = new_colors;
+  // Only overwrites given colors
+  for (const auto &[k, v] : new_colors)
+    colors[k] = v;
+}
+
+/**
+ * @brief Sets individual color map for logger ui.
+ * 
+ * @param k 
+ * @param v 
+ */
+void Logger::set_color(const std::string &k, const std::string &v)
+{
+  colors[k] = v;
 }
 
 /**

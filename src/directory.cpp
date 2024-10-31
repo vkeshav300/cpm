@@ -11,8 +11,6 @@
 #include "logger.h"
 #include "misc.h"
 
-#include <filesystem>
-
 namespace directory
 {
     /**
@@ -22,9 +20,9 @@ namespace directory
      * @return true
      * @return false
      */
-    bool has_directory(const std::string &path)
+    bool has_directory(const std::filesystem::path &path)
     {
-        return std::filesystem::is_directory(path);
+        return std::filesystem::is_directory(std::filesystem::absolute(path));
     }
 
     /**
@@ -34,9 +32,9 @@ namespace directory
      * @return true
      * @return false
      */
-    bool has_file(const std::string &path)
+    bool has_file(const std::filesystem::path &path)
     {
-        return std::filesystem::exists(path);
+        return std::filesystem::exists(std::filesystem::absolute(path));
     }
 
     /**
@@ -44,12 +42,12 @@ namespace directory
      *
      * @param path
      */
-    void create_directory(const std::string &path)
+    void create_directory(const std::filesystem::path &path)
     {
         if (has_directory(path))
             return;
 
-        std::filesystem::create_directory(path);
+        std::filesystem::create_directory(std::filesystem::absolute(path));
     }
 
     /**
@@ -57,7 +55,7 @@ namespace directory
      *
      * @param path
      */
-    void create_file(const std::string &path)
+    void create_file(const std::filesystem::path &path)
     {
         if (has_file(path))
             return;
@@ -71,11 +69,11 @@ namespace directory
      *
      * @param path
      */
-    void destroy_file(const std::string &path)
+    void destroy_file(const std::filesystem::path &path)
     {
         if (!has_file(path))
             return;
 
-        std::filesystem::remove(path);
+        std::filesystem::remove(std::filesystem::absolute(path));
     }
 } // namespace directory

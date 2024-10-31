@@ -13,22 +13,6 @@
 #include <cstdlib>
 #include <filesystem>
 
-#ifdef _WIN32
-
-std::string _get_store_location()
-{
-    return "";
-}
-
-#else
-
-std::string _get_store_location()
-{
-    return "";
-}
-
-#endif
-
 namespace misc
 {
     Logger &logger = Logger::get();
@@ -115,17 +99,5 @@ namespace misc
         }
 
         return true;
-    }
-
-    /**
-     * @brief Returns location of cpm executable.
-     *
-     * @return char
-     */
-    std::string get_store_location()
-    {
-        std::string result = _get_store_location();
-
-        return result;
     }
 } // namespace misc

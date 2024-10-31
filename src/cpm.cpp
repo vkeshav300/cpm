@@ -77,18 +77,17 @@ int main(int argc, char *argv[])
   Logger &logger = Logger::get();
   Data_Handler &data_handler = Data_Handler::get();
 
-  logger.set_colors({
-      {"theme", logger.raw_colors["blue"]},
-      {"success", logger.raw_colors["green"]},
-      {"error", logger.raw_colors["red"]},
-      {"warn", logger.raw_colors["orange"]},
-      {"count", logger.raw_colors["cyan"]},
-      {"prompt", logger.raw_colors["yellow"]},
-      {"execute", logger.raw_colors["orange"]},
-      {"reset", logger.raw_colors["reset"]},
-  });
-
   data_handler.read();
+
+  // Overwrites existing colormap with user preferences
+  for (const auto &[k, v] : logger.colors)
+  {
+    if (data_handler.config_has_key("color_" + k))
+      logger.set_color(k, logger.raw_colors[data_handler.config["color_" + k]]);
+  }
+
+  for (const auto &[k, v] : data_handler.config)
+    logger.custom(v, k, "orange");
 
   // Verifies command is inputted
   if (argc <= 1)
@@ -129,7 +128,7 @@ int main(int argc, char *argv[])
       return 1;
     }
 
-    if (!data_handler.has_key("language"))
+    if (!data_handler.data_has_key("language"))
     {
       logger.error("language information lacking from local cpm storage");
       return 1;

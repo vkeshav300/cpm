@@ -162,7 +162,7 @@ void Logger::warn_q(const std::string &message, const std::string &quote)
 void Logger::custom(const std::string &message, const std::string &mtype, const std::string &color)
 {
   handle_logger_count();
-  std::cout << raw_colors[color]
+  std::cout << ((raw_colors.find(color) != raw_colors.end()) ? raw_colors[color] : colors[color])
             << "["
             << mtype
             << "]: "

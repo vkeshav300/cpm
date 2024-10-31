@@ -110,6 +110,16 @@ namespace commands
                   << "    if file does not exist, a file pair will be created automatically\n"
                   << "  [name] --> 'reference' name to be used in coding\n\n"
                   << "Ex: cpm tmp class utils MyClass";
+      else if (command == "config")
+      {
+        std::cout << "config [method] [key] {value} --> performs method on cpm config\n"
+                  << "  [method] --> what operation to perform on config\n"
+                  << "    set [key] [value] --> add / edit key-value pair (requires value)\n"
+                  << "    remove [key] --> removes key-value pair (doesn't require value)\n"
+                  << "  [key] --> used to index config and search for value\n"
+                  << "  {value} --> a value\n\n"
+                  << "Ex: cpm config set colors_success blue";
+      }
       else
       {
         logger.error_q("does not have any help-related information", command);
@@ -128,6 +138,7 @@ namespace commands
                 << "  create [language] --> creates new c/c++ project\n"
                 << "  fpair [method] [name] --> performs method on header/source file pair\n"
                 << "  tmp [template] [file name] [name] --> inserts coding template into file\n"
+                << "  config [method] [key] {value}"
                 << "\n";
 
     std::cout << logger.colors["reset"];
@@ -582,6 +593,33 @@ namespace commands
 
     header_file.close();
     source_file.close();
+
+    return 0;
+  }
+
+  int config(const std::vector<std::string> &args, const std::vector<std::string> &flags)
+  {
+    if (args[0] == "set")
+    {
+      if (args.size() < 3)
+      {
+        logger.error_q("method of 'config' requires at least 3 arguments", "set");
+        return 1;
+      }
+
+      data_handler.config[args[1]] = args[2];
+      logger.success_q("set to '" + args[2] + "'", args[1]);
+    }
+    else if (args[0] == "remove")
+    {
+      data_handler.config.erase(args[1]);
+      logger.success_q("removed from config", args[1]);
+    }
+    else
+    {
+      logger.error_q("method of config is not valid", args[0]);
+      return 1;
+    }
 
     return 0;
   }

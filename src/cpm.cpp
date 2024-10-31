@@ -60,6 +60,13 @@ std::unordered_map<std::string, std::unordered_map<std::string, int>> command_in
             {"min_args", 3},
         },
     },
+    {
+        "config",
+        {
+            {"init_exception", true},
+            {"min_args", 2},
+        },
+    },
 };
 /**
  * @brief Main function.
@@ -85,9 +92,6 @@ int main(int argc, char *argv[])
     if (data_handler.config_has_key("color_" + k))
       logger.set_color(k, logger.raw_colors[data_handler.config["color_" + k]]);
   }
-
-  for (const auto &[k, v] : data_handler.config)
-    logger.custom(v, k, "orange");
 
   // Verifies command is inputted
   if (argc <= 1)
@@ -179,6 +183,8 @@ int main(int argc, char *argv[])
     result = commands::file_pair(arguments, flags);
   else if (command == "tmp")
     result = commands::file_template(arguments, flags);
+  else if (command == "config")
+    result = commands::config(arguments, flags);
 
   // Save data
   if (result == 0 && command != "help" && command != "version")
@@ -190,7 +196,7 @@ int main(int argc, char *argv[])
   // Measure process time
   auto end = std::chrono::high_resolution_clock::now();
 
-  logger.custom("command \'" + command + "\' with exit code " + std::to_string(result) + " in " + std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count()) + " ms", "finished", "blue");
+  logger.custom("command \'" + command + "\' with exit code " + std::to_string(result) + " in " + std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count()) + " ms", "finished", "theme");
   logger.flush_buffer();
 
   return result;

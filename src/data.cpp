@@ -16,18 +16,37 @@
 
 #ifdef _WIN32
 
+/**
+ * @brief Ensures existance of valid store location for cpm config data and returns it (WINDOWS ONLY).
+ * 
+ * @return std::string 
+ */
 std::string get_store_location()
 {
     return "";
 }
 
 #else
-
+/**
+ * @brief Ensures existance of valid store location for cpm config data and returns it (NON-WINDOWS).
+ * 
+ * @return std::string 
+ */
 std::string get_store_location()
 {
     // /Users/<user>/.config/cpm
     std::string home_loc = std::getenv("HOME");
-    return  home_loc + "/.config/cpm";
+    home_loc += "/.config";
+
+    if (!directory::has_directory(home_loc))
+        directory::create_directory(home_loc);
+
+    home_loc += "/cpm";
+
+    if (!directory::has_directory(home_loc))
+        directory::create_directory(home_loc);
+
+    return home_loc;
 }
 
 #endif
@@ -103,9 +122,6 @@ void Data_Handler::read()
     data_file.close();
 
     std::string config_location = get_store_location();
-
-    if (!directory::has_directory(config_location))
-        return;
 
     config_location += "/cpm.data";
 

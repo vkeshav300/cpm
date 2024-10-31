@@ -30,4 +30,6 @@ namespace commands
     int file_pair(const std::vector<std::string> &args, const std::vector<std::string> &flags);
 
     int file_template(const std::vector<std::string> &args, const std::vector<std::string> &flags);
+
+    int config(const std::vector<std::string> &args, const std::vector<std::string> &flags);
 };

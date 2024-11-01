@@ -56,7 +56,7 @@ int File::ropen()
  */
 void File::write_line(const std::string &line)
 {
-    if (!wopen(true))
+    if (!wopen())
         return;
     
     writer << "\n"
@@ -72,7 +72,7 @@ void File::write_line(const std::string &line)
  */
 void File::write_lines(const std::vector<std::string> &lines)
 {
-    if (!wopen(true))
+    if (!wopen())
         return;
 
     for (const auto &line : lines)
@@ -80,4 +80,19 @@ void File::write_lines(const std::vector<std::string> &lines)
                << line;
     
     writer.close();
+}
+
+/**
+ * @brief Overwrites file with given lines
+ * 
+ * @param lines 
+ */
+void File::load(const std::vector<std::string> &lines)
+{
+    if (!wopen(false))
+        return;
+    
+    for (const auto &line : lines)
+        writer << "\n"
+               << line;
 }

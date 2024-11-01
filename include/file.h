@@ -22,7 +22,7 @@ private:
 
   std::filesystem::path path;
 
-  int wopen(const bool &append); // write open
+  int wopen(const bool &append = true); // write open
   int ropen(); // read open
 
 public:
@@ -31,4 +31,6 @@ public:
   void write_line(const std::string &line);
 
   void write_lines(const std::vector<std::string> &lines);
+
+  void load(const std::vector<std::string> &lines);
 };

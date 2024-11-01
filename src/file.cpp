@@ -20,7 +20,12 @@ std::ifstream File::reader;
  * 
  * @param _path 
  */
-File::File(const std::filesystem::path &_path) : path(_path) {}
+File::File(const std::filesystem::path &_path) : path(_path)
+{
+    // Create file
+    wopen(false);
+    writer.close();
+}
 
 /**
  * @brief Opens file object with ofstream

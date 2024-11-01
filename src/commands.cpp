@@ -456,7 +456,7 @@ namespace commands
   {
     std::string header_path = ((directory::get_structure() == "default") ? "include/" : "") + // if structure is 'default', use include/ directory
                               args[1] +
-                              (misc::vector_contains(flags, "hpp") ? ".hpp" : ".h");
+                              (directory::has_file(args[1] + ".hpp") ? ".hpp" : ".h");
 
     // If header file doesn't exist, create it
     if (!directory::has_file(header_path) && file_pair({"create", args[1]}, flags))

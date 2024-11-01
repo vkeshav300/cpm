@@ -53,6 +53,17 @@ namespace directory
     }
 
     /**
+     * @brief Creates folders in current directory
+     * 
+     * @param paths 
+     */
+    void create_directories(const std::vector<std::filesystem::path> &paths)
+    {
+        for (const auto &path : paths)
+            directory::create_directory(path);
+    }
+
+    /**
      * @brief Create a file at path.
      *
      * @param path
@@ -87,7 +98,7 @@ namespace directory
     std::string get_structure()
     {
         if (has_directory("src") && has_directory("include"))
-            return "default";
+            return "executable";
 
         return "simple";
     }
@@ -101,7 +112,7 @@ namespace directory
     {
         // Get file names in directory
         std::vector<std::string> files;
-        const std::filesystem::path current_dir((get_structure() == "default") ? "src/" : "./");
+        const std::filesystem::path current_dir((get_structure() == "executable") ? "src/" : "./");
         const std::filesystem::directory_iterator start(current_dir);
         const std::filesystem::directory_iterator end;
 

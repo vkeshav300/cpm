@@ -29,7 +29,6 @@ namespace commands
    *
    */
   std::vector<std::string> supported_structures = {
-      "default",
       "executable",
       "simple",
   };
@@ -90,8 +89,7 @@ namespace commands
                   << "  language --> language project will be based off of, C or C++ (ex. cpp)\n"
                   << "  -v=... --> Specify a specific language verison to use (ex. -v=17)\n\n"
                   << "Different Project Templates:\n"
-                  << "  default  --> 'executable' project structure, built around CMake\n"
-                  << "  executable --> alias for 'default'\n"
+                  << "  executable --> 'executable' project structure, built around CMake\n"
                   << "  simple   --> only creates one main file in working directory\n\n"
                   << "Ex: cpm create cpp";
       else if (command == "fpair")
@@ -206,171 +204,115 @@ namespace commands
       }
     }
     else
-      structure = "default";
+      structure = "executable";
 
     bool git_support = logger.prompt_yn("add git support");
 
-    std::vector<std::string> folders = {};
+    std::string main_path;
 
-    std::vector<std::string> files = {};
-
-    std::string main_file;
-
-    if (structure == "default" || structure == "executable")
+    if (structure == "executable")
     {
-      folders.emplace_back("include");
-      folders.emplace_back("build");
-      folders.emplace_back("tests");
-      folders.emplace_back("src");
+      directory::create_directories({"src", "include", "build", "tests"});
 
-      files.emplace_back("CMakeLists.txt");
+      main_path = "src/main";
+      main_path += ((lang == "cpp") ? ".cpp" : ".c");
 
-      main_file = "src/" + project_name + "." + lang;
-      files.emplace_back(main_file);
+      // Get installed CMake version
+      std::string cmake_current_version;
+      logger.execute("cmake --version > cpm.tmp");
+
+      std::ifstream result_file("cpm.tmp");
+      if (!misc::ifstream_open(result_file))
+        return 1;
+
+      std::getline(result_file, cmake_current_version);
+      cmake_current_version = misc::split_string(cmake_current_version, " ")[2];
+
+      result_file.close();
+
+      // Other CMake variables
+      std::string cmake_lang = (lang == "cpp") ? "CXX" : "C";
+      std::string lang_version = (flags.size() > 0) ? misc::get_flag_value(flags[0]) : "23";
+
+      File cmake_lists("CMakeLists.txt");
+      cmake_lists.load({
+          "cmake_minimum_required(VERSION " + cmake_current_version + ")",
+          "",
+          "project(",
+          "    " + project_name,
+          "    LANGUAGES " + cmake_lang,
+          ")",
+          "",
+          "set(CMAKE_" + cmake_lang + "_STANDARD " + lang_version + ")",
+          "set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)",
+          "",
+          "file(GLOB SOURCES \"${SOURCE_DIR}/*.cpp\")",
+          "",
+          "add_executable(",
+          "    ${PROJECT_NAME}",
+          "    ${SOURCES}",
+          ")",
+          "",
+          "target_include_directories(",
+          "    ${PROJECT_NAME} PRIVATE",
+          "    ${CMAKE_CURRENT_SOURCE_DIR}/include",
+          ")",
+          "",
+          "target_link_libraries(",
+          "    ${PROJECT_NAME} PRIVATE",
+          ")",
+          "",
+          "if (CMAKE_SYSTEM_NAME MATCHES \"Darwin\" OR CMAKE_SYSTEM_NAME MATCHES \"Linux\")",
+          "    install(TARGETS ${PROJECT_NAME} DESTINATION /usr/local/bin) # sudo required",
+          "elseif (CMAKE_SYSTEM_NAME MATCHES \"Windows\")",
+          "    install(TARGETS ${PROJECT_NAME} DESTINATION $ENV{ProgramFiles})",
+          "endif()",
+      });
     }
     else if (structure == "simple")
     {
-      main_file = project_name + "." + lang;
-      files.emplace_back(main_file);
+      main_path = "main";
+      main_path += (lang == "cpp") ? ".cpp" : ".c";
     }
 
     if (git_support)
     {
-      files.emplace_back(".gitignore");
-      files.emplace_back("LICENSE");
+      File gitignore(".gitignore");
+      gitignore.load({
+          "# CMake artifacts",
+          "build",
+          "CMakeFiles/",
+          "CMakeCache.txt",
+          "CMakeScripts/",
+          "cmake_install.cmake",
+          "Makefile",
+          "",
+          "# Testing",
+          "tests",
+          "",
+          "# Others",
+          ".exe",
+          ".vscode/",
+          ".DS_Store",
+      });
+
+      File readme("README.md");
+      readme.load({"# " + project_name});
+
+      directory::create_file("LICENSE");
     }
 
-    for (const auto &folder : folders)
-      directory::create_directory(folder);
+    File main_file(main_path);
 
-    for (const auto &file : files)
-      directory::create_file(file);
-
-    // Writing to files
-    std::ofstream writing_file;
-    std::ifstream reading_file;
-
-    // <project-name>.c / <project-name>.cpp
-    writing_file.open(main_file);
-
-    if (!misc::ofstream_open(writing_file))
-      return 1;
-
-    /*
-    #include <iostream>
-
-    int main(int argc, char *argv[])
-    {
-      std::cout << "Helo World" << std::endl;
-      return 0;
-    }
-    */
-    writing_file << "#include <iostream>\n"
-                 << "\n"
-                 << "int main(int argc, char *argv[])\n"
-                 << "{\n"
-                 << "  std::cout << \"Hello World!\" << std::endl;"
-                 << "  return 0;\n"
-                 << "}";
-
-    writing_file.close();
-
-    // CMakeLists.txt
-    if (misc::vector_contains(files, "CMakeLists.txt") && logger.execute("cmake --version"))
-    {
-      writing_file.open("CMakeLists.txt");
-      reading_file.open("cpm.tmp");
-
-      if (!misc::ofstream_open(writing_file) || !misc::ifstream_open(reading_file))
-        return 1;
-
-      // Use installed CMAKE version
-      std::string cmake_current_version;
-      std::getline(reading_file, cmake_current_version);
-      cmake_current_version = misc::split_string(cmake_current_version, " ")[2];
-
-      std::string cmake_lang = (lang == "cpp") ? "CXX" : "C";
-      std::string version = (flags.size() > 0) ? misc::get_flag_value(flags[0]) : "23";
-
-      /*
-      cmake_minimum_required(VERSION <version>)
-
-      project(
-        <project name>
-        LANGUAGES <C/CXX>
-      )
-
-      set(CMAKE_<C/CXX>_STANDARD <version>)
-      */
-      writing_file << "cmake_minimum_required(VERSION "
-                   << cmake_current_version
-                   << ")\n\n"
-                   << "project(\n"
-                   << "    "
-                   << project_name
-                   << "\n"
-                   << "    LANGUAGES "
-                   << cmake_lang
-                   << "\n)\n\n"
-                   << "set(CMAKE_"
-                   << cmake_lang
-                   << "_STANDARD "
-                   << version
-                   << ")\n";
-
-      reading_file.close();
-      writing_file.close();
-    }
-
-    if (misc::vector_contains(files, ".gitignore"))
-    {
-      writing_file.open(".gitignore");
-
-      if (!misc::ofstream_open(writing_file))
-        return 1;
-
-      /*
-      # CMake artifacts
-      build
-      CMakeFiles/
-      CMakeCache.txt
-      CMakeScripts/
-      cmake_install.cmake
-      Makefile
-
-      # Doxygen artifacts
-      docs/html
-      docs/latex
-
-      # Testing
-      tests
-
-      # Other
-      .exe
-      .vscode/
-      README_tmp.html
-      README.pdf
-      .DS_Store
-      */
-      writing_file << "# CMake artifacts\n"
-                   << "build\n"
-                   << "CMakeFiles/\n"
-                   << "CMakeCache.txt\n"
-                   << "CMakeScripts/\n"
-                   << "cmake_install.cmake\n"
-                   << "Makefile\n\n"
-                   << "# Doxygen artifacts\n"
-                   << "docs/html\n"
-                   << "docs/latex\n\n"
-                   << "# Testing\n"
-                   << "tests\n\n"
-                   << "# Other\n"
-                   << ".exe\n"
-                   << ".vscode/\n"
-                   << ".DS_Store";
-
-      writing_file.close();
-    }
+    main_file.load({
+        "#include <iostream>",
+        "",
+        "int main(int argc, char *argv[])",
+        "{",
+        "    std::cout << \"Hello World!\" << std::endl;",
+        "    return 0;",
+        "}",
+    });
 
     return 0;
   }
@@ -385,7 +327,7 @@ namespace commands
   int file_pair(const std::vector<std::string> &args, const std::vector<std::string> &flags)
   {
     // Whether to use include/ src/ folders
-    bool prefix = (directory::get_structure() == "default") ? true : false;
+    bool prefix = (directory::get_structure() == "executable") ? true : false;
 
     for (const auto &arg : misc::sub_vector<std::string>(args, 1, args.size() - 1))
     {
@@ -468,7 +410,7 @@ namespace commands
     // Open files
     std::ofstream header_file, source_file;
 
-    bool prefix = (directory::get_structure() == "default") ? true : false;
+    bool prefix = (directory::get_structure() == "executable") ? true : false;
     std::string prefix_a;
 
     for (const auto &arg : args)

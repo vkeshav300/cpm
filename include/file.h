@@ -26,6 +26,7 @@ private:
   int ropen(); // read open
 
 public:
+  File();
   File(const std::filesystem::path &_path);
 
   void write_line(const std::string &line);
@@ -33,4 +34,6 @@ public:
   void write_lines(const std::vector<std::string> &lines);
 
   void load(const std::vector<std::string> &lines);
+
+  void remove();
 };

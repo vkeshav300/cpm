@@ -18,6 +18,12 @@ std::ifstream File::reader;
 /**
  * @brief Construct a new File:: File object
  * 
+ */
+File::File() {}
+
+/**
+ * @brief Construct a new File:: File object
+ * 
  * @param _path 
  */
 File::File(const std::filesystem::path &_path) : path(_path)
@@ -98,6 +104,18 @@ void File::load(const std::vector<std::string> &lines)
         return;
     
     for (const auto &line : lines)
-        writer << "\n"
-               << line;
+        writer << line
+               << "\n";
+}
+
+/**
+ * @brief Removes file from computer
+ * 
+ */
+void File::remove()
+{
+    writer.close();
+    reader.close();
+
+    std::filesystem::remove(std::filesystem::absolute(path));
 }

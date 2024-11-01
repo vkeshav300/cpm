@@ -12,6 +12,7 @@
 #include <fstream>
 #include <filesystem>
 #include <string>
+#include <vector>
 
 namespace directory
 {
@@ -20,6 +21,8 @@ namespace directory
     bool has_file(const std::filesystem::path &path);
 
     void create_directory(const std::filesystem::path &path);
+
+    void create_directories(const std::vector<std::filesystem::path> &paths);
 
     void create_file(const std::filesystem::path &path);
 

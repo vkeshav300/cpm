@@ -49,9 +49,9 @@ std::unordered_map<std::string, std::unordered_map<std::string, int>> command_in
         },
     },
     {
-        "tmp",
+        "class",
         {
-            {"min_args", 3},
+            {"min_args", 1},
         },
     },
     {
@@ -124,15 +124,23 @@ int main(int argc, char *argv[])
   for (int i = 0; i < argc; i++)
   {
     std::string arg = argv[i];
-    if ("-" == arg.substr(0, 1) && arg.size() >= 2)
-      flags.push_back(arg.substr(1, arg.size()));
+    if (arg[0] == '-' && arg.size() > 1)
+    {
+      if (arg[1] == '-' && arg.size() > 2) // --flag
+      {
+        flags.push_back(arg.substr(2, arg.size()));
+        continue;
+      }
+
+      flags.push_back(arg.substr(1, arg.size())); // -f
+    }
   }
 
   // Arguments
   for (int i = 2; i < argc; i++)
   {
     std::string arg = argv[i];
-    if (arg.substr(0, 1) != "-")
+    if (arg[0] != '-')
       arguments.push_back(arg);
   }
 
@@ -158,8 +166,8 @@ int main(int argc, char *argv[])
     result = commands::test(arguments, flags);
   else if (command == "fpair")
     result = commands::file_pair(arguments, flags);
-  else if (command == "tmp")
-    result = commands::file_template(arguments, flags);
+  else if (command == "class")
+    result = commands::class_file_pair(arguments, flags);
   else if (command == "config")
     result = commands::config(arguments, flags);
 

@@ -25,4 +25,23 @@ namespace misc
     bool ofstream_open(const std::ofstream &_ofstream);
 
     bool ifstream_open(const std::ifstream &_ifstream);
+
+    /**
+     * @brief Extracts sub-vector from vector
+     * 
+     * @tparam T 
+     * @param parent_vector 
+     * @param m1 min
+     * @param m2 max
+     * @return std::vector<T> 
+     */
+    template <typename T>
+    std::vector<T> sub_vector(const std::vector<T> &parent_vector, const size_t &m1, const size_t &m2)
+    {
+        if (m1 > m2 || m2 > parent_vector.size())
+            return {};
+
+        std::vector<T> new_vector(parent_vector.begin() + m1, parent_vector.begin() + m2 + 1);
+        return new_vector;
+    }
 } // namespace misc

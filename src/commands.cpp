@@ -29,7 +29,7 @@ namespace commands
    */
   std::vector<std::string> supported_structures = {
       "default",
-      "standard",
+      "executable",
       "simple",
   };
 
@@ -89,31 +89,29 @@ namespace commands
                   << "  language --> language project will be based off of, C or C++ (ex. cpp)\n"
                   << "  -v=... --> Specify a specific language verison to use (ex. -v=17)\n\n"
                   << "Different Project Templates:\n"
-                  << "  default  --> 'full' project structure, built around CMake\n"
-                  << "  standard --> alias for 'default'\n"
+                  << "  default  --> 'executable' project structure, built around CMake\n"
+                  << "  executable --> alias for 'default'\n"
                   << "  simple   --> only creates one main file in working directory\n\n"
                   << "Ex: cpm create cpp";
       else if (command == "fpair")
-        std::cout << "fpair [action] [name] --> performs action on header/source file pair\n"
-                  << "  [action] --> what operation to perform on file pair\n"
+        std::cout << "fpair [sub-command] [names] --> performs action on header/source file pair\n"
+                  << "  [sub-command] --> what operation to perform on file pair\n"
                   << "    create --> creates new file pair\n"
                   << "    remove --> destroys existing file pair\n"
-                  << "  [name] --> name of file pair\n"
+                  << "  [names] --> name(s) of file pairs\n"
                   << "  -hpp --> use hpp header format (only useful for create action)\n\n"
                   << "Ex: cpm fpair create utils";
-      else if (command == "tmp")
-        std::cout << "tmp [template] [file name] [name] --> inserts coding template into file\n"
-                  << "  [template] --> template to be inserted\n"
-                  << "    class --> basic class template\n"
-                  << "    singleton --> basic singleton template\n"
-                  << "  [file name] --> name of file to insert in (don't include extension)\n"
-                  << "    if file does not exist, a file pair will be created automatically\n"
-                  << "  [name] --> 'reference' name to be used in coding\n\n"
-                  << "Ex: cpm tmp class utils MyClass";
+      else if (command == "class")
+        std::cout << "class [names] --> creates class based header/source file pair\n"
+                  << "  [names] --> what name(s) to use (class names will automatically be capitalized)\n"
+                  << "    if file does not exist, a file pair will be created automatically\n\n"
+                  << "Variations:\n"
+                  << "  --singleton --> creates singleton based file pairs\n\n"
+                  << "Ex: cpm class engine axle tire headlight taillight";
       else if (command == "config")
       {
-        std::cout << "config [action] [key] {value} --> performs action on cpm config\n"
-                  << "  [action] --> what operation to perform on config\n"
+        std::cout << "config [sub-command] [key] {value} --> performs action on cpm config\n"
+                  << "  [sub-command] --> what operation to perform on config\n"
                   << "    set [key] [value] --> add / edit key-value pair (requires value)\n"
                   << "    remove [key] --> removes key-value pair (doesn't require value)\n"
                   << "  [key] --> used to index config and search for value\n"
@@ -136,10 +134,10 @@ namespace commands
                 << "  help {command} --> lists commands + other useful information related to CPM\n"
                 << "  version --> states version of CPM installed\n"
                 << "  create [language] --> creates new c/c++ project\n"
-                << "  fpair [sub-command] [name] --> performs action on header/source file pair\n"
-                << "  tmp [template] [file name] [name] --> inserts coding template into file\n"
-                << "  config [sub-command] [key] {value} --> performs action on cpm config file"
-                << "\n";
+                << "  fpair [sub-command] [names] --> performs action on header/source file pair\n"
+                << "  class [names] --> creates class based header/source file pair\n"
+                << "  config [sub-command] [key] {value} --> performs action on cpm config file\n"
+                << "\n\n";
 
     std::cout << logger.colors["reset"];
 
@@ -217,7 +215,7 @@ namespace commands
 
     std::string main_file;
 
-    if (structure == "default" || structure == "standard")
+    if (structure == "default" || structure == "executable")
     {
       folders.emplace_back("include");
       folders.emplace_back("build");
@@ -388,58 +386,61 @@ namespace commands
     // Whether to use include/ src/ folders
     bool prefix = (directory::get_structure() == "default") ? true : false;
 
-    if (args[0] == "create")
+    for (const auto &arg : misc::sub_vector<std::string>(args, 1, args.size() - 1))
     {
-      // File related variables
-      std::string header_extension = (misc::vector_contains(flags, "hpp")) ? ".hpp" : ".h";
-      std::string header_path = (prefix ? "include/" : "") + args[1] + header_extension;
-      std::string source_path = (prefix ? "src/" : "") + args[1] + directory::get_extension();
-
-      // Creating and writing to header file
-      std::ofstream file(header_path);
-
-      if (!misc::ofstream_open(file))
-        return 1;
-
-      file << "#pragma once";
-
-      file.close();
-
-      // Creating and writing to source file
-      file.open(source_path);
-
-      if (!misc::ofstream_open(file))
-        return 1;
-
-      /*
-      #include <name>.<extension>
-       */
-      file << "#include \""
-           << args[1]
-           << header_extension
-           << "\"";
-    }
-    else if (args[0] == "remove")
-    {
-      if (prefix)
+      if (args[0] == "create")
       {
-        directory::destroy_file("include/" + args[1] + ".h");
-        directory::destroy_file("include/" + args[1] + ".hpp");
-        directory::destroy_file("src/" + args[1] + ".c");
-        directory::destroy_file("src/" + args[1] + ".cpp");
+        // File related variables
+        std::string header_extension = (misc::vector_contains(flags, "hpp")) ? ".hpp" : ".h";
+        std::string header_path = (prefix ? "include/" : "") + arg + header_extension;
+        std::string source_path = (prefix ? "src/" : "") + arg + directory::get_extension();
+
+        // Creating and writing to header file
+        std::ofstream file(header_path);
+
+        if (!misc::ofstream_open(file))
+          return 1;
+
+        file << "#pragma once";
+
+        file.close();
+
+        // Creating and writing to source file
+        file.open(source_path);
+
+        if (!misc::ofstream_open(file))
+          return 1;
+
+        /*
+        #include <name>.<extension>
+         */
+        file << "#include \""
+             << arg
+             << header_extension
+             << "\"";
+      }
+      else if (args[0] == "remove")
+      {
+        if (prefix)
+        {
+          directory::destroy_file("include/" + arg + ".h");
+          directory::destroy_file("include/" + arg + ".hpp");
+          directory::destroy_file("src/" + arg + ".c");
+          directory::destroy_file("src/" + arg + ".cpp");
+        }
+        else
+        {
+          directory::destroy_file(arg + ".h");
+          directory::destroy_file(arg + ".hpp");
+          directory::destroy_file(arg + ".c");
+          directory::destroy_file(arg + ".cpp");
+        }
       }
       else
       {
-        directory::destroy_file(args[1] + ".h");
-        directory::destroy_file(args[1] + ".hpp");
-        directory::destroy_file(args[1] + ".c");
-        directory::destroy_file(args[1] + ".cpp");
+        logger.error_q("is an invalid sub-command", arg);
+        return 1;
       }
-    }
-    else
-    {
-      logger.error_q("is an invalid sub-command", args[0]);
-      return 1;
     }
 
     return 0;
@@ -452,132 +453,143 @@ namespace commands
    * @param flags
    * @return int
    */
-  int file_template(const std::vector<std::string> &args, const std::vector<std::string> &flags)
+  int class_file_pair(const std::vector<std::string> &args, const std::vector<std::string> &flags)
   {
-    std::string header_path = ((directory::get_structure() == "default") ? "include/" : "") + // if structure is 'default', use include/ directory
-                              args[1] +
-                              (directory::has_file(args[1] + ".hpp") ? ".hpp" : ".h");
+    // Create file pairs
+    std::vector<std::string> file_pair_args = args;
+    file_pair_args.insert(file_pair_args.begin(), "create");
 
-    // If header file doesn't exist, create it
-    if (!directory::has_file(header_path) && file_pair({"create", args[1]}, flags))
-      return 1;
+    const int result = file_pair(file_pair_args, flags);
+
+    if (result != 0)
+      return result;
 
     // Open files
-    std::ofstream header_file(header_path, std::ios::app);
-    std::ofstream source_file(
-        (
-            (directory::get_structure() == "default") ? "src/" : "") + // if structure is 'default', use src/ directory
-            args[1] +
-            directory::get_extension(),
-        std::ios::app);
+    std::ofstream header_file, source_file;
 
-    if (!misc::ofstream_open(header_file) || !misc::ofstream_open(source_file))
-      return 1;
-
-    // ease-of-coding variables
+    bool prefix = (directory::get_structure() == "default") ? true : false;
     std::string prefix_a;
 
-    // Spacing
-    header_file << "\n\n";
-    source_file << "\n\n";
-
-    if (args[0] == "class") // Basic class
+    for (const auto &arg : args)
     {
-      /*
-      class <name>
+      header_file.open(
+          (prefix ? "include/" : "") +
+              arg +
+              (misc::vector_contains(flags, "hpp") ? ".hpp" : ".h"),
+          std::ios::app);
+
+      source_file.open(
+          (prefix ? "src/" : "") +
+              arg +
+              directory::get_extension(),
+          std::ios::app);
+
+      if (!misc::ofstream_open(header_file) || !misc::ofstream_open(source_file))
+        return 1;
+
+      header_file << "\n\n";
+      source_file << "\n\n";
+
+      // Automatic capitalization
+      std::string letter(1, std::toupper(arg[0]));
+      std::string class_name = letter + ((arg.length() > 1) ? arg.substr(1) : "");
+
+      // TODO: Automatically capitalize letters after underscores or dashes
+
+      // Writing files
+      if (misc::vector_contains(flags, "singleton"))
       {
-      private:
-      public:
-        <name>();
-        ~<name>();
-      };
-      */
-      header_file << "class "
-                  << args[2]
-                  << "\n{\n"
-                  << "private:\n"
-                  << "public:\n"
-                  << "  "
-                  << args[2]
-                  << "();\n\n"
-                  << "  ~"
-                  << args[2]
-                  << "();\n"
-                  << "};";
+        /*
+        class <Name>
+        {
+        private:
+          <Name>();
 
-      /*
-      <name>::<name>() {}
+        public:
+          <Name>(const <Name> &obj) = delete;
 
-      <name>::~<name>() {}
-      */
-      prefix_a = args[2] + "::";
-      source_file << prefix_a
-                  << args[2]
-                  << "() {}\n\n"
-                  << prefix_a
-                  << "~"
-                  << args[2]
-                  << "() {}";
-    }
-    else if (args[0] == "singleton")
-    {
-      /*
-      class <name>
-      {
-      private:
-        <name>();
+          static <Name> &get();
+        };
+        */
+        header_file << "class "
+                    << class_name
+                    << "\n{\n"
+                    << "private:\n"
+                    << "  "
+                    << class_name
+                    << "();\n\n"
+                    << "public:\n"
+                    << "  "
+                    << class_name
+                    << "("
+                    << "const "
+                    << class_name
+                    << " &obj) = delete;\n\n"
+                    << "  static "
+                    << class_name
+                    << " &get();\n"
+                    << "};";
 
-      public:
-        <name>(const <name> &obj) = delete;
-
-        static <name> &get();
-      };
-      */
-      header_file << "class "
-                  << args[2]
-                  << "\n{\n"
-                  << "private:\n"
-                  << "  "
-                  << args[2]
-                  << "();\n\n"
-                  << "public:\n"
-                  << "  "
-                  << args[2]
-                  << "("
-                  << "const "
-                  << args[2]
-                  << " &obj) = delete;\n\n"
-                  << "  static "
-                  << args[2]
-                  << " &get();\n"
-                  << "};";
-
-      /*
-      <name> &<name>::get()
-      {
-        static <name> obj;
-        return obj;
+        /*
+        <Name> &<Name>::get()
+        {
+          static <Name> obj;
+          return obj;
+        }
+        */
+        source_file << class_name
+                    << " &"
+                    << class_name
+                    << "::get()\n"
+                    << "{\n"
+                    << "  static "
+                    << class_name
+                    << " obj;\n"
+                    << "  return obj;\n"
+                    << "}";
       }
-      */
-      source_file << args[2]
-                  << " &"
-                  << args[2]
-                  << "::get()\n"
-                  << "{\n"
-                  << "  static "
-                  << args[2]
-                  << " obj;\n"
-                  << "  return obj;\n"
-                  << "}";
-    }
-    else
-    {
-      logger.error_q("is not a valid template", args[0]);
-      return 1;
-    }
+      else // Default class code
+      {
+        /*
+            class <name>
+            {
+            private:
+            public:
+              <name>();
+              ~<name>();
+            };
+            */
+        header_file << "class "
+                    << class_name
+                    << "\n{\n"
+                    << "private:\n"
+                    << "public:\n"
+                    << "  "
+                    << class_name
+                    << "();\n\n"
+                    << "  ~"
+                    << class_name
+                    << "();\n"
+                    << "};";
 
-    header_file.close();
-    source_file.close();
+        /*
+        <name>::<name>() {}
+
+        <name>::~<name>() {}
+        */
+        prefix_a = class_name + "::";
+        source_file << prefix_a
+                    << class_name
+                    << "() {}\n\n"
+                    << prefix_a
+                    << "~"
+                    << class_name
+                    << "() {}";
+      }
+
+      header_file.close();
+      source_file.close();
+    }
 
     return 0;
   }

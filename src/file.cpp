@@ -27,9 +27,12 @@ File::File(const std::filesystem::path &_path) : path(_path) {}
  * 
  * @return int 
  */
-int File::wopen()
+int File::wopen(const bool &append)
 {
-    writer.open(path);
+    if (append)
+        writer.open(path, std::ios::app);
+    else
+        writer.open(path);
 
     return misc::ofstream_open(writer);
 }
@@ -53,7 +56,7 @@ int File::ropen()
  */
 void File::write_line(const std::string &line)
 {
-    if (!wopen())
+    if (!wopen(true))
         return;
     
     writer << "\n"
@@ -69,7 +72,7 @@ void File::write_line(const std::string &line)
  */
 void File::write_lines(const std::vector<std::string> &lines)
 {
-    if (!wopen())
+    if (!wopen(true))
         return;
 
     for (const auto &line : lines)

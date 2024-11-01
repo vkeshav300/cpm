@@ -22,8 +22,8 @@ private:
 
   std::filesystem::path path;
 
-  int wopen(); // read open
-  int ropen(); // write open
+  int wopen(const bool &append); // write open
+  int ropen(); // read open
 
 public:
   File(const std::filesystem::path &_path);

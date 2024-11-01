@@ -12,6 +12,7 @@
 #include "logger.h"
 #include "misc.h"
 #include "data.h"
+#include "file.h"
 
 #include <fstream>
 #include <cstdlib>

@@ -21,49 +21,42 @@ std::unordered_map<std::string, std::unordered_map<std::string, int>> command_in
     {
         "create",
         {
-            {"init_exception", true},
             {"min_args", 1},
         },
     },
     {
         "help",
         {
-            {"init_exception", true},
             {"min_args", 0},
         },
     },
     {
         "version",
         {
-            {"init_exception", true},
             {"min_args", 0},
         },
     },
     {
         "test",
         {
-            {"init_exception", false},
             {"min_args", 0},
         },
     },
     {
         "fpair",
         {
-            {"init_exception", false},
             {"min_args", 2},
         },
     },
     {
         "tmp",
         {
-            {"init_exception", false},
             {"min_args", 3},
         },
     },
     {
         "config",
         {
-            {"init_exception", true},
             {"min_args", 2},
         },
     },
@@ -121,22 +114,6 @@ int main(int argc, char *argv[])
   {
     logger.error_q("is not a valid command", command);
     return 1;
-  }
-
-  // Checks if command requires cpm.data to exist
-  if (!command_info[command]["init_exception"])
-  {
-    if (!commands::verify_init())
-    {
-      logger.error_q("requires a valid cpm.data file", command);
-      return 1;
-    }
-
-    if (!data_handler.data_has_key("language"))
-    {
-      logger.error("language information lacking from local cpm storage");
-      return 1;
-    }
   }
 
   // Parsing

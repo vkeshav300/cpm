@@ -68,14 +68,18 @@ Data_Handler &Data_Handler::get()
  */
 void Data_Handler::read()
 {
-    if (!directory::has_file("cpm.data"))
+    std::string config_location = get_store_location();
+
+    config_location += "/cpm.data";
+
+    if (!directory::has_file(config_location))
         return;
 
-    std::ifstream data_file("cpm.data");
+    std::ifstream data_file(config_location);
 
     if (!misc::ifstream_open(data_file))
         return;
-
+    
     // Reading variables
     char ch, prevCh;
     std::string key, value;
@@ -86,7 +90,7 @@ void Data_Handler::read()
     {
         if (ch == '\n') // \n = newline = new key: value
         {
-            data[key] = value;
+            config[key] = value;
             key = value = "";
             onKey = true;
 
@@ -117,58 +121,6 @@ void Data_Handler::read()
         continue;
     }
 
-    data[key] = value;
-
-    data_file.close();
-
-    std::string config_location = get_store_location();
-
-    config_location += "/cpm.data";
-
-    if (!directory::has_file(config_location))
-        return;
-
-    data_file.open(config_location);
-
-    if (!misc::ifstream_open(data_file))
-        return;
-
-    // Nearly identical to project data storage, except information stored in config instead of data
-    while (data_file.get(ch))
-    {
-        if (ch == '\n')
-        {
-            config[key] = value;
-            key = value = "";
-            onKey = true;
-
-            prevCh = ch;
-            continue;
-        }
-        else if (prevCh == ':')
-        {
-            prevCh = ch;
-            continue;
-        }
-        else if (ch == ':')
-        {
-            onKey = false;
-            prevCh = ch;
-            continue;
-        }
-
-        if (onKey)
-        {
-            key += ch;
-            prevCh = ch;
-            continue;
-        }
-
-        value += ch;
-        prevCh = ch;
-        continue;
-    }
-
     config[key] = value;
 }
 
@@ -178,27 +130,12 @@ void Data_Handler::read()
  */
 void Data_Handler::write()
 {
-    std::ofstream data_file("cpm.data");
+    std::string config_location = get_store_location();
+
+    std::ofstream data_file(config_location + "/cpm.data");
 
     if (!misc::ofstream_open(data_file))
         return;
-
-    for (const auto &[k, v] : data)
-    {
-        if (k == "" || v == "")
-            continue;
-
-        data_file << k << ": " << v << "\n";
-    }
-
-    data_file.close();
-
-    std::string config_location = get_store_location();
-
-    if (!directory::has_directory(config_location))
-        return;
-
-    data_file.open(config_location + "/cpm.data");
 
     for (const auto &[k, v] : config)
     {
@@ -209,21 +146,6 @@ void Data_Handler::write()
     }
 
     data_file.close();
-}
-
-/**
- * @brief Checks if data contains key.
- *
- * @param key
- * @return true
- * @return false
- */
-bool Data_Handler::data_has_key(const std::string &key)
-{
-    if (data.find(key) != data.end())
-        return true;
-
-    return false;
 }
 
 /**

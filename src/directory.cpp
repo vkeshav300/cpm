@@ -11,6 +11,8 @@
 #include "logger.h"
 #include "misc.h"
 
+#include <algorithm>
+
 namespace directory
 {
     /**
@@ -75,5 +77,47 @@ namespace directory
             return;
 
         std::filesystem::remove(std::filesystem::absolute(path));
+    }
+
+    /**
+     * @brief Returns structure of current directory.
+     *
+     * @return std::string
+     */
+    std::string get_structure()
+    {
+        if (has_directory("src") && has_directory("include"))
+            return "default";
+
+        return "simple";
+    }
+
+    /**
+     * @brief Returns directory default file extension.
+     *
+     * @return std::string
+     */
+    std::string get_extension()
+    {
+        // Get file names in directory
+        std::vector<std::string> files;
+        const std::filesystem::path current_dir((get_structure() == "default") ? "src/" : "./");
+        const std::filesystem::directory_iterator start(current_dir);
+        const std::filesystem::directory_iterator end;
+
+        std::transform(start, end, std::back_inserter(files), [](const std::filesystem::directory_entry &entry)
+                       { return entry.path().string(); });
+
+        // Check for file extension type
+        for (const auto &v : files)
+        {
+            auto const pos = v.find_last_of(".");
+            const std::string leaf = v.substr(pos + 1);
+
+            if (leaf == "cpp")
+                return ".cpp";
+        }
+
+        return ".c";
     }
 } // namespace directory

@@ -11,6 +11,7 @@
 
 #include <fstream>
 #include <filesystem>
+#include <string>
 
 namespace directory
 {
@@ -23,4 +24,8 @@ namespace directory
     void create_file(const std::filesystem::path &path);
 
     void destroy_file(const std::filesystem::path &path);
+
+    std::string get_structure();
+
+    std::string get_extension();
 }; // namespace directory

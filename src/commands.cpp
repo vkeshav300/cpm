@@ -94,12 +94,12 @@ namespace commands
                   << "  simple   --> only creates one main file in working directory\n\n"
                   << "Ex: cpm create cpp";
       else if (command == "fpair")
-        std::cout << "fpair [method] [name] --> performs method on header/source file pair\n"
-                  << "  [method] --> what operation to perform on file pair\n"
+        std::cout << "fpair [action] [name] --> performs action on header/source file pair\n"
+                  << "  [action] --> what operation to perform on file pair\n"
                   << "    create --> creates new file pair\n"
-                  << "    destroy --> destroys existing file pair\n"
+                  << "    remove --> destroys existing file pair\n"
                   << "  [name] --> name of file pair\n"
-                  << "  -hpp --> use hpp header format (only useful for create method)\n\n"
+                  << "  -hpp --> use hpp header format (only useful for create action)\n\n"
                   << "Ex: cpm fpair create utils";
       else if (command == "tmp")
         std::cout << "tmp [template] [file name] [name] --> inserts coding template into file\n"
@@ -112,8 +112,8 @@ namespace commands
                   << "Ex: cpm tmp class utils MyClass";
       else if (command == "config")
       {
-        std::cout << "config [method] [key] {value} --> performs method on cpm config\n"
-                  << "  [method] --> what operation to perform on config\n"
+        std::cout << "config [action] [key] {value} --> performs action on cpm config\n"
+                  << "  [action] --> what operation to perform on config\n"
                   << "    set [key] [value] --> add / edit key-value pair (requires value)\n"
                   << "    remove [key] --> removes key-value pair (doesn't require value)\n"
                   << "  [key] --> used to index config and search for value\n"
@@ -136,9 +136,9 @@ namespace commands
                 << "  help {command} --> lists commands + other useful information related to CPM\n"
                 << "  version --> states version of CPM installed\n"
                 << "  create [language] --> creates new c/c++ project\n"
-                << "  fpair [method] [name] --> performs method on header/source file pair\n"
+                << "  fpair [sub-command] [name] --> performs action on header/source file pair\n"
                 << "  tmp [template] [file name] [name] --> inserts coding template into file\n"
-                << "  config [method] [key] {value}"
+                << "  config [sub-command] [key] {value} --> performs action on cpm config file"
                 << "\n";
 
     std::cout << logger.colors["reset"];
@@ -373,9 +373,6 @@ namespace commands
       writing_file.close();
     }
 
-    data_handler.data["language"] = lang;
-    data_handler.data["structure"] = structure;
-
     return 0;
   }
 
@@ -388,21 +385,15 @@ namespace commands
    */
   int file_pair(const std::vector<std::string> &args, const std::vector<std::string> &flags)
   {
-    if (!data_handler.data_has_key("structure"))
-    {
-      logger.error_q("information lacking from local cpm storage", "structure");
-      return 1;
-    }
-
     // Whether to use include/ src/ folders
-    bool prefix = (data_handler.data["structure"] == "simple") ? false : true;
+    bool prefix = (directory::get_structure() == "default") ? true : false;
 
     if (args[0] == "create")
     {
       // File related variables
       std::string header_extension = (misc::vector_contains(flags, "hpp")) ? ".hpp" : ".h";
       std::string header_path = (prefix ? "include/" : "") + args[1] + header_extension;
-      std::string source_path = (prefix ? "src/" : "") + args[1] + ((data_handler.data["language"] == "cpp") ? ".cpp" : ".c");
+      std::string source_path = (prefix ? "src/" : "") + args[1] + directory::get_extension();
 
       // Creating and writing to header file
       std::ofstream file(header_path);
@@ -428,7 +419,7 @@ namespace commands
            << header_extension
            << "\"";
     }
-    else if (args[0] == "destroy")
+    else if (args[0] == "remove")
     {
       if (prefix)
       {
@@ -463,13 +454,7 @@ namespace commands
    */
   int file_template(const std::vector<std::string> &args, const std::vector<std::string> &flags)
   {
-    if (!data_handler.data_has_key("structure"))
-    {
-      logger.error_q("information lacking from local cpm storage", "structure");
-      return 1;
-    }
-
-    std::string header_path = ((data_handler.data["structure"] == "simple") ? "" : "include/") + // if structure is simple, don't use include/ directory
+    std::string header_path = ((directory::get_structure() == "default") ? "include/" : "") + // if structure is 'default', use include/ directory
                               args[1] +
                               (misc::vector_contains(flags, "hpp") ? ".hpp" : ".h");
 
@@ -481,9 +466,9 @@ namespace commands
     std::ofstream header_file(header_path, std::ios::app);
     std::ofstream source_file(
         (
-            (data_handler.data["structure"] == "simple") ? "" : "src/") + // if structure is simple, don't use src/ directory
+            (directory::get_structure() == "default") ? "src/" : "") + // if structure is 'default', use src/ directory
             args[1] +
-            ((data_handler.data["language"] == "cpp") ? ".cpp" : ".c"),
+            directory::get_extension(),
         std::ios::app);
 
     if (!misc::ofstream_open(header_file) || !misc::ofstream_open(source_file))
@@ -603,7 +588,7 @@ namespace commands
     {
       if (args.size() < 3)
       {
-        logger.error_q("method of 'config' requires at least 3 arguments", "set");
+        logger.error_q("sub-command requires at least 3 arguments", "set");
         return 1;
       }
 
@@ -617,7 +602,7 @@ namespace commands
     }
     else
     {
-      logger.error_q("method of config is not valid", args[0]);
+      logger.error_q("sub-command is not valid", args[0]);
       return 1;
     }
 

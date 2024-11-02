@@ -43,4 +43,6 @@ namespace misc
         std::vector<T> new_vector(parent_vector.begin() + m1, parent_vector.begin() + m2 + 1);
         return new_vector;
     }
+
+    std::string join_string_vector(const std::vector<std::string> &vect, const std::string &joiner);
 } // namespace misc

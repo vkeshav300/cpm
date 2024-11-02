@@ -39,13 +39,20 @@ namespace misc
      */
     std::vector<std::string> split_string(const std::string &s, const std::string &delimiter)
     {
+
         std::vector<std::string> tokens;
         size_t start = 0;
         size_t end = 0;
 
+        if (delimiter.empty()) // Provided delimiter is ""
+        {
+            tokens.emplace_back(s);
+            return tokens;
+        }
+
         while ((end = s.find(delimiter, start)) != std::string::npos)
         {
-            tokens.emplace_back(s.substr(start, end));
+            tokens.emplace_back(s.substr(start, end - start));
             start = end + delimiter.length();
         }
 
@@ -99,5 +106,26 @@ namespace misc
         }
 
         return true;
+    }
+
+    /**
+     * @brief Joins vector full of strings into one string
+     * 
+     * @param vect 
+     * @return std::string 
+     */
+    std::string join_string_vector(const std::vector<std::string> &vect, const std::string &joiner)
+    {
+        std::string result;
+
+        for (int i = 0; i < vect.size(); i++)
+        {
+            result += vect[i];
+
+            if ((i + 1) < vect.size())
+                result += joiner;
+        }
+
+        return result;
     }
 } // namespace misc

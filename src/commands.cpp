@@ -372,7 +372,7 @@ namespace commands
       logger.error("C programming language does not support classes");
       return 1;
     }
-    
+
     // Create file pairs
     std::vector<std::string> file_pair_args = args;
     file_pair_args.insert(file_pair_args.begin(), "create");
@@ -384,14 +384,19 @@ namespace commands
 
     // Open files
     std::string prefix_a, class_name;
+    std::vector<std::string> split_arg;
 
     for (const auto &arg : args)
     {
       // Automatic capitalization
-      const std::string letter(1, std::toupper(arg[0]));
-      class_name = letter + ((arg.length() > 1) ? arg.substr(1) : "");
-      // TODO: Automatically capitalize letters after underscores or dashes
+      split_arg = misc::split_string(arg, "_");
 
+      for (auto &token : split_arg)
+        token[0] = std::toupper(token[0]);
+
+      class_name = misc::join_string_vector(split_arg, "_");
+
+      // Write to files
       prefix_a = class_name + "::";
 
       // Write to headers

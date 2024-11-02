@@ -14,6 +14,7 @@
 
 std::ofstream File::writer;
 std::ifstream File::reader;
+std::mutex File::writer_mtx, File::reader_mtx;
 
 /**
  * @brief Construct a new File:: File object
@@ -40,6 +41,9 @@ File::File(const std::filesystem::path &_path) : path(_path)
  */
 int File::wopen(const bool &append)
 {
+    if (writer.is_open())
+        return 1;
+    
     if (append)
         writer.open(path, std::ios::app);
     else
@@ -55,25 +59,12 @@ int File::wopen(const bool &append)
  */
 int File::ropen()
 {
+    if (reader.is_open())
+        return 1;
+
     reader.open(path);
 
     return misc::ifstream_open(reader);
-}
-
-/**
- * @brief Adds line to file
- * 
- * @param line 
- */
-void File::write_line(const std::string &line)
-{
-    if (!wopen())
-        return;
-    
-    writer << "\n"
-           << line;
-    
-    writer.close();
 }
 
 /**
@@ -81,8 +72,10 @@ void File::write_line(const std::string &line)
  * 
  * @param lines 
  */
-void File::write_lines(const std::vector<std::string> &lines)
+void File::write(const std::vector<std::string> &lines)
 {
+    std::lock_guard<std::mutex> lock(writer_mtx);
+
     if (!wopen())
         return;
 
@@ -100,6 +93,8 @@ void File::write_lines(const std::vector<std::string> &lines)
  */
 void File::load(const std::vector<std::string> &lines)
 {
+    std::lock_guard<std::mutex> lock(writer_mtx);
+
     if (!wopen(false))
         return;
     

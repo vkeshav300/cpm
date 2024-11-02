@@ -13,12 +13,14 @@
 #include <fstream>
 #include <filesystem>
 #include <vector>
+#include <mutex>
 
 class File
 {
 private:
   static std::ofstream writer;
   static std::ifstream reader;
+  static std::mutex writer_mtx, reader_mtx;
 
   std::filesystem::path path;
 
@@ -29,9 +31,7 @@ public:
   File();
   File(const std::filesystem::path &_path);
 
-  void write_line(const std::string &line);
-
-  void write_lines(const std::vector<std::string> &lines);
+  void write(const std::vector<std::string> &lines);
 
   void load(const std::vector<std::string> &lines);
 

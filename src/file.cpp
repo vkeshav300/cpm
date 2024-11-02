@@ -11,17 +11,6 @@
 #include "file.h"
 #include "misc.h"
 
-
-std::ofstream File::writer;
-std::ifstream File::reader;
-std::mutex File::writer_mtx, File::reader_mtx;
-
-/**
- * @brief Construct a new File:: File object
- * 
- */
-File::File() {}
-
 /**
  * @brief Construct a new File:: File object
  * 
@@ -30,41 +19,18 @@ File::File() {}
 File::File(const std::filesystem::path &_path) : path(_path)
 {
     // Create file
-    wopen(false);
+    writer.open(path, std::ios::app);
     writer.close();
 }
 
 /**
- * @brief Opens file object with ofstream
+ * @brief Destroy the File:: File object
  * 
- * @return int 
  */
-int File::wopen(const bool &append)
+File::~File()
 {
-    if (writer.is_open())
-        return 1;
-    
-    if (append)
-        writer.open(path, std::ios::app);
-    else
-        writer.open(path);
-
-    return misc::ofstream_open(writer);
-}
-
-/**
- * @brief Opens file object with ifstream
- * 
- * @return int 
- */
-int File::ropen()
-{
-    if (reader.is_open())
-        return 1;
-
-    reader.open(path);
-
-    return misc::ifstream_open(reader);
+    writer.close();
+    reader.close();
 }
 
 /**
@@ -74,9 +40,9 @@ int File::ropen()
  */
 void File::write(const std::vector<std::string> &lines)
 {
-    std::lock_guard<std::mutex> lock(writer_mtx);
+    writer.open(path, std::ios::app);
 
-    if (!wopen())
+    if (!misc::ofstream_open(writer))
         return;
 
     for (const auto &line : lines)
@@ -93,14 +59,16 @@ void File::write(const std::vector<std::string> &lines)
  */
 void File::load(const std::vector<std::string> &lines)
 {
-    std::lock_guard<std::mutex> lock(writer_mtx);
+    writer.open(path);
 
-    if (!wopen(false))
+    if (!misc::ofstream_open(writer))
         return;
     
     for (const auto &line : lines)
         writer << line
                << "\n";
+
+    writer.close();
 }
 
 /**

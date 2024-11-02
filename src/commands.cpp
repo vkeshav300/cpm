@@ -309,8 +309,8 @@ namespace commands
         "",
         "int main(int argc, char *argv[])",
         "{",
-        "    std::cout << \"Hello World!\" << std::endl;",
-        "    return 0;",
+        "  std::cout << \"Hello World!\" << std::endl;",
+        "  return 0;",
         "}",
     });
 
@@ -333,7 +333,7 @@ namespace commands
       {
         File header(directory::get_structured_header_path(arg, (misc::vector_contains(flags, "hpp"))));
         header.load({"#pragma once"});
-        
+
         File source(directory::get_structured_source_path(arg));
         source.load({"#include \"" + arg + (misc::vector_contains(flags, "hpp") ? ".hpp" : ".h") + "\""});
       }
@@ -367,6 +367,12 @@ namespace commands
    */
   int class_file_pair(const std::vector<std::string> &args, const std::vector<std::string> &flags)
   {
+    if (directory::get_extension() == ".c")
+    {
+      logger.error("C programming language does not support classes");
+      return 1;
+    }
+    
     // Create file pairs
     std::vector<std::string> file_pair_args = args;
     file_pair_args.insert(file_pair_args.begin(), "create");
@@ -377,130 +383,69 @@ namespace commands
       return result;
 
     // Open files
-    std::ofstream header_file, source_file;
-
-    bool prefix = (directory::get_structure() == "executable") ? true : false;
-    std::string prefix_a;
+    std::string prefix_a, class_name;
 
     for (const auto &arg : args)
     {
-      header_file.open(
-          (prefix ? "include/" : "") +
-              arg +
-              (misc::vector_contains(flags, "hpp") ? ".hpp" : ".h"),
-          std::ios::app);
-
-      source_file.open(
-          (prefix ? "src/" : "") +
-              arg +
-              directory::get_extension(),
-          std::ios::app);
-
-      if (!misc::ofstream_open(header_file) || !misc::ofstream_open(source_file))
-        return 1;
-
-      header_file << "\n\n";
-      source_file << "\n\n";
-
       // Automatic capitalization
-      std::string letter(1, std::toupper(arg[0]));
-      std::string class_name = letter + ((arg.length() > 1) ? arg.substr(1) : "");
-
+      const std::string letter(1, std::toupper(arg[0]));
+      class_name = letter + ((arg.length() > 1) ? arg.substr(1) : "");
       // TODO: Automatically capitalize letters after underscores or dashes
 
-      // Writing files
+      prefix_a = class_name + "::";
+
+      // Write to headers
+      File header(directory::get_structured_header_path(arg, !directory::has_file(directory::get_structured_header_path(arg))));
+
       if (misc::vector_contains(flags, "singleton"))
       {
-        /*
-        class <Name>
-        {
-        private:
-          <Name>();
-
-        public:
-          <Name>(const <Name> &obj) = delete;
-
-          static <Name> &get();
-        };
-        */
-        header_file << "class "
-                    << class_name
-                    << "\n{\n"
-                    << "private:\n"
-                    << "  "
-                    << class_name
-                    << "();\n\n"
-                    << "public:\n"
-                    << "  "
-                    << class_name
-                    << "("
-                    << "const "
-                    << class_name
-                    << " &obj) = delete;\n\n"
-                    << "  static "
-                    << class_name
-                    << " &get();\n"
-                    << "};";
-
-        /*
-        <Name> &<Name>::get()
-        {
-          static <Name> obj;
-          return obj;
-        }
-        */
-        source_file << class_name
-                    << " &"
-                    << class_name
-                    << "::get()\n"
-                    << "{\n"
-                    << "  static "
-                    << class_name
-                    << " obj;\n"
-                    << "  return obj;\n"
-                    << "}";
+        header.write({
+            "class " + class_name,
+            "{",
+            "private:",
+            "  " + class_name + "();",
+            "",
+            "public:",
+            "  " + class_name + "(const " + class_name + " &obj) = delete;",
+            "",
+            "  static " + class_name + " &get();",
+            "};",
+        });
       }
-      else // Default class code
+      else
       {
-        /*
-            class <name>
-            {
-            private:
-            public:
-              <name>();
-              ~<name>();
-            };
-            */
-        header_file << "class "
-                    << class_name
-                    << "\n{\n"
-                    << "private:\n"
-                    << "public:\n"
-                    << "  "
-                    << class_name
-                    << "();\n\n"
-                    << "  ~"
-                    << class_name
-                    << "();\n"
-                    << "};";
-
-        /*
-        <name>::<name>() {}
-
-        <name>::~<name>() {}
-        */
-        prefix_a = class_name + "::";
-        source_file << prefix_a
-                    << class_name
-                    << "() {}\n\n"
-                    << prefix_a
-                    << "~"
-                    << class_name
-                    << "() {}";
+        header.write({
+            "class " + class_name,
+            "{",
+            "private:",
+            "",
+            "public:",
+            "  " + class_name + "();",
+            "  ~" + class_name + "();",
+            "};",
+        });
       }
 
-      header_file.close();
-      source_file.close();
+      // Write to sources
+      File source(directory::get_structured_source_path(arg));
+
+      if (misc::vector_contains(flags, "singleton"))
+      {
+        source.write({
+            prefix_a + "get()",
+            "{",
+            "  static " + class_name + " obj;",
+            "  return obj;",
+            "}",
+        });
+      }
+      else
+      {
+        source.write({
+            prefix_a + class_name + "() {}",
+            prefix_a + "~" + class_name + "() {}",
+        });
+      }
     }
 
     return 0;

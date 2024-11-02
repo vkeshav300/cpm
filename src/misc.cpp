@@ -76,7 +76,7 @@ namespace misc
     {
         if (!_ofstream.is_open())
         {
-            logger.custom("failed to open file", "ofs", "red");
+            logger.custom("failed to open file", "ofs", "error");
             return false;
         }
 
@@ -94,7 +94,7 @@ namespace misc
     {
         if (!_ifstream.is_open())
         {
-            logger.custom("failed to open file", "ifs", "red");
+            logger.custom("failed to open file", "ifs", "error");
             return false;
         }
 

@@ -54,8 +54,8 @@ namespace directory
 
     /**
      * @brief Creates folders in current directory
-     * 
-     * @param paths 
+     *
+     * @param paths
      */
     void create_directories(const std::vector<std::filesystem::path> &paths)
     {
@@ -130,5 +130,33 @@ namespace directory
         }
 
         return ".c";
+    }
+
+    /**
+     * @brief Returns path to header file with name 'name'
+     *
+     * @param name
+     * @return std::filesystem::path
+     */
+    std::filesystem::path get_structured_header_path(const std::string &name, const bool &hpp)
+    {
+        if (get_structure() == "executable")
+            return "include/" + name + (hpp ? ".hpp" : ".h");
+
+        return name + (hpp ? ".hpp" : ".h");
+    }
+
+    /**
+     * @brief Returns path to source file with name 'name'
+     *
+     * @param name
+     * @return std::filesystem::path
+     */
+    std::filesystem::path get_structured_source_path(const std::string &name)
+    {
+        if (get_structure() == "executable")
+            return "src/" + name + get_extension();
+
+        return name + get_extension();
     }
 } // namespace directory

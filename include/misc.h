@@ -11,7 +11,6 @@
 
 #include <string>
 #include <vector>
-#include <algorithm>
 #include <fstream>
 
 namespace misc

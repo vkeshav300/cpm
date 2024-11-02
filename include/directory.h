@@ -31,4 +31,8 @@ namespace directory
     std::string get_structure();
 
     std::string get_extension();
+
+    std::filesystem::path get_structured_header_path(const std::string &name, const bool &hpp = false);
+
+    std::filesystem::path get_structured_source_path(const std::string &name);
 }; // namespace directory

@@ -236,7 +236,7 @@ bool Logger::execute(const std::string &command, const bool &must_populate_file)
             << "\n";
 
   // Command execution
-  std::system((command + " > cpm.tmp").c_str());
+  std::system(command.c_str());
 
   // Empty response is indicator of command failure (unless command does not give a response)
   if (must_populate_file)

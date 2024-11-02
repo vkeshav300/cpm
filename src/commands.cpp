@@ -327,57 +327,26 @@ namespace commands
   int file_pair(const std::vector<std::string> &args, const std::vector<std::string> &flags)
   {
     // Whether to use include/ src/ folders
-    bool prefix = (directory::get_structure() == "executable") ? true : false;
-
     for (const auto &arg : misc::sub_vector<std::string>(args, 1, args.size() - 1))
     {
       if (args[0] == "create")
       {
-        // File related variables
-        std::string header_extension = (misc::vector_contains(flags, "hpp")) ? ".hpp" : ".h";
-        std::string header_path = (prefix ? "include/" : "") + arg + header_extension;
-        std::string source_path = (prefix ? "src/" : "") + arg + directory::get_extension();
-
-        // Creating and writing to header file
-        std::ofstream file(header_path);
-
-        if (!misc::ofstream_open(file))
-          return 1;
-
-        file << "#pragma once";
-
-        file.close();
-
-        // Creating and writing to source file
-        file.open(source_path);
-
-        if (!misc::ofstream_open(file))
-          return 1;
-
-        /*
-        #include <name>.<extension>
-         */
-        file << "#include \""
-             << arg
-             << header_extension
-             << "\"";
+        File header(directory::get_structured_header_path(arg, (misc::vector_contains(flags, "hpp"))));
+        header.load({"#pragma once"});
+        
+        File source(directory::get_structured_source_path(arg));
+        source.load({"#include \"" + arg + (misc::vector_contains(flags, "hpp") ? ".hpp" : ".h") + "\""});
       }
       else if (args[0] == "remove")
       {
-        if (prefix)
-        {
-          directory::destroy_file("include/" + arg + ".h");
-          directory::destroy_file("include/" + arg + ".hpp");
-          directory::destroy_file("src/" + arg + ".c");
-          directory::destroy_file("src/" + arg + ".cpp");
-        }
-        else
-        {
-          directory::destroy_file(arg + ".h");
-          directory::destroy_file(arg + ".hpp");
-          directory::destroy_file(arg + ".c");
-          directory::destroy_file(arg + ".cpp");
-        }
+        directory::destroy_file("include/" + arg + ".h");
+        directory::destroy_file("include/" + arg + ".hpp");
+        directory::destroy_file("src/" + arg + ".c");
+        directory::destroy_file("src/" + arg + ".cpp");
+        directory::destroy_file(arg + ".h");
+        directory::destroy_file(arg + ".hpp");
+        directory::destroy_file(arg + ".c");
+        directory::destroy_file(arg + ".cpp");
       }
       else
       {

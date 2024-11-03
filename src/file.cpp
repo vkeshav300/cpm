@@ -82,3 +82,6 @@ void File::remove()
 
     std::filesystem::remove(std::filesystem::absolute(path));
 }
+
+std::ofstream File::writer;
+std::ifstream File::reader;

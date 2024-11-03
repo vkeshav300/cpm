@@ -17,8 +17,8 @@
 class File
 {
 private:
-  std::ofstream writer;
-  std::ifstream reader;
+  static std::ofstream writer;
+  static std::ifstream reader;
 
   std::filesystem::path path;
 

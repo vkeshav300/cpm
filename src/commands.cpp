@@ -115,6 +115,10 @@ namespace commands
                   << "    remove [key] --> removes key-value pair (doesn't require value)\n"
                   << "  [key] --> used to index config and search for value\n"
                   << "  {value} --> a value\n\n"
+                  << "Logger Config Variables:\n"
+                  << "  color_success\n  color_error\n  color_warn\n  color_theme\n  color_warn\n  color_count\n  color_prompt\n  color_execute\n\n"
+                  << "Other Config Variables:\n"
+                  << "  default_structure --> default project structure used in `cpm create`\n\n"
                   << "Ex: cpm config set colors_success blue";
       }
       else
@@ -176,6 +180,7 @@ namespace commands
    */
   int create(const std::vector<std::string> &args, const std::vector<std::string> &flags)
   {
+    // Language
     std::string lang = args[0];
 
     if (lang == "c++")
@@ -187,26 +192,26 @@ namespace commands
       return 1;
     }
 
-    std::string project_name = logger.prompt("enter project name");
+    const std::string project_name = logger.prompt("enter project name");
 
+    // Structure
+    const std::string default_structure = data_handler.config_has_key("default_structure") ? data_handler.config["default_structure"] : "executable";
     std::string structure;
 
-    if (logger.prompt_yn("use custom template"))
+    while (true)
     {
-      while (true)
-      {
-        structure = logger.prompt("enter the name of a template you would like to use");
+      structure = logger.prompt("enter project structure (hit enter for default '" + default_structure + "')");
 
-        if (!misc::vector_contains(supported_structures, structure))
-          logger.warn_q("is an invald template name", structure);
-        else
-          break;
-      }
+      if (structure == "")
+        structure = default_structure;
+
+      if (!misc::vector_contains(supported_structures, structure))
+        logger.warn_q("is an invald template name", structure);
+      else
+        break;
     }
-    else
-      structure = "executable";
 
-    bool git_support = logger.prompt_yn("add git support");
+    const bool git_support = logger.prompt_yn("add git support");
 
     std::string main_path;
 
@@ -214,25 +219,26 @@ namespace commands
     {
       directory::create_directories({"src", "include", "build", "tests"});
 
+      // Set main path to use src/
       main_path = "src/main";
       main_path += ((lang == "cpp") ? ".cpp" : ".c");
 
       // Get installed CMake version
-      std::string cmake_current_version;
       logger.execute("cmake --version > cpm.tmp");
 
       std::ifstream result_file("cpm.tmp");
       if (!misc::ifstream_open(result_file))
         return 1;
 
+      std::string cmake_current_version;
       std::getline(result_file, cmake_current_version);
       cmake_current_version = misc::split_string(cmake_current_version, " ")[2];
 
       result_file.close();
 
       // Other CMake variables
-      std::string cmake_lang = (lang == "cpp") ? "CXX" : "C";
-      std::string lang_version = (flags.size() > 0) ? misc::get_flag_value(flags[0]) : "23";
+      const std::string cmake_lang = (lang == "cpp") ? "CXX" : "C";
+      const std::string lang_version = (flags.size() > 0) ? misc::get_flag_value(flags[0]) : "23";
 
       File cmake_lists("CMakeLists.txt");
       cmake_lists.load({
@@ -271,6 +277,7 @@ namespace commands
     }
     else if (structure == "simple")
     {
+      // Set main path to use ./
       main_path = "main";
       main_path += (lang == "cpp") ? ".cpp" : ".c";
     }

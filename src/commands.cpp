@@ -17,6 +17,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <iostream>
+#include <filesystem>
 
 namespace commands
 {
@@ -395,19 +396,15 @@ namespace commands
 
     for (const auto &arg : args)
     {
-      // Automatic capitalization
-      split_arg = misc::split_string(arg, "_");
-
-      for (auto &token : split_arg)
-        token[0] = std::toupper(token[0]);
-
-      class_name = misc::join_string_vector(split_arg, "_");
+      class_name = arg;
+      misc::auto_capitalize(class_name);
 
       // Write to files
       prefix_a = class_name + "::";
 
-      // Write to headers
-      File header(directory::get_structured_header_path(arg, !directory::has_file(directory::get_structured_header_path(arg))));
+      // Write to files
+      File header(directory::get_structured_header_path(arg, misc::vector_contains(flags, "hpp")));
+      File source(directory::get_structured_source_path(arg));
 
       if (misc::vector_contains(flags, "singleton"))
       {
@@ -423,6 +420,58 @@ namespace commands
             "  static " + class_name + " &get();",
             "};",
         });
+
+        source.write({
+            prefix_a + "get()",
+            "{",
+            "  static " + class_name + " obj;",
+            "  return obj;",
+            "}",
+        });
+      }
+      else if (flags.size() > 0 && flags[0][0] == 'p')
+      {
+        // Header file that contains 'parent' class
+        prefix_a = misc::get_flag_value(flags[0]);
+        const std::filesystem::path header_p_path(directory::get_structured_header_path(prefix_a, !directory::has_file(directory::get_structured_header_path(prefix_a))));
+
+        if (!directory::has_file(header_p_path))
+        {
+          logger.error_q("does not exist", header_p_path);
+          return 1;
+        }
+
+        File header_p(header_p_path);
+        header_p.replace_first_with("private", "protected");
+
+        misc::auto_capitalize(prefix_a);
+
+        std::string inherit_mode = "";
+
+        if (misc::vector_contains(flags, "protected"))
+          inherit_mode = "protected ";
+        else if (misc::vector_contains(flags, "public"))
+          inherit_mode = "public ";
+
+        header.write({
+            "#include \"" + misc::get_flag_value(flags[0]) + ((header_p_path.string().substr(header_p_path.string().length() - 2) == ".h") ? ".h" : ".hpp") + "\"",
+            "",
+            "class " + class_name + ": " + inherit_mode + prefix_a,
+            "{",
+            "private:",
+            "",
+            "public:",
+            "  " + class_name + "();",
+            "  ~" + class_name + "();",
+            "};",
+        });
+
+        prefix_a = class_name + "::";
+
+        source.write({
+            prefix_a + class_name + "() {}",
+            prefix_a + "~" + class_name + "() {}",
+        });
       }
       else
       {
@@ -436,23 +485,7 @@ namespace commands
             "  ~" + class_name + "();",
             "};",
         });
-      }
 
-      // Write to sources
-      File source(directory::get_structured_source_path(arg));
-
-      if (misc::vector_contains(flags, "singleton"))
-      {
-        source.write({
-            prefix_a + "get()",
-            "{",
-            "  static " + class_name + " obj;",
-            "  return obj;",
-            "}",
-        });
-      }
-      else
-      {
         source.write({
             prefix_a + class_name + "() {}",
             prefix_a + "~" + class_name + "() {}",

@@ -110,9 +110,9 @@ namespace misc
 
     /**
      * @brief Joins vector full of strings into one string
-     * 
-     * @param vect 
-     * @return std::string 
+     *
+     * @param vect
+     * @return std::string
      */
     std::string join_string_vector(const std::vector<std::string> &vect, const std::string &joiner)
     {
@@ -127,5 +127,20 @@ namespace misc
         }
 
         return result;
+    }
+
+    /**
+     * @brief Capitalizes 'str'
+     *
+     * @param str
+     */
+    void auto_capitalize(std::string &str)
+    {
+        std::vector<std::string> split_str = split_string(str, "_");
+
+        for (auto &token : split_str)
+            token[0] = std::toupper(token[0]);
+
+        str = misc::join_string_vector(split_str, "_");
     }
 } // namespace misc

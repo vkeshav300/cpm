@@ -83,5 +83,77 @@ void File::remove()
     std::filesystem::remove(std::filesystem::absolute(path));
 }
 
+/**
+ * @brief Reads file into vector containing individual lines
+ * 
+ * @return std::vector<std::string> 
+ */
+std::vector<std::string> File::read()
+{
+    reader.open(path);
+
+    if (!misc::ifstream_open(reader))
+        return {};
+
+    std::vector<std::string> lines;
+    std::string line;
+
+    while (std::getline(reader, line))
+        lines.emplace_back(line);
+
+    return lines;
+}
+
+/**
+ * @brief Finds first instance of 'token_f' in file and replaces it with 'token_r'
+ * 
+ * @param token_f 
+ * @param token_r 
+ */
+void File::replace_first_with(const std::string &token_f, const std::string &token_r)
+{
+    const std::filesystem::path tmp_path(path.string() + ".tmp");
+
+    writer.open(tmp_path);
+    reader.open(path);
+
+    if (!misc::ifstream_open(reader) || !misc::ofstream_open(writer))
+        return;
+    
+    std::string line;
+    size_t pos;
+    bool searching = true;
+
+    while (std::getline(reader, line))
+    {
+        if (searching && (pos = line.find(token_f)) != std::string::npos) // Replcae first instance of token_f with token_r
+        {
+            line.replace(pos, token_f.length(), token_r);
+            searching = false;
+        }
+
+        writer << line << "\n";
+    }
+    
+    writer.close();
+    reader.close();
+
+    if (!std::filesystem::remove(path))
+        return;
+    
+    std::filesystem::rename(tmp_path, path);
+}
+
+/**
+ * @brief Returns whether there is an actual file at 'path'
+ * 
+ * @return true 
+ * @return false 
+ */
+bool File::exists()
+{
+    return std::filesystem::exists(std::filesystem::absolute(path));
+}
+
 std::ofstream File::writer;
 std::ifstream File::reader;

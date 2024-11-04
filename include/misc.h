@@ -45,4 +45,6 @@ namespace misc
     }
 
     std::string join_string_vector(const std::vector<std::string> &vect, const std::string &joiner);
+
+    void auto_capitalize(std::string &str);
 } // namespace misc

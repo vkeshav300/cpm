@@ -31,4 +31,10 @@ public:
   void load(const std::vector<std::string> &lines);
 
   void remove();
+
+  std::vector<std::string> read();
+
+  void replace_first_with(const std::string &token_f, const std::string &token_r);
+
+  bool exists();
 };

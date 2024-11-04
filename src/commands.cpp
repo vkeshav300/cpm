@@ -107,8 +107,9 @@ namespace commands
                   << "    if file does not exist, a file pair will be created automatically\n\n"
                   << "Variations:\n"
                   << "  -p=[parent name] --> creates child class from parent class located in <parent name>.<h/hpp>\n"
-                  << "    --public --> inherit public aspects of parent\n"
-                  << "    --protected --> inherit protected aspects of parent\n"
+                  << "    Default: class A: public B\n"
+                  << "    --private --> class A: private B\n"
+                  << "    --protected --> class A: protected B\n"
                   << "  --singleton --> creates singleton based file pairs\n\n"
                   << "Ex: cpm class engine axle tire headlight taillight";
       else if (command == "config")
@@ -449,12 +450,12 @@ namespace commands
 
         misc::auto_capitalize(prefix_a);
 
-        std::string inherit_mode = "";
+        std::string inherit_mode = "public ";
 
         if (misc::vector_contains(flags, "protected"))
           inherit_mode = "protected ";
-        else if (misc::vector_contains(flags, "public"))
-          inherit_mode = "public ";
+        else if (misc::vector_contains(flags, "private"))
+          inherit_mode = "private ";
 
         header.write({
             "#include \"" + misc::get_flag_value(flags[0]) + ((header_p_path.string().substr(header_p_path.string().length() - 2) == ".h") ? ".h" : ".hpp") + "\"",

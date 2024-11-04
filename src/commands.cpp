@@ -106,6 +106,9 @@ namespace commands
                   << "  [names] --> what name(s) to use (class names will automatically be capitalized)\n"
                   << "    if file does not exist, a file pair will be created automatically\n\n"
                   << "Variations:\n"
+                  << "  -p=[parent name] --> creates child class from parent class located in <parent name>.<h/hpp>\n"
+                  << "    --public --> inherit public aspects of parent\n"
+                  << "    --protected --> inherit protected aspects of parent\n"
                   << "  --singleton --> creates singleton based file pairs\n\n"
                   << "Ex: cpm class engine axle tire headlight taillight";
       else if (command == "config")

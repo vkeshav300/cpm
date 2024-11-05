@@ -27,12 +27,12 @@ namespace misc
 
     /**
      * @brief Extracts sub-vector from vector
-     * 
-     * @tparam T 
-     * @param parent_vector 
+     *
+     * @tparam T
+     * @param parent_vector
      * @param m1 min
      * @param m2 max
-     * @return std::vector<T> 
+     * @return std::vector<T>
      */
     template <typename T>
     std::vector<T> sub_vector(const std::vector<T> &parent_vector, const size_t &m1, const size_t &m2)

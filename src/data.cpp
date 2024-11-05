@@ -18,8 +18,8 @@
 
 /**
  * @brief Ensures existance of valid store location for cpm config data and returns it (WINDOWS ONLY).
- * 
- * @return std::string 
+ *
+ * @return std::string
  */
 std::string get_store_location()
 {
@@ -29,8 +29,8 @@ std::string get_store_location()
 #else
 /**
  * @brief Ensures existance of valid store location for cpm config data and returns it (NON-WINDOWS).
- * 
- * @return std::string 
+ *
+ * @return std::string
  */
 std::string get_store_location()
 {
@@ -79,7 +79,7 @@ void Data_Handler::read()
 
     if (!misc::ifstream_open(data_file))
         return;
-    
+
     // Reading variables
     char ch, prevCh;
     std::string key, value;
@@ -150,10 +150,10 @@ void Data_Handler::write()
 
 /**
  * @brief Checks if config contains key.
- * 
- * @param key 
- * @return true 
- * @return false 
+ *
+ * @param key
+ * @return true
+ * @return false
  */
 bool Data_Handler::config_has_key(const std::string &key)
 {

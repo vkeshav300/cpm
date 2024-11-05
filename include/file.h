@@ -3,9 +3,9 @@
  * @brief Makes creating/loading/editing files easier.
  * @version 0.1
  * @date 2024-11-01
- * 
+ *
  * @copyright Copyright (c) 2024
- * 
+ *
  */
 #pragma once
 
@@ -36,5 +36,5 @@ public:
 
   void replace_first_with(const std::string &token_f, const std::string &token_r);
 
-  bool exists();
+  bool exists(const std::string &token_f);
 };

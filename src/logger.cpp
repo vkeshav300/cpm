@@ -38,9 +38,9 @@ void Logger::set_colors(const std::unordered_map<std::string, std::string> &new_
 
 /**
  * @brief Sets individual color map for logger ui.
- * 
- * @param k 
- * @param v 
+ *
+ * @param k
+ * @param v
  */
 void Logger::set_color(const std::string &k, const std::string &v)
 {

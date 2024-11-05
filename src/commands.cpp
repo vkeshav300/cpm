@@ -396,6 +396,7 @@ namespace commands
 
     // Open files
     std::string prefix_a, class_name;
+    bool status = false;
     std::vector<std::string> split_arg;
 
     for (const auto &arg : args)
@@ -446,7 +447,12 @@ namespace commands
         }
 
         File header_p(header_p_path);
-        header_p.replace_first_with("private", "protected");
+
+        if (!status && !header_p.exists("protected"))
+        {
+          header_p.replace_first_with("private", "protected");
+          status = true;
+        }
 
         misc::auto_capitalize(prefix_a);
 

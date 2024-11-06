@@ -41,7 +41,7 @@ public:
         {"success", raw_colors["green"]},
         {"error", raw_colors["red"]},
         {"warn", raw_colors["orange"]},
-        {"count", raw_colors["cyan"]},
+        {"count", raw_colors["white"]},
         {"prompt", raw_colors["yellow"]},
         {"execute", raw_colors["orange"]},
         {"reset", raw_colors["reset"]},

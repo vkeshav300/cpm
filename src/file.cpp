@@ -16,23 +16,10 @@
  *
  * @param _path
  */
-File::File(const std::filesystem::path &_path) : path(_path)
-{
-    // Create directories (a/b/c/d.e --> a/b/c/d)
-    const std::vector<std::string> directories = misc::split_string(path, "/");
-    std::string path_prefix;
+File::File(const std::filesystem::path &_path) : path(std::filesystem::absolute(_path))
+{   
+    std::filesystem::create_directories(std::filesystem::absolute(path.parent_path()));
 
-    for (const auto &dir : misc::sub_vector<std::string>(directories, 0, directories.size() - 2))
-    {
-        path_prefix += ("/" + dir);
-
-        if (std::filesystem::is_directory(std::filesystem::absolute(path_prefix)))
-            continue;
-
-        // std::filesystem::create_directory(std::filesystem::absolute(path_prefix));
-    }
-
-    // Create file (a/b/c/d.e)
     writer.open(path, std::ios::app);
     writer.close();
 }
@@ -94,7 +81,7 @@ void File::remove()
     writer.close();
     reader.close();
 
-    std::filesystem::remove(std::filesystem::absolute(path));
+    std::filesystem::remove(path);
 }
 
 /**

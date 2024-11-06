@@ -401,7 +401,8 @@ namespace commands
 
     for (const auto &arg : args)
     {
-      class_name = arg;
+      std::filesystem::path _arg(arg);
+      class_name = std::filesystem::absolute(_arg).filename().string();
       misc::auto_capitalize(class_name);
 
       // Write to files
@@ -437,8 +438,8 @@ namespace commands
       else if (flags.size() > 0 && flags[0][0] == 'p')
       {
         // Header file that contains 'parent' class
-        prefix_a = misc::get_flag_value(flags[0]);
-        const std::filesystem::path header_p_path(directory::get_structured_header_path(prefix_a, !directory::has_file(directory::get_structured_header_path(prefix_a))));
+        _arg = misc::get_flag_value(flags[0]);
+        const std::filesystem::path header_p_path(directory::get_structured_header_path(_arg, !directory::has_file(directory::get_structured_header_path(_arg))));
 
         if (!directory::has_file(header_p_path))
         {
@@ -454,6 +455,7 @@ namespace commands
           status = true;
         }
 
+        prefix_a = _arg.filename().string();
         misc::auto_capitalize(prefix_a);
 
         std::string inherit_mode = "public ";

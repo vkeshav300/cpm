@@ -449,15 +449,18 @@ namespace commands
 
         File header_p(header_p_path);
 
+        // Switch 'private' to 'protected' if 'protected' doesn't already exist within the file
         if (!status && !header_p.exists("protected"))
         {
           header_p.replace_first_with("private", "protected");
           status = true;
         }
 
+        // Get parent class name
         prefix_a = _arg.filename().string();
         misc::auto_capitalize(prefix_a);
 
+        // Get inherit mode (public, protected, private)
         std::string inherit_mode = "public ";
 
         if (misc::vector_contains(flags, "protected"))
@@ -465,8 +468,20 @@ namespace commands
         else if (misc::vector_contains(flags, "private"))
           inherit_mode = "private ";
 
+        // Get include path
+        std::string include_path;
+
+        for (int i = 1; i < arg.length(); i++)
+        {
+          if (arg[i] == '/' && arg[i - 1] != '.')
+            include_path += "../";
+        }
+
+        include_path += misc::get_flag_value(flags[0]) + ((header_p_path.string().substr(header_p_path.string().length() - 2) == ".h") ? ".h" : ".hpp");
+
+        // Write to files
         header.write({
-            "#include \"" + misc::get_flag_value(flags[0]) + ((header_p_path.string().substr(header_p_path.string().length() - 2) == ".h") ? ".h" : ".hpp") + "\"",
+            "#include \"" + include_path + "\"",
             "",
             "class " + class_name + ": " + inherit_mode + prefix_a,
             "{",

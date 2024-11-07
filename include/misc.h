@@ -26,12 +26,12 @@ namespace misc
     bool ifstream_open(const std::ifstream &_ifstream);
 
     /**
-     * @brief Extracts sub-vector from vector
+     * @brief Extracts sub-vector from vector (inclusive)
      *
      * @tparam T
-     * @param parent_vector
-     * @param m1 min
-     * @param m2 max
+     * @param parent_vector Parent vector
+     * @param m1 Lowest index
+     * @param m2 Highest index
      * @return std::vector<T>
      */
     template <typename T>

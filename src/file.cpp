@@ -35,9 +35,9 @@ File::~File()
 }
 
 /**
- * @brief Adds lines to file
+ * @brief Writes (in append mode) lines to file
  *
- * @param lines
+ * @param lines Lines to write
  */
 void File::write(const std::vector<std::string> &lines)
 {
@@ -56,7 +56,7 @@ void File::write(const std::vector<std::string> &lines)
 /**
  * @brief Overwrites file with given lines
  *
- * @param lines
+ * @param lines Lines to write
  */
 void File::load(const std::vector<std::string> &lines)
 {
@@ -108,8 +108,8 @@ std::vector<std::string> File::read()
 /**
  * @brief Finds first instance of 'token_f' in file and replaces it with 'token_r'
  *
- * @param token_f
- * @param token_r
+ * @param token_f Text to find
+ * @param token_r Text to replace with
  */
 void File::replace_first_with(const std::string &token_f, const std::string &token_r)
 {
@@ -150,7 +150,7 @@ void File::replace_first_with(const std::string &token_f, const std::string &tok
 /**
  * @brief Returns whether 'token_f' exists in file
  *
- * @param token_f
+ * @param token_f Text to find
  * @return true
  * @return false
  */

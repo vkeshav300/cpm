@@ -210,7 +210,7 @@ namespace commands
 
     if (structure == "executable")
     {
-      directory::create_directories({"src", "include", "build", "tests"});
+      directory::create_folders({"src", "include", "build", "tests"});
 
       // Set main path to use src/
       main_path = "src/main";

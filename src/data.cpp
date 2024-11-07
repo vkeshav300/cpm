@@ -17,7 +17,7 @@
 #ifdef _WIN32
 
 /**
- * @brief Ensures existance of valid store location for cpm config data and returns it (WINDOWS ONLY).
+ * @brief Ensures existance of valid store location for cpm config data and returns it (WINDOWS ONLY)
  *
  * @return std::string
  */
@@ -28,7 +28,7 @@ std::string get_store_location()
 
 #else
 /**
- * @brief Ensures existance of valid store location for cpm config data and returns it (NON-WINDOWS).
+ * @brief Ensures existance of valid store location for cpm config data and returns it (NON-WINDOWS)
  *
  * @return std::string
  */
@@ -38,13 +38,13 @@ std::string get_store_location()
     std::string home_loc = std::getenv("HOME");
     home_loc += "/.config";
 
-    if (!directory::has_directory(home_loc))
-        directory::create_directory(home_loc);
+    if (!directory::has_folder(home_loc))
+        directory::create_folders({home_loc});
 
     home_loc += "/cpm";
 
-    if (!directory::has_directory(home_loc))
-        directory::create_directory(home_loc);
+    if (!directory::has_folder(home_loc))
+        directory::create_folders({home_loc});
 
     return home_loc;
 }
@@ -52,7 +52,7 @@ std::string get_store_location()
 #endif
 
 /**
- * @brief Get method for DATA_HANDLER singleton class.
+ * @brief Get method for DATA_HANDLER singleton class
  *
  * @return Data_Handler&
  */
@@ -63,7 +63,7 @@ Data_Handler &Data_Handler::get()
 }
 
 /**
- * @brief Reads cpm.data file and stores it in data.
+ * @brief Reads config file and stores it in data
  *
  */
 void Data_Handler::read()
@@ -125,7 +125,7 @@ void Data_Handler::read()
 }
 
 /**
- * @brief Writes to cpm.data from data
+ * @brief Writes to config from stored information
  *
  */
 void Data_Handler::write()
@@ -149,9 +149,9 @@ void Data_Handler::write()
 }
 
 /**
- * @brief Checks if config contains key.
+ * @brief Checks if config contains key
  *
- * @param key
+ * @param key Key to check for
  * @return true
  * @return false
  */

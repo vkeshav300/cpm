@@ -16,23 +16,23 @@
 namespace directory
 {
     /**
-     * @brief Checks if directory exists at path.
+     * @brief Checks if directory exists at path
      *
-     * @param path
+     * @param path Path to check in
      * @return true
      * @return false
      */
-    bool has_directory(const std::filesystem::path &path)
+    bool has_folder(const std::filesystem::path &path)
     {
         return std::filesystem::is_directory(std::filesystem::absolute(path));
     }
 
     /**
-     * @brief Checks if file exists at a path.
-     *
-     * @param file
-     * @return true
-     * @return false
+     * @brief Checks if file exists at a path
+     * 
+     * @param path Path to check in
+     * @return true 
+     * @return false 
      */
     bool has_file(const std::filesystem::path &path)
     {
@@ -40,33 +40,20 @@ namespace directory
     }
 
     /**
-     * @brief Creates directory at path.
+     * @brief Creates folder at path for multiple paths
      *
-     * @param path
+     * @param paths Paths to folders to be created
      */
-    void create_directory(const std::filesystem::path &path)
-    {
-        if (has_directory(path))
-            return;
-
-        std::filesystem::create_directory(std::filesystem::absolute(path));
-    }
-
-    /**
-     * @brief Creates folders in current directory
-     *
-     * @param paths
-     */
-    void create_directories(const std::vector<std::filesystem::path> &paths)
+    void create_folders(const std::vector<std::filesystem::path> &paths)
     {
         for (const auto &path : paths)
-            directory::create_directory(path);
+            std::filesystem::create_directories(std::filesystem::absolute(path));
     }
 
     /**
-     * @brief Create a file at path.
+     * @brief Create a file at path
      *
-     * @param path
+     * @param path Path to file to be created
      */
     void create_file(const std::filesystem::path &path)
     {
@@ -80,7 +67,7 @@ namespace directory
     /**
      * @brief Destroys file at path.
      *
-     * @param path
+     * @param path Path to file to destroy.
      */
     void destroy_file(const std::filesystem::path &path)
     {
@@ -91,20 +78,20 @@ namespace directory
     }
 
     /**
-     * @brief Returns structure of current directory.
+     * @brief Get the structure of directory
      *
      * @return std::string
      */
     std::string get_structure()
     {
-        if (has_directory("src") && has_directory("include"))
+        if (has_folder("src") && has_folder("include"))
             return "executable";
 
         return "simple";
     }
 
     /**
-     * @brief Returns directory default file extension.
+     * @brief Get the file extension of directory
      *
      * @return std::string
      */
@@ -133,10 +120,11 @@ namespace directory
     }
 
     /**
-     * @brief Returns path to header file with name 'name'
+     * @brief Gets expected path to header file <name> in directory
      *
-     * @param name
-     * @return std::filesystem::path
+     * @param name Name of header file
+     * @param hpp If header extension is .hpp
+     * @return std::filesystem::path 
      */
     std::filesystem::path get_structured_header_path(const std::string &name, const bool &hpp)
     {
@@ -147,9 +135,9 @@ namespace directory
     }
 
     /**
-     * @brief Returns path to source file with name 'name'
+     * @brief Gets expected path to source file <name> in directory
      *
-     * @param name
+     * @param name Name of source file
      * @return std::filesystem::path
      */
     std::filesystem::path get_structured_source_path(const std::string &name)

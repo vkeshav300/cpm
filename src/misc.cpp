@@ -18,10 +18,10 @@ namespace misc
     Logger &logger = Logger::get();
 
     /**
-     * @brief Checks if std::vector that contains std::strings has a specific string.
+     * @brief Checks if std::vector that contains std::strings has a specific string
      *
-     * @param vector Vector to search.
-     * @param content Content to search for.
+     * @param vector Vector to search
+     * @param content Content to search for
      * @return true
      * @return false
      */
@@ -31,10 +31,10 @@ namespace misc
     }
 
     /**
-     * @brief Splits a std::string based on a specified delimeter.
+     * @brief Splits a std::string based on a specified delimeter
      *
-     * @param s String to split.
-     * @param delimeter String to split by.
+     * @param s String to split
+     * @param delimeter String to split by
      * @return std::vector<std::string>
      */
     std::vector<std::string> split_string(const std::string &s, const std::string &delimiter)
@@ -62,9 +62,9 @@ namespace misc
     }
 
     /**
-     * @brief Get the flag value objectGets the value of flags in the format of -flag=value
+     * @brief Gets the value of flags in the format of flag=value
      *
-     * @param flag
+     * @param flag Raw flag
      * @return std::string
      */
     std::string get_flag_value(const std::string &flag)
@@ -73,9 +73,9 @@ namespace misc
     }
 
     /**
-     * @brief Validates ofstream instance is open.
+     * @brief Validates ofstream instance is open
      *
-     * @param _ofstream
+     * @param _ofstream Ofstream object
      * @return true
      * @return false
      */
@@ -91,9 +91,9 @@ namespace misc
     }
 
     /**
-     * @brief Validates ifstream instance is open.
+     * @brief Validates ifstream instance is open
      *
-     * @param _ifstream
+     * @param _ifstream Ifstream object
      * @return true
      * @return false
      */
@@ -111,7 +111,7 @@ namespace misc
     /**
      * @brief Joins vector full of strings into one string
      *
-     * @param vect
+     * @param vect Vector
      * @return std::string
      */
     std::string join_string_vector(const std::vector<std::string> &vect, const std::string &joiner)
@@ -130,9 +130,9 @@ namespace misc
     }
 
     /**
-     * @brief Capitalizes 'str'
+     * @brief Capitalizes first letter after every separator (including first letter)
      *
-     * @param str
+     * @param str String
      */
     void auto_capitalize(std::string &str)
     {

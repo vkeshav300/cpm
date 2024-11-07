@@ -62,10 +62,10 @@ std::unordered_map<std::string, std::unordered_map<std::string, int>> command_in
     },
 };
 /**
- * @brief Main function.
+ * @brief Main function
  *
- * @param argc
- * @param argv
+ * @param argc Number of arguments
+ * @param argv Arguments
  * @return int
  */
 int main(int argc, char *argv[])

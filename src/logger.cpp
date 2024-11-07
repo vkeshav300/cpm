@@ -14,7 +14,7 @@
 #include <fstream>
 
 /**
- * @brief Get method for logger class.
+ * @brief Get method for logger class
  *
  * @return Logger*
  */
@@ -25,9 +25,9 @@ Logger &Logger::get()
 }
 
 /**
- * @brief Sets all given color maps for logger ui.
+ * @brief Replaces old color maps with new color maps (only replaces given color maps)
  *
- * @param new_colors
+ * @param new_colors New color map(s)
  */
 void Logger::set_colors(const std::unordered_map<std::string, std::string> &new_colors)
 {
@@ -37,10 +37,10 @@ void Logger::set_colors(const std::unordered_map<std::string, std::string> &new_
 }
 
 /**
- * @brief Sets individual color map for logger ui.
+ * @brief Sets individual color map for logger ui
  *
- * @param k
- * @param v
+ * @param k Color type
+ * @param v Raw color
  */
 void Logger::set_color(const std::string &k, const std::string &v)
 {
@@ -48,13 +48,13 @@ void Logger::set_color(const std::string &k, const std::string &v)
 }
 
 /**
- * @brief Flushes output buffer.
+ * @brief Flushes output buffer
  *
  */
 void Logger::flush_buffer() { std::cout.flush(); }
 
 /**
- * @brief Handles logger count.
+ * @brief Handles logger count
  *
  */
 void Logger::handle_logger_count()
@@ -75,9 +75,9 @@ void Logger::handle_logger_count()
 }
 
 /**
- * @brief Logs success message to console.
+ * @brief Logs success message to console
  *
- * @param message Text to be logged.
+ * @param message Text to be logged
  */
 void Logger::success(const std::string &message)
 {
@@ -90,10 +90,10 @@ void Logger::success(const std::string &message)
 }
 
 /**
- * @brief Logs success message with quote to console.
+ * @brief Logs success message with quote to console
  *
- * @param message Text to be logged.
- * @param quote Text in quote.
+ * @param message Text to be logged
+ * @param quote Text in quote
  */
 void Logger::success_q(const std::string &message, const std::string &quote)
 {
@@ -101,9 +101,9 @@ void Logger::success_q(const std::string &message, const std::string &quote)
 }
 
 /**
- * @brief Logs error message to console.
+ * @brief Logs error message to console
  *
- * @param message Text to be logged.
+ * @param message Text to be logged
  */
 void Logger::error(const std::string &message)
 {
@@ -116,10 +116,10 @@ void Logger::error(const std::string &message)
 }
 
 /**
- * @brief Logs error message with quote to console.
+ * @brief Logs error message with quote to console
  *
- * @param message Text to be logged.
- * @param quote Text in quote.
+ * @param message Text to be logged
+ * @param quote Text in quote
  */
 void Logger::error_q(const std::string &message, const std::string &quote)
 {
@@ -127,9 +127,9 @@ void Logger::error_q(const std::string &message, const std::string &quote)
 }
 
 /**
- * @brief Logs warning message to console.
+ * @brief Logs warning message to console
  *
- * @param message
+ * @param message Text to be logged
  */
 void Logger::warn(const std::string &message)
 {
@@ -142,10 +142,10 @@ void Logger::warn(const std::string &message)
 }
 
 /**
- * @brief Logs warning message with quote to console.
+ * @brief Logs warning message with quote to console
  *
- * @param message Text to be logged.
- * @param quote Text in quote.
+ * @param message Text to be logged
+ * @param quote Text in quote
  */
 void Logger::warn_q(const std::string &message, const std::string &quote)
 {
@@ -153,11 +153,11 @@ void Logger::warn_q(const std::string &message, const std::string &quote)
 }
 
 /**
- * @brief Logs custom message to console.
+ * @brief Logs custom message to console
  *
- * @param message Text to be logged.
- * @param mtype Message type.
- * @param color Message color.
+ * @param message Text to be logged
+ * @param mtype Message type
+ * @param color Message color
  */
 void Logger::custom(const std::string &message, const std::string &mtype, const std::string &color)
 {
@@ -172,9 +172,9 @@ void Logger::custom(const std::string &message, const std::string &mtype, const 
 }
 
 /**
- * @brief Logs an input prompt to console.
+ * @brief Logs an input prompt to console
  *
- * @param message Prompt.
+ * @param message Prompt
  * @return std::string
  */
 std::string Logger::prompt(const std::string &message)
@@ -194,9 +194,9 @@ std::string Logger::prompt(const std::string &message)
 }
 
 /**
- * @brief Logs y/n prompt to console.
+ * @brief Logs y/n prompt to console
  *
- * @param message Prompt.
+ * @param message Prompt
  * @return true
  * @return false
  */
@@ -217,10 +217,10 @@ bool Logger::prompt_yn(const std::string &message)
 }
 
 /**
- * @brief Executes terminal command.
+ * @brief Executes terminal command
  *
- * @param command Command to execute.
- * @param must_populate_file (Optional -> default: true) whether to throw error if command does not output.
+ * @param command Command to execute
+ * @param must_populate_file Whether to throw error if command does not output (optional)
  * @return true
  * @return false
  */

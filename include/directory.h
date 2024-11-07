@@ -16,13 +16,13 @@
 
 namespace directory
 {
-    bool has_directory(const std::filesystem::path &path);
+    bool has_folder(const std::filesystem::path &path);
 
     bool has_file(const std::filesystem::path &path);
 
-    void create_directory(const std::filesystem::path &path);
+    void create_folder(const std::filesystem::path &path);
 
-    void create_directories(const std::vector<std::filesystem::path> &paths);
+    void create_folders(const std::vector<std::filesystem::path> &paths);
 
     void create_file(const std::filesystem::path &path);
 

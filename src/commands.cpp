@@ -99,7 +99,7 @@ namespace commands
                   << "    create --> creates new file pair\n"
                   << "    remove --> destroys existing file pair\n"
                   << "  [names] --> name(s) of file pairs\n"
-                  << "  -hpp --> use hpp header format (only useful for create action)\n\n"
+                  << "  --hpp --> use hpp header format (only useful for create action)\n\n"
                   << "Ex: cpm fpair create utils";
       else if (command == "class")
         std::cout << "class [names] --> creates class based header/source file pair\n"

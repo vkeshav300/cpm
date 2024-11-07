@@ -5,6 +5,9 @@
 CPM is a simple, yet useful tool for managing your C and C++ projects.
 ![Object Oriented Programming Example](assets/readme/1.png)
 
+Currently supports the following operating systems:
+- All unix-based operating systems
+
 ### Building
 For building project (you may need to use sudo if you are getting `access denied` or `permission not granted` errors):
 ```

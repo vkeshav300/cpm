@@ -21,8 +21,6 @@ namespace commands
 
     int help(const std::vector<std::string> &args);
 
-    bool verify_init();
-
     int version();
 
     int create(const std::vector<std::string> &args, const std::vector<std::string> &flags);

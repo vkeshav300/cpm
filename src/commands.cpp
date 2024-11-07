@@ -26,7 +26,7 @@ namespace commands
   Data_Handler &data_handler = Data_Handler::get();
 
   /**
-   * @brief All templates supported by the create command.
+   * @brief All templates supported by the create command
    *
    */
   std::vector<std::string> supported_structures = {
@@ -47,7 +47,7 @@ namespace commands
   }
 
   /**
-   * @brief Lists all commands and provides useful information about CPM.
+   * @brief Lists all commands and provides useful information about CPM
    *
    * @return int
    */
@@ -153,7 +153,7 @@ namespace commands
   }
 
   /**
-   * @brief Outputs current CPM version.
+   * @brief Outputs current CPM version
    *
    * @return int
    */
@@ -165,19 +165,7 @@ namespace commands
   }
 
   /**
-   * @brief Checks if cpm has been initialized in the directory by looking for a
-   * "cpm" file.
-   *
-   * @return true
-   * @return false
-   */
-  bool verify_init()
-  {
-    return directory::has_file("cpm.data");
-  }
-
-  /**
-   * @brief Creates new project in working directory.
+   * @brief Creates new project in working directory
    *
    * @param args
    * @param flags
@@ -330,7 +318,7 @@ namespace commands
   }
 
   /**
-   * @brief Creates / destroys header and source file pairs.
+   * @brief Creates / destroys header and source file pairs
    *
    * @param args
    * @param flags

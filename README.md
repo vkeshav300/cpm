@@ -5,10 +5,11 @@
 [![License](https://img.shields.io/badge/License-CC0_1.0_Universal-yellow.svg?style=rounded-square)](https://github.com/vkeshav300/cpm/blob/master/LICENSE)
 
 ### General information
-CPM is a useful tool for managing your C and C++ projects. *Note from devs: don't expect changes / updates / releases to be frequent as we are making this software on our own time without a strict schedule.*
+CPM is a simple, yet useful tool for managing your C and C++ projects.
+![Object Oriented Programming Example](assets/readme/1.png)
 
 ### Building
-For building project normally (you may need to use sudo if you are getting `access denied` or `permission not granted` errors):
+For building project (you may need to use sudo if you are getting `access denied` or `permission not granted` errors):
 ```
 cd build
 cmake ..
@@ -25,4 +26,4 @@ The code uses 256-Color Mode [ANSI Escape Codes](https://gist.github.com/fnky/45
 ```
 echo -e "\x1b[38;5;196mTest\x1b[0m"
 ```
-This should appear red in your terminal. Most modern terminals support this feature.
+This should print the text "Test" in a red-ish color. Most modern terminals support coloring using ANSI Escape Codes.

@@ -69,7 +69,7 @@ namespace commands
               << "     \\__\\/         \\__\\/       \\__\\/    \n\n\n"
               << logger.colors["reset"];
 
-    logger.custom("https://github.com/vkeshav300/cpm\n\n\n", "github", "white");
+    logger.custom("https://github.com/vkeshav300/cpm\n\n\n", "github", "theme");
 
     // Specifc command focus
     std::cout << logger.colors["theme"];

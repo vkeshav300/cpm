@@ -71,7 +71,7 @@ std::unordered_map<std::string, std::unordered_map<std::string, int>> command_in
 int main(int argc, char *argv[])
 {
   // Start time
-  auto start = std::chrono::high_resolution_clock::now();
+  const auto start = std::chrono::high_resolution_clock::now();
 
   // Singleton accessing
   Logger &logger = Logger::get();
@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
   }
 
   // Initial validations
-  std::string command = argv[1];
+  const std::string command = argv[1];
   bool command_found = false;
 
   // Checks if command is valid
@@ -153,6 +153,9 @@ int main(int argc, char *argv[])
     return 1;
   }
 
+  // Attempt to auto cd to "project directory"
+  const std::vector<std::string> child_dirs = {};
+
   // Command processing
   int result = 0;
 
@@ -179,7 +182,7 @@ int main(int argc, char *argv[])
   directory::destroy_file("cpm.tmp");
 
   // Measure process time
-  auto end = std::chrono::high_resolution_clock::now();
+  const auto end = std::chrono::high_resolution_clock::now();
 
   logger.custom("command \'" + command + "\' with exit code " + std::to_string(result) + " in " + std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count()) + " ms", "finished", "theme");
   logger.flush_buffer();

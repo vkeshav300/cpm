@@ -37,4 +37,10 @@ public:
   void replace_first_with(const std::string &token_f, const std::string &token_r);
 
   bool exists(const std::string &token_f);
+
+  std::filesystem::path get_path() const;
+
+  char compare(const File &_f) const;
+
+  std::filesystem::path trim(const File &_f) const;
 };

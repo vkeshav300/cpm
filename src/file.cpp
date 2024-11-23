@@ -10,6 +10,7 @@
 
 #include "file.h"
 #include "misc.h"
+#include "logger.h"
 
 /**
  * @brief Construct a new File:: File object
@@ -181,6 +182,61 @@ bool File::exists(const std::string &token_f)
 
     reader.close();
     return false;
+}
+
+/**
+ * @brief Get the path member
+ * 
+ * @return const std::filesystem::path 
+ */
+std::filesystem::path File::get_path() const
+{
+    return path;
+}
+
+/**
+ * @brief Gets relative location of another file (not lexiographically)
+ * 
+ * @param _f Other file
+ * @return char 
+ */
+char File::compare(const File &_f) const
+{
+    const std::vector<std::string> t_split(misc::split_string(path.string(), "/")), o_split(misc::split_string(_f.get_path().string(), "/")); // t_split = this_split, o_split = other_split
+    size_t location = 0;
+
+    for (; location < ((t_split.size() > o_split.size()) ? o_split.size() : t_split.size()); location++)
+    {
+        if (t_split[location] == o_split[location])
+            continue;
+
+        if (misc::sub_vector(t_split, location, t_split.size() - 1).size() > misc::sub_vector(o_split, location, o_split.size() - 1).size() | misc::sub_vector(t_split, location, t_split.size() - 1).size() == misc::sub_vector(o_split, location, o_split.size() - 1).size()) // this file is "further in" or "equally in" than other file
+            return -1;
+        else // other file is "further in" than this file
+            return 1;
+    }
+
+    return 0; // both files are located in same directory
+}
+
+/**
+ * @brief Returns the trimmed path of this file object by eliminating common directories based on another file object
+ * 
+ * @param _f Other file
+ * @return std::filesystem::path 
+ */
+std::filesystem::path File::trim(const File &_f) const
+{
+    const std::vector<std::string> t_split(misc::split_string(path.string(), "/")), o_split(misc::split_string(_f.get_path().string(), "/"));
+    size_t location = 0;
+
+    for (; location < ((t_split.size() > o_split.size()) ? o_split.size() : t_split.size()); location++)
+    {
+        if (t_split[location] != o_split[location])
+            break;
+    }
+
+    return std::filesystem::path(misc::join_string_vector(misc::sub_vector(t_split, location, t_split.size() - 1), "/"));
 }
 
 std::ofstream File::writer;

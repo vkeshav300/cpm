@@ -330,11 +330,19 @@ namespace commands
     {
       if (args[0] == "create")
       {
-        File header(directory::get_structured_header_path(arg, (misc::vector_contains(flags, "hpp"))));
+        const std::filesystem::path header_path(directory::get_structured_header_path(arg, (misc::vector_contains(flags, "hpp")))), source_path(directory::get_structured_source_path(arg));
+        std::filesystem::path source_include_path;
+
+        File header(header_path);
         header.load({"#pragma once"});
 
-        File source(directory::get_structured_source_path(arg));
-        source.load({"#include \"" + arg + (misc::vector_contains(flags, "hpp") ? ".hpp" : ".h") + "\""});
+        if (source_path.parent_path() == header_path.parent_path())
+          source_include_path = header_path.stem();
+        else
+          source_include_path = arg;
+
+        File source(source_path);
+        source.load({"#include \"" + source_include_path.string() + (misc::vector_contains(flags, "hpp") ? ".hpp" : ".h") + "\""});
       }
       else if (args[0] == "remove")
       {
@@ -388,6 +396,7 @@ namespace commands
 
     for (const auto &arg : args)
     {
+      // Set '_arg' to filesystem::path from 'arg' so filename can be easily extracted
       std::filesystem::path _arg(arg);
       class_name = std::filesystem::absolute(_arg).filename().string();
       misc::auto_capitalize(class_name);
@@ -396,8 +405,7 @@ namespace commands
       prefix_a = class_name + "::";
 
       // Write to files
-      File header(directory::get_structured_header_path(arg, misc::vector_contains(flags, "hpp")));
-      File source(directory::get_structured_source_path(arg));
+      File header(directory::get_structured_header_path(arg, misc::vector_contains(flags, "hpp"))), source(directory::get_structured_source_path(arg));
 
       if (misc::vector_contains(flags, "singleton"))
       {
@@ -424,9 +432,9 @@ namespace commands
       }
       else if (flags.size() > 0 && flags[0][0] == 'p')
       {
-        // Header file that contains 'parent' class
+        // Set '_arg' to path of parent header file
         _arg = misc::get_flag_value(flags[0]);
-        const std::filesystem::path header_p_path(directory::get_structured_header_path(_arg, !directory::has_file(directory::get_structured_header_path(_arg))));
+        const std::filesystem::path header_p_path(std::filesystem::absolute(directory::get_structured_header_path(_arg, !directory::has_file(directory::get_structured_header_path(_arg)))));
 
         if (!directory::has_file(header_p_path))
         {
@@ -455,16 +463,43 @@ namespace commands
         else if (misc::vector_contains(flags, "private"))
           inherit_mode = "private ";
 
-        // Get include path
-        std::string include_path;
+        // Auto relative path detection
+        std::string include_path = "";
+        const char path_diff = header.compare(header_p);
 
-        for (int i = 1; i < arg.length(); i++)
+        logger.warn(std::to_string(path_diff));
+        // Construct header path from given relative path
+        if (path_diff < 0)
         {
-          if (arg[i] == '/' && arg[i - 1] != '.')
-            include_path += "../";
-        }
+          // Figure out last common path
+          const std::vector<std::string> split_header_p_path(misc::split_string(std::filesystem::absolute(header_p_path).string(), "/")), split_header_path(misc::split_string(std::filesystem::absolute(header.get_path()).string(), "/"));
+          size_t location = 0;
 
-        include_path += misc::get_flag_value(flags[0]) + ((header_p_path.string().substr(header_p_path.string().length() - 2) == ".h") ? ".h" : ".hpp");
+          for (; location < split_header_p_path.size(); location++)
+          {
+            if (split_header_p_path[location] != split_header_path[location])
+              break;
+          }
+          
+          // Add ../ for every path it takes to get from the header path to the last common path
+          for (size_t i = 0; i < (split_header_path.size() - location - 1); i++)
+            include_path += "../";
+
+          // Add the trimmed header_p_path to include_path
+          include_path += header_p.trim(header).parent_path().string();
+        }
+        else if (path_diff > 0)
+          include_path += header_p.trim(header).parent_path().string() + "/";
+
+        if (include_path[include_path.size() - 1] != '/')
+            include_path += "/";
+
+        if (include_path.length() > 0 && include_path[0] == '/')
+          include_path = include_path.substr(1);
+        else if (include_path.length() > 1 && (include_path[0] == '.' & include_path[1] == '/'))
+          include_path = include_path.substr(2);
+
+        include_path += header_p_path.filename().string();
 
         // Write to files
         header.write({

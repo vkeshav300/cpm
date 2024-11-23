@@ -41,8 +41,7 @@ namespace misc
     {
 
         std::vector<std::string> tokens;
-        size_t start = 0;
-        size_t end = 0;
+        size_t start = 0, end = 0;
 
         if (delimiter.empty()) // Provided delimiter is ""
         {

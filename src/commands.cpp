@@ -467,7 +467,6 @@ namespace commands
         std::string include_path = "";
         const char path_diff = header.compare(header_p);
 
-        logger.warn(std::to_string(path_diff));
         // Construct header path from given relative path
         if (path_diff < 0)
         {

@@ -21,9 +21,9 @@
  *
  * @return std::string
  */
-std::string get_store_location()
+std::filesystem::path get_store_location()
 {
-    return "";
+    return std::filesystem::absolute("");
 }
 
 #else
@@ -32,7 +32,7 @@ std::string get_store_location()
  *
  * @return std::string
  */
-std::string get_store_location()
+std::filesystem::path get_store_location()
 {
     // /Users/<user>/.config/cpm
     std::string home_loc = std::getenv("HOME");
@@ -46,7 +46,7 @@ std::string get_store_location()
     if (!directory::has_folder(home_loc))
         directory::create_folders({home_loc});
 
-    return home_loc;
+    return std::filesystem::absolute(home_loc);
 }
 
 #endif

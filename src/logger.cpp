@@ -207,9 +207,9 @@ bool Logger::prompt_yn(const std::string &message)
   {
     response = prompt(message + " [y/n]");
 
-    if (response == "y" || response == "yes")
+    if (response == "y" | response == "yes")
       return true;
-    else if (response == "n" || response == "no")
+    else if (response == "n" | response == "no")
       return false;
     else
       warn_q("is not a valid response, try again", response);

@@ -124,15 +124,13 @@ int main(int argc, char *argv[])
   for (int i = 0; i < argc; i++)
   {
     std::string arg = argv[i];
-    if (arg[0] == '-' && arg.size() > 1)
+    if (arg[0] == '-' & arg.size() > 1)
     {
-      if (arg[1] == '-' && arg.size() > 2) // --flag
-      {
-        flags.push_back(arg.substr(2, arg.size()));
-        continue;
-      }
+      size_t _start = 1;
+      if (arg[1] == '-' & arg.size() > 2) // --flag
+        _start = 2;
 
-      flags.push_back(arg.substr(1, arg.size())); // -f
+      flags.push_back(arg.substr(_start, arg.size())); // -f
     }
   }
 

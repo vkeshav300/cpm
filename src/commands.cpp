@@ -178,7 +178,7 @@ namespace commands
     if (lang == "c++")
       lang = "cpp";
 
-    if (lang != "cpp" && lang != "c")
+    if (lang != "cpp" & lang != "c")
     {
       logger.error_q("is not a supported language", lang);
       return 1;

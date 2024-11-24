@@ -84,7 +84,7 @@ namespace directory
      */
     std::string get_structure()
     {
-        if (has_folder("src") && has_folder("include"))
+        if (has_folder("src") & has_folder("include"))
             return "executable";
 
         return "simple";

@@ -139,7 +139,7 @@ void Data_Handler::write()
 
     for (const auto &[k, v] : config)
     {
-        if (k == "" || v == "")
+        if (k == "" | v == "")
             continue;
 
         data_file << k << ": " << v << "\n";

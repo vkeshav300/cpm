@@ -119,7 +119,7 @@ void File::replace_first_with(const std::string &token_f, const std::string &tok
     writer.open(tmp_path);
     reader.open(path);
 
-    if (!misc::ifstream_open(reader) || !misc::ofstream_open(writer))
+    if (!misc::ifstream_open(reader) | !misc::ofstream_open(writer))
         return;
 
     std::string line;
@@ -164,7 +164,7 @@ bool File::exists(const std::string &token_f)
 
     while (reader.get(ch))
     {
-        if (ch == ' ' || ch == '\n')
+        if (ch == ' ' | ch == '\n')
         {
             current_token = "";
             continue;

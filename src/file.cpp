@@ -189,10 +189,7 @@ bool File::exists(const std::string &token_f)
  * 
  * @return const std::filesystem::path 
  */
-std::filesystem::path File::get_path() const
-{
-    return path;
-}
+std::filesystem::path File::get_path() const { return path; }
 
 /**
  * @brief Gets relative location of another file (not lexiographically)

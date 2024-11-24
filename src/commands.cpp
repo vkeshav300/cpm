@@ -41,10 +41,7 @@ namespace commands
    * @param flags
    * @return int
    */
-  int test(const std::vector<std::string> &args, const std::vector<std::string> &flags)
-  {
-    return 0;
-  }
+  int test(const std::vector<std::string> &args, const std::vector<std::string> &flags) { return 0; }
 
   /**
    * @brief Lists all commands and provides useful information about CPM

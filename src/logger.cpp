@@ -51,7 +51,7 @@ void Logger::set_color(const std::string &k, const std::string &v)
  * @brief Flushes output buffer
  *
  */
-void Logger::flush_buffer() { std::cout.flush(); }
+void Logger::flush_buffer() const { std::cout.flush(); }
 
 /**
  * @brief Handles logger count

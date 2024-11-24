@@ -25,10 +25,7 @@ namespace misc
      * @return true
      * @return false
      */
-    bool vector_contains(const std::vector<std::string> &vector, const std::string &content)
-    {
-        return (std::find(vector.begin(), vector.end(), content) == vector.end()) ? false : true;
-    }
+    bool vector_contains(const std::vector<std::string> &vector, const std::string &content) { return (std::find(vector.begin(), vector.end(), content) == vector.end()) ? false : true; }
 
     /**
      * @brief Splits a std::string based on a specified delimeter
@@ -66,10 +63,7 @@ namespace misc
      * @param flag Raw flag
      * @return std::string
      */
-    std::string get_flag_value(const std::string &flag)
-    {
-        return (flag.find("=") != std::string::npos) ? flag.substr(flag.find("=") + 1, flag.length()) : "";
-    }
+    std::string get_flag_value(const std::string &flag) { return (flag.find("=") != std::string::npos) ? flag.substr(flag.find("=") + 1, flag.length()) : ""; }
 
     /**
      * @brief Validates ofstream instance is open

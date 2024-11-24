@@ -22,10 +22,7 @@ namespace directory
      * @return true
      * @return false
      */
-    bool has_folder(const std::filesystem::path &path)
-    {
-        return std::filesystem::is_directory(std::filesystem::absolute(path));
-    }
+    bool has_folder(const std::filesystem::path &path) { return std::filesystem::is_directory(std::filesystem::absolute(path)); }
 
     /**
      * @brief Checks if file exists at a path
@@ -34,10 +31,7 @@ namespace directory
      * @return true
      * @return false
      */
-    bool has_file(const std::filesystem::path &path)
-    {
-        return std::filesystem::exists(std::filesystem::absolute(path));
-    }
+    bool has_file(const std::filesystem::path &path) { return std::filesystem::exists(std::filesystem::absolute(path)); }
 
     /**
      * @brief Creates folder at path for multiple paths

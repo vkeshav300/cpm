@@ -55,7 +55,7 @@ public:
 
     void set_color(const std::string &k, const std::string &v);
 
-    void flush_buffer();
+    void flush_buffer() const;
 
     void handle_logger_count();
 

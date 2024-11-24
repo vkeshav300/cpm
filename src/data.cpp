@@ -21,10 +21,7 @@
  *
  * @return std::string
  */
-std::filesystem::path get_store_location()
-{
-    return std::filesystem::absolute("");
-}
+std::filesystem::path get_store_location() { return std::filesystem::absolute(""); }
 
 #else
 /**

@@ -1,6 +1,6 @@
 /**
  * @file misc.h
- * @brief Outlines misc.cpp.
+ * @brief Outlines misc.cpp
  * @version 0.1
  * @date 2023-11-23
  *

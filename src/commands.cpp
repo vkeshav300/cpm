@@ -1,6 +1,6 @@
 /**
  * @file commands.cpp
- * @brief Contains the functionality of all commands.
+ * @brief Contains the functionality of all commands
  * @version 0.1
  * @date 2023-09-29
  *
@@ -479,7 +479,7 @@ namespace commands
             if (split_header_p_path[location] != split_header_path[location])
               break;
           }
-          
+
           // Add ../ for every path it takes to get from the header path to the last common path
           for (size_t i = 0; i < (split_header_path.size() - location - 1); i++)
             include_path += "../";
@@ -491,7 +491,7 @@ namespace commands
           include_path += header_p.trim(header).parent_path().string() + "/";
 
         if (include_path[include_path.size() - 1] != '/')
-            include_path += "/";
+          include_path += "/";
 
         if (include_path.length() > 0 && include_path[0] == '/')
           include_path = include_path.substr(1);

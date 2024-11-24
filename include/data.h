@@ -1,6 +1,6 @@
 /**
  * @file data.h
- * @brief Defines Data_Handler singleton.
+ * @brief Defines Data_Handler singleton
  * @version 0.1
  * @date 2024-09-15
  *

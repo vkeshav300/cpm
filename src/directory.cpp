@@ -1,6 +1,6 @@
 /**
  * @file directory.cpp
- * @brief Contains most directory-related functions that aren't commands.
+ * @brief Contains most directory-related functions that aren't commands
  * @version 0.1
  * @date 2023-09-29
  *
@@ -29,10 +29,10 @@ namespace directory
 
     /**
      * @brief Checks if file exists at a path
-     * 
+     *
      * @param path Path to check in
-     * @return true 
-     * @return false 
+     * @return true
+     * @return false
      */
     bool has_file(const std::filesystem::path &path)
     {
@@ -124,7 +124,7 @@ namespace directory
      *
      * @param name Name of header file
      * @param hpp If header extension is .hpp
-     * @return std::filesystem::path 
+     * @return std::filesystem::path
      */
     std::filesystem::path get_structured_header_path(const std::string &name, const bool &hpp)
     {

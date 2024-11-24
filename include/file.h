@@ -1,6 +1,6 @@
 /**
  * @file file.h
- * @brief Makes creating/loading/editing files easier.
+ * @brief Makes creating/loading/editing files easier
  * @version 0.1
  * @date 2024-11-01
  *

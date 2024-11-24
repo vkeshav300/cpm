@@ -1,6 +1,6 @@
 /**
  * @file misc.cpp
- * @brief Contains useful tools that don't warrant a dedicated category.
+ * @brief Contains useful tools that don't warrant a dedicated category
  * @version 0.1
  * @date 2023-11-23
  *

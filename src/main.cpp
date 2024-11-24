@@ -1,6 +1,6 @@
 /**
  * @file main.cpp
- * @brief Puts together all the other files.
+ * @brief Main file
  * @version 0.1
  * @date 2023-09-29
  *

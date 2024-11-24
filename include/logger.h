@@ -1,6 +1,6 @@
 /**
  * @file logger.h
- * @brief Defines Logger singleton.
+ * @brief Defines Logger singleton
  * @version 0.1
  * @date 2023-09-30
  *

@@ -1,6 +1,6 @@
 /**
  * @file data.cpp
- * @brief Provides majority of functionality to Dat_Handler singleton.
+ * @brief Provides majority of functionality to Dat_Handler singleton
  * @version 0.1
  * @date 2024-09-15
  *

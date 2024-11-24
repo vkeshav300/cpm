@@ -423,14 +423,14 @@ namespace commands
         });
 
         source.write({
-            prefix_a + "get()",
+            class_name + " &" + prefix_a + "get()",
             "{",
             "  static " + class_name + " obj;",
             "  return obj;",
             "}",
         });
       }
-      else if (flags.size() > 0 && flags[0][0] == 'p')
+      else if (flags.size() > 0 && flags[0][0] == 'p') // inheritance
       {
         // Set '_arg' to path of parent header file
         _arg = misc::get_flag_value(flags[0]);

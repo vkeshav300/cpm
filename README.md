@@ -3,7 +3,8 @@
 [![pages-build-deployment](https://github.com/vkeshav300/cpm/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/vkeshav300/cpm/actions/workflows/pages/pages-build-deployment)
 
 CPM is a simple, yet useful tool for managing your C and C++ projects.
-![Object Oriented Programming Example](assets/readme/1.png)
+![Example Image](assets/readme/1.png)
+![Example Image](assets/readme/2.png)
 
 Currently supports the following operating systems:
 - All unix-based operating systems

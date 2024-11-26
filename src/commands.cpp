@@ -39,16 +39,16 @@ namespace commands
    *
    * @param args
    * @param flags
-   * @return int
+   * @return uint8_t
    */
-  int test(const std::vector<std::string> &args, const std::vector<std::string> &flags) { return 0; }
+  uint8_t test(const std::vector<std::string> &args, const std::vector<std::string> &flags) { return 0; }
 
   /**
    * @brief Lists all commands and provides useful information about CPM
    *
-   * @return int
+   * @return uint8_t
    */
-  int help(const std::vector<std::string> &args)
+  uint8_t help(const std::vector<std::string> &args)
   {
     // CPM ASCII art
     std::cout << "\n"
@@ -151,9 +151,9 @@ namespace commands
   /**
    * @brief Outputs current CPM version
    *
-   * @return int
+   * @return uint8_t
    */
-  int version()
+  uint8_t version()
   {
     logger.custom("cpm version 0.1.0", "version", "red");
 
@@ -165,9 +165,9 @@ namespace commands
    *
    * @param args
    * @param flags
-   * @return int
+   * @return uint8_t
    */
-  int create(const std::vector<std::string> &args, const std::vector<std::string> &flags)
+  uint8_t create(const std::vector<std::string> &args, const std::vector<std::string> &flags)
   {
     // Language
     std::string lang = args[0];
@@ -318,9 +318,9 @@ namespace commands
    *
    * @param args
    * @param flags
-   * @return int
+   * @return uint8_t
    */
-  int file_pair(const std::vector<std::string> &args, const std::vector<std::string> &flags)
+  uint8_t file_pair(const std::vector<std::string> &args, const std::vector<std::string> &flags)
   {
     // Whether to use include/ src/ folders
     for (const auto &arg : misc::sub_vector<std::string>(args, 1, args.size() - 1))
@@ -367,9 +367,9 @@ namespace commands
    *
    * @param args
    * @param flags
-   * @return int
+   * @return uint8_t
    */
-  int class_file_pair(const std::vector<std::string> &args, const std::vector<std::string> &flags)
+  uint8_t class_file_pair(const std::vector<std::string> &args, const std::vector<std::string> &flags)
   {
     if (directory::get_extension() == ".c")
     {
@@ -381,7 +381,7 @@ namespace commands
     std::vector<std::string> file_pair_args = args;
     file_pair_args.insert(file_pair_args.begin(), "create");
 
-    const int result = file_pair(file_pair_args, flags);
+    const uint8_t result = file_pair(file_pair_args, flags);
 
     if (result != 0)
       return result;
@@ -541,7 +541,7 @@ namespace commands
     return 0;
   }
 
-  int config(const std::vector<std::string> &args, const std::vector<std::string> &flags)
+  uint8_t config(const std::vector<std::string> &args, const std::vector<std::string> &flags)
   {
     if (args[0] == "set")
     {

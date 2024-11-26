@@ -17,7 +17,7 @@
 #include <string>
 #include <vector>
 
-std::unordered_map<std::string, std::unordered_map<std::string, int>> command_info = {
+std::unordered_map<std::string, std::unordered_map<std::string, uint8_t>> command_info = {
     {
         "create",
         {
@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
     std::string arg = argv[i];
     if (arg[0] == '-' & arg.size() > 1)
     {
-      size_t _start = 1;
+      uint32_t _start = 1;
       if (arg[1] == '-' & arg.size() > 2) // --flag
         _start = 2;
 
@@ -155,7 +155,7 @@ int main(int argc, char *argv[])
   const std::vector<std::string> child_dirs = {};
 
   // Command processing
-  int result = 0;
+  uint8_t result = 0;
 
   if (command == "help")
     result = commands::help(arguments);

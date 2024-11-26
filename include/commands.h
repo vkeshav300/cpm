@@ -9,8 +9,6 @@
  */
 #pragma once
 
-#include "logger.h"
-
 #include <string>
 #include <vector>
 
@@ -18,17 +16,17 @@ namespace commands
 {
     extern std::vector<std::string> supported_bases;
 
-    int test(const std::vector<std::string> &args, const std::vector<std::string> &flags);
+    uint8_t test(const std::vector<std::string> &args, const std::vector<std::string> &flags);
 
-    int help(const std::vector<std::string> &args);
+    uint8_t help(const std::vector<std::string> &args);
 
-    int version();
+    uint8_t version();
 
-    int create(const std::vector<std::string> &args, const std::vector<std::string> &flags);
+    uint8_t create(const std::vector<std::string> &args, const std::vector<std::string> &flags);
 
-    int file_pair(const std::vector<std::string> &args, const std::vector<std::string> &flags);
+    uint8_t file_pair(const std::vector<std::string> &args, const std::vector<std::string> &flags);
 
-    int class_file_pair(const std::vector<std::string> &args, const std::vector<std::string> &flags);
+    uint8_t class_file_pair(const std::vector<std::string> &args, const std::vector<std::string> &flags);
 
-    int config(const std::vector<std::string> &args, const std::vector<std::string> &flags);
+    uint8_t config(const std::vector<std::string> &args, const std::vector<std::string> &flags);
 };

@@ -26,6 +26,11 @@ cmake ..
 sudo make install
 ```
 
+### Issues
+All bug reports, feature requests and other issues are monitored at the [GitHub issue tracker](https://github.com/vkeshav300/cpm/issues).
+- Please note that feature requests are low-priority compared to other issues such as bug reports.
+- If a feature request is related to a problem with preexisting features, consider submitting a bug report instead.
+
 ### Other information
 The code uses 256-Color Mode [ANSI Escape Codes](https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797) to color text. Not all terminals support coloring text. To check if your terminal does, run: 
 ```

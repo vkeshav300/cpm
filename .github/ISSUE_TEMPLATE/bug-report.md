@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a report about a bug.
+about: Create a report about a bug
 title: Bug Report
 labels: help wanted
 assignees: ''
@@ -23,13 +23,13 @@ Steps to reproduce the behavior:
 
 **In the code (if applicable):**
 *File(s)*: '....'
-*Conflicting*: (if the code may interfere with existing or future features.)
+*Conflicting*: (if the code may interfere with existing or future features)
 
 **Expected behavior**
-A clear and concise description of what you expected to happen.
+A clear and concise description of what you expected to happen
 
 **Screenshots**
-If applicable, add screenshots to help explain your problem.
+If applicable, add screenshots to help explain your problem
 
 **Computer Information:**
  - *OS:* "MacOS Ventura 13.4"

@@ -1,0 +1,29 @@
+name: Feature Requestion
+description: File a feature request.
+title: "[Feature_Request]: "
+labels: ["enhancement"]
+projects: ["vkeshav300/cpm"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        If your feature is related to a problem with preexisting features of CPM, consider filling out a bug report instead.
+        Issues are given low priority compared to bug reports.
+        Make sure your feature idea doesn't already exist.
+  - type: textarea
+    id: feature
+    attributes:
+      label: What's the feature?
+      description: Describe it in detail.
+      placeholder: A cool feature would be [...] so that [...].
+      value: "A cool feature would be [...] so that [...]."
+    validations:
+      required: true
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: ex. email@example.com
+    validations:
+      required: false

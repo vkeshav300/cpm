@@ -1,0 +1,49 @@
+name: Bug Report
+description: File a bug report.
+title: "[Bug]: "
+labels: ["bug"]
+projects: ["vkeshav300/cpm"]
+assignees:
+  - vkeshav300
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: textarea
+    id: problem
+    attributes:
+      label: What's the bug?
+      description: Also include information on expeted behaviour.
+      placeholder: I tried [...] but instead of [...], [...] happened
+      value: "I tried [...] but instead of [...], [...] happened."
+    validations:
+      required: true
+  - type: dropdown
+    id: version
+    attributes:
+      label: Version
+      description: "What version of CPM are you using (run: cpm version)?"
+      options:
+        - Latest Release
+        - Prerelease
+        - Other version (specify in other comments section)
+      default: 0
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      render: shell
+    validations:
+      required: false
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: ex. email@example.com
+    validations:
+      required: false

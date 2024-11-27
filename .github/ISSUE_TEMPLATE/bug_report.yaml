@@ -47,3 +47,12 @@ body:
       placeholder: ex. email@example.com
     validations:
       required: false
+  - type: textarea
+    id: other_comments
+    attributes:
+      label: Any other comments?
+      description: If you selected "other version", put your version here
+      placeholder: "[...]"
+      value: "Nope, i'm good!"
+    validations:
+      required: false

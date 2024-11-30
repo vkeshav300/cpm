@@ -304,8 +304,20 @@ namespace commands
     }
 
     // Create file pairs
-    std::vector<std::string> file_pair_args = args;
-    file_pair_args.insert(file_pair_args.begin(), "create");
+    std::vector<std::string> file_pair_args;
+
+    if (!misc::vector_contains(flags, "interface"))
+    {
+      file_pair_args = args;
+      file_pair_args.insert(file_pair_args.begin(), "create");
+    }
+    else
+    {
+      file_pair_args = {
+        "create",
+        args[0],
+      };
+    }
 
     const uint8_t result = file_pair(file_pair_args, flags);
 
@@ -352,6 +364,29 @@ namespace commands
             "\treturn obj;",
             "}",
         });
+      }
+      else if (misc::vector_contains(flags, "interface"))
+      {
+        header.write({
+          "class " + class_name,
+          "{",
+          "private:",
+          "",
+          "public:",
+        });
+
+        // All arguments after first are treated as functions to add to interface
+        for (const auto &arg : misc::sub_vector<std::string>(args, 1, args.size() - 1))
+          header.write({ "\tvirtual " + arg + "() = 0;" });
+
+        header.write({
+          "};",
+        });
+
+        // Source file is not required
+        source.remove();
+
+        return 0;
       }
       else if (flags.size() > 0 && flags[0][0] == 'p') // inheritance
       {

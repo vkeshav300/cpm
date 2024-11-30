@@ -66,84 +66,10 @@ namespace commands
               << "     \\__\\/         \\__\\/       \\__\\/    \n\n\n"
               << logger.colors["reset"];
 
-    logger.custom("https://github.com/vkeshav300/cpm\n\n\n", "github", "theme");
-
-    // Specifc command focus
-    std::cout << logger.colors["theme"];
-
-    if (args.size() > 0)
-    {
-      std::string command = args[0];
-
-      if (command == "help")
-        std::cout << "help {command} --> gets information related to CPM and it's commands\n"
-                  << "  {command} --> specific command to focus information on\n\n"
-                  << "Ex: cpm help create";
-      else if (command == "version")
-        std::cout << "version --> states version of CPM installed\n\n";
-      else if (command == "create")
-        std::cout << "create [language] --> creates new c/c++ project\n"
-                  << "  language --> language project will be based off of, C or C++ (ex. cpp)\n"
-                  << "  -v=... --> Specify a specific language verison to use (ex. -v=17)\n\n"
-                  << "Different Project Templates:\n"
-                  << "  executable --> 'executable' project structure, built around CMake\n"
-                  << "  simple   --> only creates one main file in working directory\n\n"
-                  << "Ex: cpm create cpp";
-      else if (command == "fpair")
-        std::cout << "fpair [sub-command] [names] --> performs action on header/source file pair\n"
-                  << "  [sub-command] --> what operation to perform on file pair\n"
-                  << "    create --> creates new file pair\n"
-                  << "    remove --> destroys existing file pair\n"
-                  << "  [names] --> name(s) of file pairs\n"
-                  << "  --hpp --> use hpp header format (only useful for create action)\n\n"
-                  << "Ex: cpm fpair create utils";
-      else if (command == "class")
-        std::cout << "class [names] --> creates class based header/source file pair\n"
-                  << "  [names] --> what name(s) to use (class names will automatically be capitalized)\n"
-                  << "    if file does not exist, a file pair will be created automatically\n\n"
-                  << "Variations:\n"
-                  << "  -p=[parent name] --> creates child class from parent class located in <parent name>.<h/hpp>\n"
-                  << "    Default: class A: public B\n"
-                  << "    --private --> class A: private B\n"
-                  << "    --protected --> class A: protected B\n"
-                  << "  --singleton --> creates singleton based file pairs\n\n"
-                  << "Ex: cpm class engine axle tire headlight taillight";
-      else if (command == "config")
-      {
-        std::cout << "config [sub-command] [key] {value} --> performs action on cpm config\n"
-                  << "  [sub-command] --> what operation to perform on config\n"
-                  << "    set [key] [value] --> add / edit key-value pair (requires value)\n"
-                  << "    remove [key] --> removes key-value pair (doesn't require value)\n"
-                  << "  [key] --> used to index config and search for value\n"
-                  << "  {value} --> a value\n\n"
-                  << "Logger Config Variables:\n"
-                  << "  color_success\n  color_error\n  color_warn\n  color_theme\n  color_warn\n  color_count\n  color_prompt\n  color_execute\n\n"
-                  << "Other Config Variables:\n"
-                  << "  default_structure --> default project structure used in `cpm create`\n\n"
-                  << "Ex: cpm config set colors_success blue";
-      }
-      else
-      {
-        logger.error_q("does not have any help-related information", command);
-        return 1;
-      }
-
-      std::cout << "\n\n";
-    }
-    else
-      std::cout << "Reading Guide (for more command specific information use <help (command)>):\n"
-                << "  [Square brackets] are required arguments\n"
-                << "  {Curly brackets} are optional arguments\n\n\n"
-                << "Commands:\n"
-                << "  help {command} --> lists commands + other useful information related to CPM\n"
-                << "  version --> states version of CPM installed\n"
-                << "  create [language] --> creates new c/c++ project\n"
-                << "  fpair [sub-command] [names] --> performs action on header/source file pair\n"
-                << "  class [names] --> creates class based header/source file pair\n"
-                << "  config [sub-command] [key] {value} --> performs action on cpm config file\n"
-                << "\n\n";
-
-    std::cout << logger.colors["reset"];
+    logger.custom("https://github.com/vkeshav300/cpm", "github page", "theme");
+    logger.custom("https://github.com/vkeshav300/cpm/wiki", "general wiki", "theme");
+    logger.custom("https://github.com/vkeshav300/cpm/wiki/Commands", "commands documentation", "theme");
+    std::cout << "\n";
 
     return 0;
   }

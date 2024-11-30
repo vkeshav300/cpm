@@ -7,8 +7,7 @@ cmake_install.cmake
 Makefile
 
 # Doxygen artifacts
-docs/html
-docs/latex
+docs/output
 
 # Testing
 tests

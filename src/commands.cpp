@@ -502,6 +502,13 @@ namespace commands
     return 0;
   }
 
+  /**
+   * @brief Allows user access configuration data for cpm
+   * 
+   * @param args 
+   * @param flags 
+   * @return uint8_t 
+   */
   uint8_t config(const std::vector<std::string> &args, const std::vector<std::string> &flags)
   {
     if (args[0] == "set")

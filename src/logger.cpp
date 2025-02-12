@@ -59,9 +59,11 @@ void Logger::flush_buffer() const { std::cout.flush(); }
  */
 void Logger::handle_logger_count()
 {
+  static uint64_t logger_count = 0;
+
   std::cout << colors["count"]
             << "["
-            << logger_count
+            << logger_count++
             << "]"
             << colors["reset"];
 
@@ -70,8 +72,6 @@ void Logger::handle_logger_count()
 
   if (logger_count < 100)
     std::cout << " ";
-
-  logger_count++;
 }
 
 /**

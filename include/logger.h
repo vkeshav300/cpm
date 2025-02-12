@@ -16,8 +16,6 @@
 class Logger
 {
 private:
-    size_t logger_count = 0;
-
     Logger() {}
 
 public:

@@ -17,7 +17,7 @@ Currently supports the following operating systems:
 Clone the project, and follow instructions for buildling down bellow (specifically the ones for installing as well)
 - More detailed information may be availible at the release page for the version you want to install
 
-### Building
+### Building/Installing
 #### Unix-Based Operating Systems
 For building project (you may need to use sudo if you are getting `access denied` or `permission not granted` errors):
 ```
@@ -33,6 +33,8 @@ cd build
 cmake ..
 sudo make install
 ```
+### Arch Linux(AUR)
+``` paru -S cpm-git ```
 
 ### Issues
 All bug reports, feature requests and other issues are monitored at the [GitHub issue tracker](https://github.com/vkeshav300/cpm/issues).

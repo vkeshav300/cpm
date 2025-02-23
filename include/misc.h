@@ -50,4 +50,10 @@ std::string join_string_vector(const std::vector<std::string> &vect,
                                const std::string &joiner);
 
 void auto_capitalize(std::string &str);
+
+char compare_paths(const std::filesystem::path &p1, const std::filesystem::path &p2);
+
+std::filesystem::path trim_path(const std::filesystem::path &p1, const std::filesystem::path &p2);
+
+void set_relative_path(std::string &p, const std::filesystem::path &p1, const std::filesystem::path &p2);
 } // namespace misc

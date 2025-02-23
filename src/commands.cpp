@@ -415,40 +415,7 @@ uint8_t class_file_pair(const std::vector<std::string> &args,
 
       /* Auto relative path detection (between parent header and child header) */
       std::string include_path = "";
-      const char path_diff = header.compare(header_p);
-
-      if (path_diff < 0) {
-        /* Figure out last common path */
-        const std::vector<std::string> split_header_p_path(misc::split_string(
-            std::filesystem::absolute(header_p_path).string(), "/")),
-            split_header_path(misc::split_string(
-                std::filesystem::absolute(header.get_path()).string(), "/"));
-        size_t location = 0;
-
-        for (; location < split_header_p_path.size(); location++) {
-          if (split_header_p_path[location] != split_header_path[location])
-            break;
-        }
-
-        /* Add ../ to path to get to last common path */
-        for (size_t i = 0; i < (split_header_path.size() - location - 1); i++)
-          include_path += "../";
-
-        /* Add trimmed paths together */
-        include_path += header_p.trim(header).parent_path().string();
-      } else if (path_diff > 0)
-        include_path += header_p.trim(header).parent_path().string() + "/";
-
-      if (include_path[include_path.size() - 1] != '/')
-        include_path += "/";
-
-      if (include_path.length() > 0 && include_path[0] == '/')
-        include_path = include_path.substr(1);
-      else if (include_path.length() > 1 &&
-               (include_path[0] == '.' & include_path[1] == '/'))
-        include_path = include_path.substr(2);
-
-      include_path += header_p_path.filename().string();
+      misc::set_relative_path(include_path, header.get_path(), header_p.get_path());
 
       /* Write to files */
       header.write({
@@ -541,38 +508,9 @@ uint8_t struct_file_pair(const std::vector<std::string> &args,
       prefix_a = _arg.filename().string();
       misc::auto_capitalize(prefix_a);
 
+      /* Auto relative path detection (between parent header and child header) */
       std::string include_path = "";
-      const char path_diff = header.compare(header_p);
-
-      if (path_diff < 0) {
-        const std::vector<std::string> split_header_p_path(misc::split_string(
-            std::filesystem::absolute(header_p_path).string(), "/")),
-            split_header_path(misc::split_string(
-                std::filesystem::absolute(header.get_path()).string(), "/"));
-        size_t location = 0;
-
-        for (; location < split_header_p_path.size(); location++) {
-          if (split_header_p_path[location] != split_header_path[location])
-            break;
-        }
-
-        for (size_t i = 0; i < (split_header_path.size() - location - 1); i++)
-          include_path += "../";
-
-        include_path += header_p.trim(header).parent_path().string();
-      } else if (path_diff > 0)
-        include_path += header_p.trim(header).parent_path().string() + "/";
-
-      if (include_path[include_path.size() - 1] != '/')
-        include_path += "/";
-
-      if (include_path.length() > 0 && include_path[0] == '/')
-        include_path = include_path.substr(1);
-      else if (include_path.length() > 1 &&
-               (include_path[0] == '.' & include_path[1] == '/'))
-        include_path = include_path.substr(2);
-
-      include_path += header_p_path.filename().string();
+      misc::set_relative_path(include_path, header.get_path(), header_p.get_path());
 
       header.write({
           "#include \"" + include_path + "\"",

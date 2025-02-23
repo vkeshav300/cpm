@@ -12,6 +12,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <fstream>
+#include <cstdint>
 
 /**
  * @brief Get method for logger class

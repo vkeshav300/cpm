@@ -16,6 +16,7 @@
 #include <unordered_map>
 #include <string>
 #include <vector>
+#include <cstdint>
 
 std::unordered_map<std::string, std::unordered_map<std::string, uint8_t>> command_info = {
     {

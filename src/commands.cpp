@@ -233,8 +233,7 @@ uint8_t create(const std::vector<std::string> &args,
   main_file.load({
       "#include <iostream>",
       "",
-      "int main(int argc, char *argv[])",
-      "{",
+      "int main(int argc, char *argv[]) {",
       "\tstd::cout << \"Hello World!\" << std::endl;",
       "\treturn 0;",
       "}",
@@ -346,8 +345,7 @@ uint8_t class_file_pair(const std::vector<std::string> &args,
 
     if (misc::vector_contains(flags, "singleton")) {
       header.write({
-          "class " + class_name,
-          "{",
+          "class " + class_name + "{",
           "private:",
           "\t" + class_name + "();",
           "",
@@ -359,16 +357,14 @@ uint8_t class_file_pair(const std::vector<std::string> &args,
       });
 
       source.write({
-          class_name + " &" + prefix_a + "get()",
-          "{",
+          class_name + " &" + prefix_a + "get() {",
           "\tstatic " + class_name + " obj;",
           "\treturn obj;",
           "}",
       });
     } else if (misc::vector_contains(flags, "interface")) {
       header.write({
-          "class " + class_name,
-          "{",
+          "class " + class_name + "{",
           "private:",
           "",
           "public:",
@@ -465,8 +461,7 @@ uint8_t class_file_pair(const std::vector<std::string> &args,
       header.write({
           "#include \"" + include_path + "\"",
           "",
-          "class " + class_name + ": " + inherit_mode + prefix_a,
-          "{",
+          "class " + class_name + ": " + inherit_mode + prefix_a + "{",
           "private:",
           "",
           "public:",
@@ -483,8 +478,7 @@ uint8_t class_file_pair(const std::vector<std::string> &args,
       });
     } else {
       header.write({
-          "class " + class_name,
-          "{",
+          "class " + class_name + "{",
           "private:",
           "",
           "public:",
@@ -603,8 +597,7 @@ uint8_t struct_file_pair(const std::vector<std::string> &args,
       header.write({
           "#include \"" + include_path + "\"",
           "",
-          "struct " + struct_name,
-          "{",
+          "struct " + struct_name + "{",
           "\t" + struct_name + "();",
           "\t~" + struct_name + "();",
           "};",
@@ -618,8 +611,7 @@ uint8_t struct_file_pair(const std::vector<std::string> &args,
       });
     } else {
       header.write({
-          "struct " + struct_name,
-          "{"
+          "struct " + struct_name + "{",
           "\t" +
               struct_name + "();",
           "\t~" + struct_name + "();",

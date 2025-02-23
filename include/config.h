@@ -4,7 +4,7 @@
 #include <string>
 #include <cstdint>
 
-constexpr std::string version_string = "1.0.0";
+const std::string version_string = "1.0.0";
 
 #if defined(MAIN_CONFIG_INCLUDE)
 std::unordered_map<std::string, std::unordered_map<std::string, uint8_t>>

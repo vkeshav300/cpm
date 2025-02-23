@@ -33,13 +33,14 @@ jobs:
         with:
           languages: ${{ matrix.language }}
 
-      - name: Configure CMake
-        run: cmake -Bbuild -S.
+      - name: Build project
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          make
 
-      - name: Build Project
-        run: cmake --build build
-
-      - name: Perform CodeQL Analysis
+      - name: Perform CodeQL analysis
         uses: github/codeql-action/analyze@v3
         with:
           category: "/language:${{ matrix.language }}"

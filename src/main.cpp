@@ -8,59 +8,66 @@
  *
  */
 #include "commands.h"
+#include "data.h"
 #include "directory.h"
 #include "logger.h"
-#include "data.h"
 
 #include <chrono>
-#include <unordered_map>
-#include <string>
-#include <vector>
 #include <cstdint>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
-std::unordered_map<std::string, std::unordered_map<std::string, uint8_t>> command_info = {
-    {
-        "create",
+std::unordered_map<std::string, std::unordered_map<std::string, uint8_t>>
+    command_info = {
         {
-            {"min_args", 1},
+            "create",
+            {
+                {"min_args", 1},
+            },
         },
-    },
-    {
-        "help",
         {
-            {"min_args", 0},
+            "help",
+            {
+                {"min_args", 0},
+            },
         },
-    },
-    {
-        "version",
         {
-            {"min_args", 0},
+            "version",
+            {
+                {"min_args", 0},
+            },
         },
-    },
-    {
-        "test",
         {
-            {"min_args", 0},
+            "test",
+            {
+                {"min_args", 0},
+            },
         },
-    },
-    {
-        "fpair",
         {
-            {"min_args", 2},
+            "fpair",
+            {
+                {"min_args", 2},
+            },
         },
-    },
-    {
-        "class",
         {
-            {"min_args", 1},
+            "class",
+            {
+                {"min_args", 1},
+            },
         },
-    },
-    {
-        "config",
         {
-            {"min_args", 2},
+            "struct",
+            {
+                {"min_args", 1},
+            },
         },
-    },
+        {
+            "config",
+            {
+                {"min_args", 2},
+            },
+        },
 };
 /**
  * @brief Main function
@@ -69,8 +76,7 @@ std::unordered_map<std::string, std::unordered_map<std::string, uint8_t>> comman
  * @param argv Arguments
  * @return int
  */
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   // Start time
   const auto start = std::chrono::high_resolution_clock::now();
 
@@ -81,15 +87,13 @@ int main(int argc, char *argv[])
   data_handler.read();
 
   // Overwrites existing colormap with user preferences
-  for (const auto &[k, v] : logger.colors)
-  {
+  for (const auto &[k, v] : logger.colors) {
     if (data_handler.config_has_key("color_" + k))
       logger.set_color(k, logger.raw_colors[data_handler.config["color_" + k]]);
   }
 
   // Verifies command is inputted
-  if (argc <= 1)
-  {
+  if (argc <= 1) {
     logger.error("no command provided");
     logger.flush_buffer();
 
@@ -101,18 +105,15 @@ int main(int argc, char *argv[])
   bool command_found = false;
 
   // Checks if command is valid
-  for (const auto &[k, v] : command_info)
-  {
-    if (k == command)
-    {
+  for (const auto &[k, v] : command_info) {
+    if (k == command) {
       command_found = true;
       break;
     }
   }
 
   // Checks if command exists
-  if (!command_found)
-  {
+  if (!command_found) {
     logger.error_q("is not a valid command", command);
     return 1;
   }
@@ -122,11 +123,9 @@ int main(int argc, char *argv[])
   std::vector<std::string> flags;
 
   // Flags
-  for (int i = 0; i < argc; i++)
-  {
+  for (int i = 0; i < argc; i++) {
     std::string arg = argv[i];
-    if (arg[0] == '-' & arg.size() > 1)
-    {
+    if (arg[0] == '-' & arg.size() > 1) {
       uint32_t _start = 1;
       if (arg[1] == '-' & arg.size() > 2) // --flag
         _start = 2;
@@ -136,8 +135,7 @@ int main(int argc, char *argv[])
   }
 
   // Arguments
-  for (int i = 2; i < argc; i++)
-  {
+  for (int i = 2; i < argc; i++) {
     std::string arg = argv[i];
     if (arg[0] != '-')
       arguments.push_back(arg);
@@ -146,9 +144,11 @@ int main(int argc, char *argv[])
   logger.success("parsed command");
 
   // Minimum arguments
-  if (arguments.size() < command_info[command]["min_args"])
-  {
-    logger.error_q("requires at least " + std::to_string(command_info[command]["min_args"]) + " arguments", command);
+  if (arguments.size() < command_info[command]["min_args"]) {
+    logger.error_q("requires at least " +
+                       std::to_string(command_info[command]["min_args"]) +
+                       " arguments",
+                   command);
     return 1;
   }
 
@@ -183,7 +183,14 @@ int main(int argc, char *argv[])
   // Measure process time
   const auto end = std::chrono::high_resolution_clock::now();
 
-  logger.custom("command \'" + command + "\' with exit code " + std::to_string(result) + " in " + std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count()) + " ms", "finished", "theme");
+  logger.custom(
+      "command \'" + command + "\' with exit code " + std::to_string(result) +
+          " in " +
+          std::to_string(
+              std::chrono::duration_cast<std::chrono::milliseconds>(end - start)
+                  .count()) +
+          " ms",
+      "finished", "theme");
   logger.flush_buffer();
 
   return result;

@@ -9,25 +9,32 @@
  */
 #pragma once
 
+#include <cstdint>
 #include <string>
 #include <vector>
-#include <cstdint>
 
-namespace commands
-{
-    extern std::vector<std::string> supported_bases;
+namespace commands {
+extern std::vector<std::string> supported_bases;
 
-    uint8_t test(const std::vector<std::string> &args, const std::vector<std::string> &flags);
+uint8_t test(const std::vector<std::string> &args,
+             const std::vector<std::string> &flags);
 
-    uint8_t help(const std::vector<std::string> &args);
+uint8_t help(const std::vector<std::string> &args);
 
-    uint8_t version();
+uint8_t version();
 
-    uint8_t create(const std::vector<std::string> &args, const std::vector<std::string> &flags);
+uint8_t create(const std::vector<std::string> &args,
+               const std::vector<std::string> &flags);
 
-    uint8_t file_pair(const std::vector<std::string> &args, const std::vector<std::string> &flags);
+uint8_t file_pair(const std::vector<std::string> &args,
+                  const std::vector<std::string> &flags);
 
-    uint8_t class_file_pair(const std::vector<std::string> &args, const std::vector<std::string> &flags);
+uint8_t class_file_pair(const std::vector<std::string> &args,
+                        const std::vector<std::string> &flags);
 
-    uint8_t config(const std::vector<std::string> &args, const std::vector<std::string> &flags);
-};
+uint8_t struct_file_pair(const std::vector<std::string> &args,
+                         const std::vector<std::string> &flags);
+
+uint8_t config(const std::vector<std::string> &args,
+               const std::vector<std::string> &flags);
+}; // namespace commands

@@ -292,11 +292,11 @@ uint8_t file_pair(const std::vector<std::string> &args,
 }
 
 /**
- * @brief Inserts a coding template into file pair
- *
- * @param args
- * @param flags
- * @return uint8_t
+ * @brief Creates class-based file pair
+ * 
+ * @param args 
+ * @param flags 
+ * @return uint8_t 
  */
 uint8_t class_file_pair(const std::vector<std::string> &args,
                         const std::vector<std::string> &flags) {
@@ -498,7 +498,7 @@ uint8_t class_file_pair(const std::vector<std::string> &args,
 }
 
 /**
- * @brief Creates struct file pair
+ * @brief Creates struct-based file pair
  *
  * @param args
  * @param flags

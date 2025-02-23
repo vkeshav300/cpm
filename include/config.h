@@ -1,8 +1,8 @@
 #pragma once
 
-#include <unordered_map>
-#include <string>
 #include <cstdint>
+#include <string>
+#include <unordered_map>
 
 const std::string version_string = "1.0.0";
 

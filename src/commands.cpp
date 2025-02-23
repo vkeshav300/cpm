@@ -8,12 +8,12 @@
  *
  */
 #include "commands.h"
+#include "config.h"
 #include "data.h"
 #include "directory.h"
 #include "file.h"
 #include "logger.h"
 #include "misc.h"
-#include "config.h"
 
 #include <cstdlib>
 #include <filesystem>
@@ -189,9 +189,11 @@ uint8_t create(const std::vector<std::string> &args,
         "\t${PROJECT_NAME} PRIVATE",
         ")",
         "",
-        "if (CMAKE_SYSTEM_NAME MATCHES \"Darwin\" OR CMAKE_SYSTEM_NAME MATCHES "
+        "if (CMAKE_SYSTEM_NAME MATCHES \"Darwin\" OR CMAKE_SYSTEM_NAME "
+        "MATCHES "
         "\"Linux\")",
-        "\tinstall(TARGETS ${PROJECT_NAME} DESTINATION /usr/local/bin) # sudo "
+        "\tinstall(TARGETS ${PROJECT_NAME} DESTINATION /usr/local/bin) # "
+        "sudo "
         "required",
         "elseif (CMAKE_SYSTEM_NAME MATCHES \"Windows\")",
         "\tinstall(TARGETS ${PROJECT_NAME} DESTINATION $ENV{ProgramFiles})",
@@ -293,10 +295,10 @@ uint8_t file_pair(const std::vector<std::string> &args,
 
 /**
  * @brief Creates class-based file pair
- * 
- * @param args 
- * @param flags 
- * @return uint8_t 
+ *
+ * @param args
+ * @param flags
+ * @return uint8_t
  */
 uint8_t class_file_pair(const std::vector<std::string> &args,
                         const std::vector<std::string> &flags) {
@@ -329,7 +331,8 @@ uint8_t class_file_pair(const std::vector<std::string> &args,
   std::vector<std::string> split_arg;
 
   for (const auto &arg : args) {
-    std::filesystem::path _arg(arg); // Turn 'arg' into filesystem::path for easier path handling
+    std::filesystem::path _arg(
+        arg); // Turn 'arg' into filesystem::path for easier path handling
     class_name = std::filesystem::absolute(_arg).filename().string();
     misc::auto_capitalize(class_name);
 
@@ -367,7 +370,8 @@ uint8_t class_file_pair(const std::vector<std::string> &args,
           "public:",
       });
 
-      /* For interfaces, all arguments after first are treated as virtual functions */
+      /* For interfaces, all arguments after first are treated as virtual
+       * functions */
       for (const auto &arg :
            misc::sub_vector<std::string>(args, 1, args.size() - 1))
         header.write({"\tvirtual " + arg + "() = 0;"});
@@ -395,7 +399,8 @@ uint8_t class_file_pair(const std::vector<std::string> &args,
 
       File header_p(header_p_path);
 
-      /* Switch 'private' to 'protected' if 'protected' doesn't already exist inside parent class */
+      /* Switch 'private' to 'protected' if 'protected' doesn't already
+       * exist inside parent class */
       if (!status && !header_p.exists("protected")) {
         header_p.replace_first_with("private", "protected");
         status = true;
@@ -413,9 +418,12 @@ uint8_t class_file_pair(const std::vector<std::string> &args,
       else if (misc::vector_contains(flags, "private"))
         inherit_mode = "private ";
 
-      /* Auto relative path detection (between parent header and child header) */
+      /* Auto relative path detection (between parent header and child
+       * header)
+       */
       std::string include_path = "";
-      misc::set_relative_path(include_path, header.get_path(), header_p.get_path());
+      misc::set_relative_path(include_path, header.get_path(),
+                              header_p.get_path());
 
       /* Write to files */
       header.write({
@@ -508,9 +516,12 @@ uint8_t struct_file_pair(const std::vector<std::string> &args,
       prefix_a = _arg.filename().string();
       misc::auto_capitalize(prefix_a);
 
-      /* Auto relative path detection (between parent header and child header) */
+      /* Auto relative path detection (between parent header and child
+       * header)
+       */
       std::string include_path = "";
-      misc::set_relative_path(include_path, header.get_path(), header_p.get_path());
+      misc::set_relative_path(include_path, header.get_path(),
+                              header_p.get_path());
 
       header.write({
           "#include \"" + include_path + "\"",
@@ -530,8 +541,7 @@ uint8_t struct_file_pair(const std::vector<std::string> &args,
     } else {
       header.write({
           "struct " + struct_name + " {",
-          "\t" +
-              struct_name + "();",
+          "\t" + struct_name + "();",
           "\t~" + struct_name + "();",
           "};",
       });

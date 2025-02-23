@@ -25,7 +25,8 @@ Logger &Logger::get() {
 }
 
 /**
- * @brief Replaces old color maps with new color maps (only replaces given color maps)
+ * @brief Replaces old color maps with new color maps (only replaces given
+ * color maps)
  *
  * @param new_colors New color map(s)
  */
@@ -189,7 +190,8 @@ bool Logger::prompt_yn(const std::string &message) {
  * @brief Executes terminal command
  *
  * @param command Command to execute
- * @param must_populate_file Whether to throw error if command does not output (optional)
+ * @param must_populate_file Whether to throw error if command does not output
+ * (optional)
  * @return true
  * @return false
  */

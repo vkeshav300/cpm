@@ -18,7 +18,8 @@ namespace misc {
 Logger &logger = Logger::get();
 
 /**
- * @brief Checks if std::vector that contains std::strings has a specific string
+ * @brief Checks if std::vector that contains std::strings has a specific
+ * string
  *
  * @param vector Vector to search
  * @param content Content to search for
@@ -142,24 +143,30 @@ void auto_capitalize(std::string &str) {
 
 /**
  * @brief Returns a value based on how two paths are separated
- * 
- * @param p1 
- * @param p2 
+ *
+ * @param p1
+ * @param p2
  */
-char compare_paths(const std::filesystem::path &p1, const std::filesystem::path &p2) {
+char compare_paths(const std::filesystem::path &p1,
+                   const std::filesystem::path &p2) {
   const std::vector<std::string> t_split(split_string(p1.string(), "/")),
-                                 o_split(split_string(p2.string(), "/")); // t_split = this_split, o_split = other_split
+      o_split(split_string(p2.string(),
+                           "/")); // t_split = this_split, o_split = other_split
   size_t location = 0;
 
-  for (; location < ((t_split.size() > o_split.size()) ? o_split.size() : t_split.size()); location++) { // Iterate until smallest path size
+  for (; location <
+         ((t_split.size() > o_split.size()) ? o_split.size() : t_split.size());
+       location++) { // Iterate until smallest path size
     if (t_split[location] == o_split[location])
       continue;
 
-    if (sub_vector(t_split, location, t_split.size() - 1).size() > sub_vector(o_split, location, o_split.size() - 1).size() |
-        sub_vector(t_split, location, t_split.size() - 1).size() == sub_vector(o_split, location, o_split.size() - 1).size())
-      return -1;  // p1 file is "further in" or "equally in" than p2 file
+    if (sub_vector(t_split, location, t_split.size() - 1).size() >
+            sub_vector(o_split, location, o_split.size() - 1).size() |
+        sub_vector(t_split, location, t_split.size() - 1).size() ==
+            sub_vector(o_split, location, o_split.size() - 1).size())
+      return -1; // p1 file is "further in" or "equally in" than p2 file
     else
-      return 1;  // p2 file is "further in" than p1 file
+      return 1; // p2 file is "further in" than p1 file
   }
 
   return 0; // fallback
@@ -167,38 +174,46 @@ char compare_paths(const std::filesystem::path &p1, const std::filesystem::path 
 
 /**
  * @brief Trims p1 relative to p2
- * 
- * @param p1 
- * @param p2 
- * @return std::filesystem::path 
+ *
+ * @param p1
+ * @param p2
+ * @return std::filesystem::path
  */
-std::filesystem::path trim_path(const std::filesystem::path &p1, const std::filesystem::path &p2) {
+std::filesystem::path trim_path(const std::filesystem::path &p1,
+                                const std::filesystem::path &p2) {
   const std::vector<std::string> t_split(split_string(p1.string(), "/")),
-                                 o_split(split_string(p2.string(), "/")); // t_split = this_split, o_split = other_split
+      o_split(split_string(p2.string(),
+                           "/")); // t_split = this_split, o_split = other_split
   size_t location = 0;
 
-  for (; location < ((t_split.size() > o_split.size()) ? o_split.size() : t_split.size()); location++) // Iterate until smallest path size
+  for (; location <
+         ((t_split.size() > o_split.size()) ? o_split.size() : t_split.size());
+       location++) // Iterate until smallest path size
     if (t_split[location] != o_split[location])
       break;
 
-  return std::filesystem::path(misc::join_string_vector(misc::sub_vector(t_split, location, t_split.size() - 1), "/"));
+  return std::filesystem::path(misc::join_string_vector(
+      misc::sub_vector(t_split, location, t_split.size() - 1), "/"));
 }
 
 /**
  * @brief Set the relative path needed to get from p1 to p2
- * 
+ *
  * @param p Path to set
- * @param p1 
- * @param p2 
+ * @param p1
+ * @param p2
  */
- void set_relative_path(std::string &p, const std::filesystem::path &p1, const std::filesystem::path &p2) {
+void set_relative_path(std::string &p, const std::filesystem::path &p1,
+                       const std::filesystem::path &p2) {
   /* Get relative path difference */
   const char path_diff(compare_paths(p1, p2));
 
   if (path_diff < 0) {
     /* Figure out last common path */
-    const std::vector<std::string> split_header_p_path(split_string(std::filesystem::absolute(p2).string(), "/")),
-                                   split_header_path(split_string(std::filesystem::absolute(p1).string(), "/"));
+    const std::vector<std::string> split_header_p_path(
+        split_string(std::filesystem::absolute(p2).string(), "/")),
+        split_header_path(
+            split_string(std::filesystem::absolute(p1).string(), "/"));
     size_t location = 0;
 
     for (; location < split_header_p_path.size(); location++)
@@ -213,15 +228,14 @@ std::filesystem::path trim_path(const std::filesystem::path &p1, const std::file
     p += trim_path(p2, p1).parent_path().string();
   } else if (path_diff > 0)
     p += trim_path(p2, p1).parent_path().string() + "/";
-  
-    if (p[p.size() - 1] != '/')
-      p += "/";
 
-    if (p.length() > 0 && p[0] == '/')
-      p = p.substr(1);
-    else if (p.length() > 1 &&
-            (p[0] == '.' & p[1] == '/'))
-      p = p.substr(2);
-      p += p2.filename().string();
-  }
+  if (p[p.size() - 1] != '/')
+    p += "/";
+
+  if (p.length() > 0 && p[0] == '/')
+    p = p.substr(1);
+  else if (p.length() > 1 && (p[0] == '.' & p[1] == '/'))
+    p = p.substr(2);
+  p += p2.filename().string();
+}
 } // namespace misc

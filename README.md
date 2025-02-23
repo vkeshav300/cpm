@@ -46,3 +46,8 @@ The code uses 256-Color Mode [ANSI Escape Codes](https://gist.github.com/fnky/45
 echo -e "\x1b[38;5;196mTest\x1b[0m"
 ```
 This should print the text "Test" in a red-ish color. Most modern terminals support coloring using ANSI Escape Codes.
+
+Try to format the code using LLVM standards. If you have clang-format installed, you can do that with the following command:
+```
+clang-format -i src/*.cpp include/*.h
+```

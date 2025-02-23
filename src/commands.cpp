@@ -73,6 +73,8 @@ uint8_t help(const std::vector<std::string> &args) {
                 "theme");
   logger.custom("https://github.com/vkeshav300/cpm/wiki/Commands",
                 "commands documentation", "theme");
+  logger.custom("https://github.com/vkeshav300/cpm/releases/latest",
+                "latest release", "theme");
   std::cout << "\n";
 
   return 0;

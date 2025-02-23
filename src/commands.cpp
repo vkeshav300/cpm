@@ -345,7 +345,7 @@ uint8_t class_file_pair(const std::vector<std::string> &args,
 
     if (misc::vector_contains(flags, "singleton")) {
       header.write({
-          "class " + class_name + "{",
+          "class " + class_name + " {",
           "private:",
           "\t" + class_name + "();",
           "",
@@ -364,7 +364,7 @@ uint8_t class_file_pair(const std::vector<std::string> &args,
       });
     } else if (misc::vector_contains(flags, "interface")) {
       header.write({
-          "class " + class_name + "{",
+          "class " + class_name + " {",
           "private:",
           "",
           "public:",
@@ -478,7 +478,7 @@ uint8_t class_file_pair(const std::vector<std::string> &args,
       });
     } else {
       header.write({
-          "class " + class_name + "{",
+          "class " + class_name + " {",
           "private:",
           "",
           "public:",
@@ -597,7 +597,7 @@ uint8_t struct_file_pair(const std::vector<std::string> &args,
       header.write({
           "#include \"" + include_path + "\"",
           "",
-          "struct " + struct_name + "{",
+          "struct " + struct_name + " {",
           "\t" + struct_name + "();",
           "\t~" + struct_name + "();",
           "};",
@@ -611,7 +611,7 @@ uint8_t struct_file_pair(const std::vector<std::string> &args,
       });
     } else {
       header.write({
-          "struct " + struct_name + "{",
+          "struct " + struct_name + " {",
           "\t" +
               struct_name + "();",
           "\t~" + struct_name + "();",

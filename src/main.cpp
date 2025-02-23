@@ -170,6 +170,8 @@ int main(int argc, char *argv[]) {
     result = commands::file_pair(arguments, flags);
   else if (command == "class")
     result = commands::class_file_pair(arguments, flags);
+  else if (command == "struct")
+    result = commands::struct_file_pair(arguments, flags);
   else if (command == "config")
     result = commands::config(arguments, flags);
 

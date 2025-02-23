@@ -12,6 +12,7 @@
 
 #include <cstdlib>
 #include <filesystem>
+#include <algorithm>
 
 namespace misc
 {

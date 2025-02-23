@@ -29,22 +29,22 @@
  * @return int
  */
 int main(int argc, char *argv[]) {
-  // Start time
+  /* Start time */
   const auto start = std::chrono::high_resolution_clock::now();
 
-  // Singleton accessing
+  /* Singletons */
   Logger &logger = Logger::get();
   Data_Handler &data_handler = Data_Handler::get();
 
   data_handler.read();
 
-  // Overwrites existing colormap with user preferences
+  /* Overwrites colormap with config variables */
   for (const auto &[k, v] : logger.colors) {
     if (data_handler.config_has_key("color_" + k))
       logger.set_color(k, logger.raw_colors[data_handler.config["color_" + k]]);
   }
 
-  // Verifies command is inputted
+  /* Checks if command was inputted */
   if (argc <= 1) {
     logger.error("no command provided");
     logger.flush_buffer();
@@ -52,11 +52,11 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  // Initial validations
+  /* Parsing information necessary for checks */
   const std::string command = argv[1];
   bool command_found = false;
 
-  // Checks if command is valid
+  /* Checks if command exists */
   for (const auto &[k, v] : command_info) {
     if (k == command) {
       command_found = true;
@@ -64,17 +64,16 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  // Checks if command exists
   if (!command_found) {
     logger.error_q("is not a valid command", command);
     return 1;
   }
 
-  // Parsing
+  /* Main parsing */
   std::vector<std::string> arguments;
   std::vector<std::string> flags;
 
-  // Flags
+  /* Flags */
   for (int i = 0; i < argc; i++) {
     std::string arg = argv[i];
     if (arg[0] == '-' & arg.size() > 1) {
@@ -86,7 +85,7 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  // Arguments
+  /* Arguments */
   for (int i = 2; i < argc; i++) {
     std::string arg = argv[i];
     if (arg[0] != '-')
@@ -95,7 +94,7 @@ int main(int argc, char *argv[]) {
 
   logger.success("parsed command");
 
-  // Minimum arguments
+  /* Checks if minimum arguments requirement is met */
   if (arguments.size() < command_info[command]["min_args"]) {
     logger.error_q("requires at least " +
                        std::to_string(command_info[command]["min_args"]) +
@@ -104,10 +103,7 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  // Attempt to auto cd to "project directory"
-  const std::vector<std::string> child_dirs = {};
-
-  // Command processing
+  /* Command execution */
   uint8_t result = 0;
 
   if (command == "help")
@@ -127,14 +123,14 @@ int main(int argc, char *argv[]) {
   else if (command == "config")
     result = commands::config(arguments, flags);
 
-  // Save data
+  /* Saving data */
   if (result == 0 && command != "help" && command != "version")
     data_handler.write();
 
-  // Cleanup artifacts
+  /* Artifact cleanup */
   directory::destroy_file("cpm.tmp");
 
-  // Measure process time
+  /* Success message + time measurement */
   const auto end = std::chrono::high_resolution_clock::now();
 
   logger.custom(

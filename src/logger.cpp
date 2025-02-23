@@ -25,14 +25,12 @@ Logger &Logger::get() {
 }
 
 /**
- * @brief Replaces old color maps with new color maps (only replaces given color
- * maps)
+ * @brief Replaces old color maps with new color maps (only replaces given color maps)
  *
  * @param new_colors New color map(s)
  */
 void Logger::set_colors(
     const std::unordered_map<std::string, std::string> &new_colors) {
-  // Only overwrites given colors
   for (const auto &[k, v] : new_colors)
     colors[k] = v;
 }
@@ -191,8 +189,7 @@ bool Logger::prompt_yn(const std::string &message) {
  * @brief Executes terminal command
  *
  * @param command Command to execute
- * @param must_populate_file Whether to throw error if command does not output
- * (optional)
+ * @param must_populate_file Whether to throw error if command does not output (optional)
  * @return true
  * @return false
  */
@@ -200,15 +197,14 @@ bool Logger::execute(const std::string &command,
                      const bool &must_populate_file) {
   handle_logger_count();
 
-  // Prefix
+  /* Prefix */
   std::cout << colors["execute"] << "[executing]: " << colors["reset"]
             << command << "\n";
 
-  // Command execution
+  /* Execution */
   std::system(command.c_str());
 
-  // Empty response is indicator of command failure (unless command does not
-  // give a response)
+  /* Empty response is indicator of command execution failure */
   if (must_populate_file) {
     std::ifstream file("cpm.tmp");
 

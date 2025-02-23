@@ -140,8 +140,7 @@ void File::replace_first_with(const std::string &token_f,
   if (!std::filesystem::remove(path))
     return;
 
-  // Rename temporary file to original file (make temporary file into original
-  // file)
+  /* Change temporary file into original file */
   std::filesystem::rename(tmp_path, path);
 }
 

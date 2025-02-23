@@ -89,7 +89,7 @@ std::string get_structure() {
  * @return std::string
  */
 std::string get_extension() {
-  // Get file names in directory
+  /* Get file names */
   std::vector<std::string> files;
   const std::filesystem::path current_dir(
       (get_structure() == "executable") ? "src/" : "./");
@@ -101,7 +101,7 @@ std::string get_extension() {
                    return entry.path().string();
                  });
 
-  // Check for file extension type
+  /* Check for file extentions */
   for (const auto &v : files) {
     auto const pos = v.find_last_of(".");
     const std::string leaf = v.substr(pos + 1);

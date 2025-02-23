@@ -34,7 +34,7 @@ std::filesystem::path get_store_location() {
  * @return std::string
  */
 std::filesystem::path get_store_location() {
-  // /Users/<user>/.config/cpm
+  /* /Users/<user>/.config/cpm */
   std::string home_loc = std::getenv("HOME");
   home_loc += "/.config";
 
@@ -78,12 +78,12 @@ void Data_Handler::read() {
   if (!misc::ifstream_open(data_file))
     return;
 
-  // Reading variables
+  /* Reading */
   char ch, prevCh;
   std::string key, value;
   bool onKey = true;
 
-  // Format --> key: value --> (key:<space>value\n)
+  /* Format --> key: value --> (key:<space>value\n) */
   while (data_file.get(ch)) {
     if (ch == '\n') // \n = newline = new key: value
     {

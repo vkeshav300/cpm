@@ -21,12 +21,12 @@
 #include <iostream>
 
 namespace commands {
-// Logger
+/* Logger */
 Logger &logger = Logger::get();
 Data_Handler &data_handler = Data_Handler::get();
 
 /**
- * @brief All templates supported by the create command
+ * @brief All directory structures supported by the create command
  *
  */
 std::vector<std::string> supported_structures = {
@@ -35,7 +35,7 @@ std::vector<std::string> supported_structures = {
 };
 
 /**
- * @brief Runs test code for CPM.
+ * @brief Runs test code for CPM
  *
  * @param args
  * @param flags
@@ -52,7 +52,7 @@ uint8_t test(const std::vector<std::string> &args,
  * @return uint8_t
  */
 uint8_t help(const std::vector<std::string> &args) {
-  // CPM ASCII art
+  /* ASCII art */
   std::cout << "\n"
             << logger.colors["theme"]
             << "      ___           ___         ___     \n"
@@ -98,7 +98,7 @@ uint8_t version() {
  */
 uint8_t create(const std::vector<std::string> &args,
                const std::vector<std::string> &flags) {
-  // Language
+  /* Language parsing */
   std::string lang = args[0];
 
   if (lang == "c++")
@@ -111,7 +111,7 @@ uint8_t create(const std::vector<std::string> &args,
 
   const std::string project_name = logger.prompt("enter project name");
 
-  // Structure
+  /* Directory structure */
   const std::string default_structure =
       data_handler.config_has_key("default_structure")
           ? data_handler.config["default_structure"]
@@ -134,16 +134,16 @@ uint8_t create(const std::vector<std::string> &args,
 
   const bool git_support = logger.prompt_yn("add git support");
 
+  /* Set main path */
   std::string main_path;
 
   if (structure == "executable") {
     directory::create_folders({"src", "include", "build", "tests"});
 
-    // Set main path to use src/
     main_path = "src/main";
     main_path += ((lang == "cpp") ? ".cpp" : ".c");
 
-    // Get installed CMake version
+    /* Get installed CMake version */
     logger.execute("cmake --version > cpm.tmp");
 
     std::ifstream result_file("cpm.tmp");
@@ -156,7 +156,7 @@ uint8_t create(const std::vector<std::string> &args,
 
     result_file.close();
 
-    // Other CMake variables
+    /* Setup CMake variables / file */
     const std::string cmake_lang = (lang == "cpp") ? "CXX" : "C";
     const std::string lang_version =
         (flags.size() > 0) ? misc::get_flag_value(flags[0]) : "23";
@@ -198,7 +198,6 @@ uint8_t create(const std::vector<std::string> &args,
         "endif()",
     });
   } else if (structure == "simple") {
-    // Set main path to use ./
     main_path = "main";
     main_path += (lang == "cpp") ? ".cpp" : ".c";
   }
@@ -252,7 +251,7 @@ uint8_t create(const std::vector<std::string> &args,
  */
 uint8_t file_pair(const std::vector<std::string> &args,
                   const std::vector<std::string> &flags) {
-  // Whether to use include/ src/ folders
+  /* Determines path prefixes */
   for (const auto &arg :
        misc::sub_vector<std::string>(args, 1, args.size() - 1)) {
     if (args[0] == "create") {
@@ -306,7 +305,7 @@ uint8_t class_file_pair(const std::vector<std::string> &args,
     return 1;
   }
 
-  // Create file pairs
+  /* Create file pairs */
   std::vector<std::string> file_pair_args;
 
   if (!misc::vector_contains(flags, "interface")) {
@@ -324,22 +323,19 @@ uint8_t class_file_pair(const std::vector<std::string> &args,
   if (result != 0)
     return result;
 
-  // Open files
+  /* Open files */
   std::string prefix_a, class_name;
   bool status = false;
   std::vector<std::string> split_arg;
 
   for (const auto &arg : args) {
-    // Set '_arg' to filesystem::path from 'arg' so filename can be easily
-    // extracted
-    std::filesystem::path _arg(arg);
+    std::filesystem::path _arg(arg); // Turn 'arg' into filesystem::path for easier path handling
     class_name = std::filesystem::absolute(_arg).filename().string();
     misc::auto_capitalize(class_name);
 
-    // Write to files
+    /* Write to files */
     prefix_a = class_name + "::";
 
-    // Write to files
     File header(directory::get_structured_header_path(
         arg, misc::vector_contains(flags, "hpp"))),
         source(directory::get_structured_source_path(arg));
@@ -371,7 +367,7 @@ uint8_t class_file_pair(const std::vector<std::string> &args,
           "public:",
       });
 
-      // All arguments after first are treated as functions to add to interface
+      /* For interfaces, all arguments after first are treated as virtual functions */
       for (const auto &arg :
            misc::sub_vector<std::string>(args, 1, args.size() - 1))
         header.write({"\tvirtual " + arg + "() = 0;"});
@@ -380,12 +376,11 @@ uint8_t class_file_pair(const std::vector<std::string> &args,
           "};",
       });
 
-      // Source file is not required
+      /* Source file isn't required */
       source.remove();
 
       return 0;
-    } else if (flags.size() > 0 && flags[0][0] == 'p') // inheritance
-    {
+    } else if (flags.size() > 0 && flags[0][0] == 'p') { // inheritance
       // Set '_arg' to path of parent header file
       _arg = misc::get_flag_value(flags[0]);
       const std::filesystem::path header_p_path(
@@ -400,18 +395,17 @@ uint8_t class_file_pair(const std::vector<std::string> &args,
 
       File header_p(header_p_path);
 
-      // Switch 'private' to 'protected' if 'protected' doesn't already exist
-      // within the file
+      /* Switch 'private' to 'protected' if 'protected' doesn't already exist inside parent class */
       if (!status && !header_p.exists("protected")) {
         header_p.replace_first_with("private", "protected");
         status = true;
       }
 
-      // Get parent class name
+      /* Get parent class name */
       prefix_a = _arg.filename().string();
       misc::auto_capitalize(prefix_a);
 
-      // Get inherit mode (public, protected, private)
+      /* Get inherit mode (public, protected, private) */
       std::string inherit_mode = "public ";
 
       if (misc::vector_contains(flags, "protected"))
@@ -419,13 +413,12 @@ uint8_t class_file_pair(const std::vector<std::string> &args,
       else if (misc::vector_contains(flags, "private"))
         inherit_mode = "private ";
 
-      // Auto relative path detection
+      /* Auto relative path detection (between parent header and child header) */
       std::string include_path = "";
       const char path_diff = header.compare(header_p);
 
-      // Construct header path from given relative path
       if (path_diff < 0) {
-        // Figure out last common path
+        /* Figure out last common path */
         const std::vector<std::string> split_header_p_path(misc::split_string(
             std::filesystem::absolute(header_p_path).string(), "/")),
             split_header_path(misc::split_string(
@@ -437,12 +430,11 @@ uint8_t class_file_pair(const std::vector<std::string> &args,
             break;
         }
 
-        // Add ../ for every path it takes to get from the header path to the
-        // last common path
+        /* Add ../ to path to get to last common path */
         for (size_t i = 0; i < (split_header_path.size() - location - 1); i++)
           include_path += "../";
 
-        // Add the trimmed header_p_path to include_path
+        /* Add trimmed paths together */
         include_path += header_p.trim(header).parent_path().string();
       } else if (path_diff > 0)
         include_path += header_p.trim(header).parent_path().string() + "/";
@@ -458,7 +450,7 @@ uint8_t class_file_pair(const std::vector<std::string> &args,
 
       include_path += header_p_path.filename().string();
 
-      // Write to files
+      /* Write to files */
       header.write({
           "#include \"" + include_path + "\"",
           "",
@@ -507,7 +499,7 @@ uint8_t class_file_pair(const std::vector<std::string> &args,
  */
 uint8_t struct_file_pair(const std::vector<std::string> &args,
                          const std::vector<std::string> &flags) {
-  // Create file pairs
+  /* Create file pairs */
   std::vector<std::string> file_pair_args(args);
   file_pair_args.insert(file_pair_args.begin(), "create");
   const uint8_t result = file_pair(file_pair_args, flags);
@@ -515,29 +507,24 @@ uint8_t struct_file_pair(const std::vector<std::string> &args,
   if (result != 0)
     return result;
 
-  // Open files
+  /* Open files */
   std::string prefix_a, struct_name;
   bool status = false;
   std::vector<std::string> split_arg;
 
   for (const auto &arg : args) {
-    // Set '_arg' to filesystem::path from 'arg' so filename can be easily
-    // extracted
+    /* Code commenting similar to class_file_pair */
     std::filesystem::path _arg(arg);
     struct_name = std::filesystem::absolute(_arg).filename().string();
     misc::auto_capitalize(struct_name);
 
-    // Write to files
     prefix_a = struct_name + "::";
 
-    // Write to files
     File header(directory::get_structured_header_path(
         arg, misc::vector_contains(flags, "hpp"))),
         source(directory::get_structured_source_path(arg));
 
-    if (flags.size() > 0 && flags[0][0] == 'p') // inheritance
-    {
-      // Set '_arg' to path of parent header file
+    if (flags.size() > 0 && flags[0][0] == 'p') {
       _arg = misc::get_flag_value(flags[0]);
       const std::filesystem::path header_p_path(
           std::filesystem::absolute(directory::get_structured_header_path(
@@ -551,17 +538,13 @@ uint8_t struct_file_pair(const std::vector<std::string> &args,
 
       File header_p(header_p_path);
 
-      // Get parent struct name
       prefix_a = _arg.filename().string();
       misc::auto_capitalize(prefix_a);
 
-      // Auto relative path detection
       std::string include_path = "";
       const char path_diff = header.compare(header_p);
 
-      // Construct header path from given relative path
       if (path_diff < 0) {
-        // Figure out last common path
         const std::vector<std::string> split_header_p_path(misc::split_string(
             std::filesystem::absolute(header_p_path).string(), "/")),
             split_header_path(misc::split_string(
@@ -573,12 +556,9 @@ uint8_t struct_file_pair(const std::vector<std::string> &args,
             break;
         }
 
-        // Add ../ for every path it takes to get from the header path to the
-        // last common path
         for (size_t i = 0; i < (split_header_path.size() - location - 1); i++)
           include_path += "../";
 
-        // Add the trimmed header_p_path to include_path
         include_path += header_p.trim(header).parent_path().string();
       } else if (path_diff > 0)
         include_path += header_p.trim(header).parent_path().string() + "/";
@@ -594,7 +574,6 @@ uint8_t struct_file_pair(const std::vector<std::string> &args,
 
       include_path += header_p_path.filename().string();
 
-      // Write to files
       header.write({
           "#include \"" + include_path + "\"",
           "",

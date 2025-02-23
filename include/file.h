@@ -9,13 +9,12 @@
  */
 #pragma once
 
-#include <string>
-#include <fstream>
 #include <filesystem>
+#include <fstream>
+#include <string>
 #include <vector>
 
-class File
-{
+class File {
 private:
   static std::ofstream writer;
   static std::ifstream reader;
@@ -34,7 +33,8 @@ public:
 
   std::vector<std::string> read();
 
-  void replace_first_with(const std::string &token_f, const std::string &token_r);
+  void replace_first_with(const std::string &token_f,
+                          const std::string &token_r);
 
   bool exists(const std::string &token_f);
 

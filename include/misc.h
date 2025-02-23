@@ -9,42 +9,45 @@
  */
 #pragma once
 
+#include <fstream>
 #include <string>
 #include <vector>
-#include <fstream>
 
-namespace misc
-{
-    bool vector_contains(const std::vector<std::string> &vector, const std::string &content);
+namespace misc {
+bool vector_contains(const std::vector<std::string> &vector,
+                     const std::string &content);
 
-    std::vector<std::string> split_string(const std::string &s, const std::string &delimiter);
+std::vector<std::string> split_string(const std::string &s,
+                                      const std::string &delimiter);
 
-    std::string get_flag_value(const std::string &flag);
+std::string get_flag_value(const std::string &flag);
 
-    bool ofstream_open(const std::ofstream &_ofstream);
+bool ofstream_open(const std::ofstream &_ofstream);
 
-    bool ifstream_open(const std::ifstream &_ifstream);
+bool ifstream_open(const std::ifstream &_ifstream);
 
-    /**
-     * @brief Extracts sub-vector from vector (inclusive)
-     *
-     * @tparam T
-     * @param parent_vector Parent vector
-     * @param m1 Lowest index
-     * @param m2 Highest index
-     * @return std::vector<T>
-     */
-    template <typename T>
-    std::vector<T> sub_vector(const std::vector<T> &parent_vector, const size_t &m1, const size_t &m2)
-    {
-        if (m1 > m2 || m2 > parent_vector.size())
-            return {};
+/**
+ * @brief Extracts sub-vector from vector (inclusive)
+ *
+ * @tparam T
+ * @param parent_vector Parent vector
+ * @param m1 Lowest index
+ * @param m2 Highest index
+ * @return std::vector<T>
+ */
+template <typename T>
+std::vector<T> sub_vector(const std::vector<T> &parent_vector, const size_t &m1,
+                          const size_t &m2) {
+  if (m1 > m2 || m2 > parent_vector.size())
+    return {};
 
-        std::vector<T> new_vector(parent_vector.begin() + m1, parent_vector.begin() + m2 + 1);
-        return new_vector;
-    }
+  std::vector<T> new_vector(parent_vector.begin() + m1,
+                            parent_vector.begin() + m2 + 1);
+  return new_vector;
+}
 
-    std::string join_string_vector(const std::vector<std::string> &vect, const std::string &joiner);
+std::string join_string_vector(const std::vector<std::string> &vect,
+                               const std::string &joiner);
 
-    void auto_capitalize(std::string &str);
+void auto_capitalize(std::string &str);
 } // namespace misc

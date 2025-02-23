@@ -7,24 +7,23 @@
  * @copyright Copyright (c) 2024
  *
  */
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
 
-class Data_Handler
-{
+class Data_Handler {
 private:
-    Data_Handler() {}
+  Data_Handler() {}
 
 public:
-    std::unordered_map<std::string, std::string> config;
+  std::unordered_map<std::string, std::string> config;
 
-    Data_Handler(const Data_Handler &obj) = delete;
+  Data_Handler(const Data_Handler &obj) = delete;
 
-    static Data_Handler &get();
+  static Data_Handler &get();
 
-    void read();
+  void read();
 
-    void write();
+  void write();
 
-    bool config_has_key(const std::string &key);
+  bool config_has_key(const std::string &key);
 };

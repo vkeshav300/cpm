@@ -9,30 +9,30 @@
  */
 
 #include "file.h"
-#include "misc.h"
 #include "logger.h"
+#include "misc.h"
 
 /**
  * @brief Construct a new File:: File object
  *
  * @param _path
  */
-File::File(const std::filesystem::path &_path) : path(std::filesystem::absolute(_path))
-{   
-    std::filesystem::create_directories(std::filesystem::absolute(path.parent_path()));
+File::File(const std::filesystem::path &_path)
+    : path(std::filesystem::absolute(_path)) {
+  std::filesystem::create_directories(
+      std::filesystem::absolute(path.parent_path()));
 
-    writer.open(path, std::ios::app);
-    writer.close();
+  writer.open(path, std::ios::app);
+  writer.close();
 }
 
 /**
  * @brief Destroy the File:: File object
  *
  */
-File::~File()
-{
-    writer.close();
-    reader.close();
+File::~File() {
+  writer.close();
+  reader.close();
 }
 
 /**
@@ -40,18 +40,16 @@ File::~File()
  *
  * @param lines Lines to write
  */
-void File::write(const std::vector<std::string> &lines)
-{
-    writer.open(path, std::ios::app);
+void File::write(const std::vector<std::string> &lines) {
+  writer.open(path, std::ios::app);
 
-    if (!misc::ofstream_open(writer))
-        return;
+  if (!misc::ofstream_open(writer))
+    return;
 
-    for (const auto &line : lines)
-        writer << "\n"
-               << line;
+  for (const auto &line : lines)
+    writer << "\n" << line;
 
-    writer.close();
+  writer.close();
 }
 
 /**
@@ -59,30 +57,27 @@ void File::write(const std::vector<std::string> &lines)
  *
  * @param lines Lines to write
  */
-void File::load(const std::vector<std::string> &lines)
-{
-    writer.open(path);
+void File::load(const std::vector<std::string> &lines) {
+  writer.open(path);
 
-    if (!misc::ofstream_open(writer))
-        return;
+  if (!misc::ofstream_open(writer))
+    return;
 
-    for (const auto &line : lines)
-        writer << line
-               << "\n";
+  for (const auto &line : lines)
+    writer << line << "\n";
 
-    writer.close();
+  writer.close();
 }
 
 /**
  * @brief Removes file from computer
  *
  */
-void File::remove()
-{
-    writer.close();
-    reader.close();
+void File::remove() {
+  writer.close();
+  reader.close();
 
-    std::filesystem::remove(path);
+  std::filesystem::remove(path);
 }
 
 /**
@@ -90,62 +85,64 @@ void File::remove()
  *
  * @return std::vector<std::string>
  */
-std::vector<std::string> File::read()
-{
-    reader.open(path);
+std::vector<std::string> File::read() {
+  reader.open(path);
 
-    if (!misc::ifstream_open(reader))
-        return {};
+  if (!misc::ifstream_open(reader))
+    return {};
 
-    std::vector<std::string> lines;
-    std::string line;
+  std::vector<std::string> lines;
+  std::string line;
 
-    while (std::getline(reader, line))
-        lines.emplace_back(line);
+  while (std::getline(reader, line))
+    lines.emplace_back(line);
 
-    return lines;
+  return lines;
 }
 
 /**
- * @brief Finds first instance of 'token_f' in file and replaces it with 'token_r'
+ * @brief Finds first instance of 'token_f' in file and replaces it with
+ * 'token_r'
  *
  * @param token_f Text to find
  * @param token_r Text to replace with
  */
-void File::replace_first_with(const std::string &token_f, const std::string &token_r)
-{
-    const std::filesystem::path tmp_path(path.string() + ".tmp");
+void File::replace_first_with(const std::string &token_f,
+                              const std::string &token_r) {
+  const std::filesystem::path tmp_path(path.string() + ".tmp");
 
-    writer.open(tmp_path);
-    reader.open(path);
+  writer.open(tmp_path);
+  reader.open(path);
 
-    if (!misc::ifstream_open(reader) | !misc::ofstream_open(writer))
-        return;
+  if (!misc::ifstream_open(reader) | !misc::ofstream_open(writer))
+    return;
 
-    std::string line;
-    size_t pos;
-    bool searching = true;
+  std::string line;
+  size_t pos;
+  bool searching = true;
 
-    while (std::getline(reader, line))
+  while (std::getline(reader, line)) {
+    if (searching &&
+        (pos = line.find(token_f)) !=
+            std::string::npos) // Replcae first instance of token_f with token_r
     {
-        if (searching && (pos = line.find(token_f)) != std::string::npos) // Replcae first instance of token_f with token_r
-        {
-            line.replace(pos, token_f.length(), token_r);
-            searching = false; // Switch off searching mode
-        }
-
-        writer << line << "\n";
+      line.replace(pos, token_f.length(), token_r);
+      searching = false; // Switch off searching mode
     }
 
-    writer.close();
-    reader.close();
+    writer << line << "\n";
+  }
 
-    // Delete original file
-    if (!std::filesystem::remove(path))
-        return;
+  writer.close();
+  reader.close();
 
-    // Rename temporary file to original file (make temporary file into original file)
-    std::filesystem::rename(tmp_path, path);
+  // Delete original file
+  if (!std::filesystem::remove(path))
+    return;
+
+  // Rename temporary file to original file (make temporary file into original
+  // file)
+  std::filesystem::rename(tmp_path, path);
 }
 
 /**
@@ -155,85 +152,94 @@ void File::replace_first_with(const std::string &token_f, const std::string &tok
  * @return true
  * @return false
  */
-bool File::exists(const std::string &token_f)
-{
-    reader.open(path);
+bool File::exists(const std::string &token_f) {
+  reader.open(path);
 
-    std::string current_token;
-    char ch;
+  std::string current_token;
+  char ch;
 
-    while (reader.get(ch))
-    {
-        if (ch == ' ' | ch == '\n')
-        {
-            current_token = "";
-            continue;
-        }
-
-        std::string _ch(1, ch);
-        current_token += _ch;
-
-        if (current_token == token_f)
-        {
-            reader.close();
-            return true;
-        }
+  while (reader.get(ch)) {
+    if (ch == ' ' | ch == '\n') {
+      current_token = "";
+      continue;
     }
 
-    reader.close();
-    return false;
+    std::string _ch(1, ch);
+    current_token += _ch;
+
+    if (current_token == token_f) {
+      reader.close();
+      return true;
+    }
+  }
+
+  reader.close();
+  return false;
 }
 
 /**
  * @brief Get the path member
- * 
- * @return const std::filesystem::path 
+ *
+ * @return const std::filesystem::path
  */
 std::filesystem::path File::get_path() const { return path; }
 
 /**
  * @brief Gets relative location of another file (not lexiographically)
- * 
+ *
  * @param _f Other file
- * @return char 
+ * @return char
  */
-char File::compare(const File &_f) const
-{
-    const std::vector<std::string> t_split(misc::split_string(path.string(), "/")), o_split(misc::split_string(_f.get_path().string(), "/")); // t_split = this_split, o_split = other_split
-    size_t location = 0;
+char File::compare(const File &_f) const {
+  const std::vector<std::string> t_split(
+      misc::split_string(path.string(), "/")),
+      o_split(misc::split_string(
+          _f.get_path().string(),
+          "/")); // t_split = this_split, o_split = other_split
+  size_t location = 0;
 
-    for (; location < ((t_split.size() > o_split.size()) ? o_split.size() : t_split.size()); location++)
-    {
-        if (t_split[location] == o_split[location])
-            continue;
+  for (; location <
+         ((t_split.size() > o_split.size()) ? o_split.size() : t_split.size());
+       location++) {
+    if (t_split[location] == o_split[location])
+      continue;
 
-        if (misc::sub_vector(t_split, location, t_split.size() - 1).size() > misc::sub_vector(o_split, location, o_split.size() - 1).size() | misc::sub_vector(t_split, location, t_split.size() - 1).size() == misc::sub_vector(o_split, location, o_split.size() - 1).size()) // this file is "further in" or "equally in" than other file
-            return -1;
-        else // other file is "further in" than this file
-            return 1;
-    }
+    if (misc::sub_vector(t_split, location, t_split.size() - 1).size() >
+            misc::sub_vector(o_split, location, o_split.size() - 1).size() |
+        misc::sub_vector(t_split, location, t_split.size() - 1).size() ==
+            misc::sub_vector(o_split, location, o_split.size() - 1)
+                .size()) // this file is "further in" or "equally in" than other
+                         // file
+      return -1;
+    else // other file is "further in" than this file
+      return 1;
+  }
 
-    return 0; // both files are located in same directory
+  return 0; // both files are located in same directory
 }
 
 /**
- * @brief Returns the trimmed path of this file object by eliminating common directories based on another file object
- * 
+ * @brief Returns the trimmed path of this file object by eliminating common
+ * directories based on another file object
+ *
  * @param _f Other file
- * @return std::filesystem::path 
+ * @return std::filesystem::path
  */
-std::filesystem::path File::trim(const File &_f) const
-{
-    const std::vector<std::string> t_split(misc::split_string(path.string(), "/")), o_split(misc::split_string(_f.get_path().string(), "/"));
-    size_t location = 0;
+std::filesystem::path File::trim(const File &_f) const {
+  const std::vector<std::string> t_split(
+      misc::split_string(path.string(), "/")),
+      o_split(misc::split_string(_f.get_path().string(), "/"));
+  size_t location = 0;
 
-    for (; location < ((t_split.size() > o_split.size()) ? o_split.size() : t_split.size()); location++)
-    {
-        if (t_split[location] != o_split[location])
-            break;
-    }
+  for (; location <
+         ((t_split.size() > o_split.size()) ? o_split.size() : t_split.size());
+       location++) {
+    if (t_split[location] != o_split[location])
+      break;
+  }
 
-    return std::filesystem::path(misc::join_string_vector(misc::sub_vector(t_split, location, t_split.size() - 1), "/"));
+  return std::filesystem::path(misc::join_string_vector(
+      misc::sub_vector(t_split, location, t_split.size() - 1), "/"));
 }
 
 std::ofstream File::writer;

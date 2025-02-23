@@ -9,6 +9,11 @@ CPM is a simple, yet useful tool for managing your C and C++ projects.
 Currently supports the following operating systems:
 - All unix-based operating systems
 
+### Installation
+#### MacOS and Linux
+Clone the project, and follow instructions for buildling down bellow (specifically the ones for installing as well)
+- More detailed information may be availible at the release page for the version you want to install
+
 ### Building
 #### Unix-Based Operating Systems
 For building project (you may need to use sudo if you are getting `access denied` or `permission not granted` errors):

@@ -11,12 +11,14 @@
 #include "data.h"
 #include "directory.h"
 #include "logger.h"
+
+#define MAIN_CONFIG_INCLUDE
 #include "config.h"
+#undef MAIN_CONFIG_INCLUDE
 
 #include <chrono>
 #include <cstdint>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
 /**

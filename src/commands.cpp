@@ -13,6 +13,7 @@
 #include "file.h"
 #include "logger.h"
 #include "misc.h"
+#include "config.h"
 
 #include <cstdlib>
 #include <filesystem>
@@ -83,7 +84,7 @@ uint8_t help(const std::vector<std::string> &args) {
  * @return uint8_t
  */
 uint8_t version() {
-  logger.custom("cpm version 0.1.0", "version", "red");
+  logger.custom("cpm version " + version_string, "version", "red");
 
   return 0;
 }

@@ -122,9 +122,9 @@ void File::replace_first_with(const std::string &token_f,
   bool searching = true;
 
   while (std::getline(reader, line)) {
-    if (searching &&
-        (pos = line.find(token_f)) !=
-            std::string::npos) // Replcae first instance of token_f with token_r
+    if (searching && (pos = line.find(token_f)) !=
+                         std::string::npos) // Replcae first instance of token_f
+                                            // with token_r
     {
       line.replace(pos, token_f.length(), token_r);
       searching = false; // Switch off searching mode

@@ -1,7 +1,7 @@
 # C/C++ Project Manager (CPM)
 <div align="center">
   <a href=https://github.com/vkeshav300/cpm/actions/workflows/codeql.yml><img src=https://github.com/vkeshav300/cpm/actions/workflows/codeql.yml/badge.svg></img></a>
-  <a href=https://github.com/vkeshav300/cpm/actions/workflows/pages/pages-build-deployment><img src=https://github.com/vkeshav300/cpm/actions/workflows/codeql.yml/badge.svg></img></a><br>
+  <a href=https://github.com/vkeshav300/cpm/actions/workflows/pages/pages-build-deployment><img src=https://github.com/vkeshav300/cpm/actions/workflows/pages/pages-build-deployment/badge.svg></img></a><br>
   <img height=256 src=assets/CPM_LOGO.png></img>
   <p>CPM is a simple, yet useful tool for managing your C and C++ projects.</p><br>
   <img src=assets/readme/1.png>
@@ -11,6 +11,8 @@
 ### Operating System Support
 Currently supports the following operating systems:
 - All unix-based operating systems
+
+For more detailed information, check out the [CPM wiki on GitHub](https://github.com/vkeshav300/cpm/wiki).
 
 ### Building / Installing
 #### Unix-Based Operating Systems

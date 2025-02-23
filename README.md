@@ -12,12 +12,7 @@
 Currently supports the following operating systems:
 - All unix-based operating systems
 
-### Installation
-#### MacOS and Linux
-Clone the project, and follow instructions for buildling down bellow (specifically the ones for installing as well)
-- More detailed information may be availible at the release page for the version you want to install
-
-### Building/Installing
+### Building / Installing
 #### Unix-Based Operating Systems
 For building project (you may need to use sudo if you are getting `access denied` or `permission not granted` errors):
 ```
@@ -33,13 +28,17 @@ cd build
 cmake ..
 sudo make install
 ```
-### Arch Linux(AUR)
-``` paru -S cpm-git ```
+#### Arch Linux(AUR)
+See [aur.archlinux.org/packages/cpm-git](https://aur.archlinux.org/packages/cpm-git) for package details.
+Instalation command:
+```
+paru -S cpm-git
+```
 
 ### Issues
 All bug reports, feature requests and other issues are monitored at the [GitHub issue tracker](https://github.com/vkeshav300/cpm/issues).
 
-### Other information
+### Other Information
 The code uses 256-Color Mode [ANSI Escape Codes](https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797) to color text. Not all terminals support coloring text. To check if your terminal does, run: 
 ```
 echo -e "\x1b[38;5;196mTest\x1b[0m"

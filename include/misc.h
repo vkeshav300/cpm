@@ -12,6 +12,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <filesystem>
 
 namespace misc {
 bool vector_contains(const std::vector<std::string> &vector,

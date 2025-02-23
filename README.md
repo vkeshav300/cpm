@@ -4,8 +4,8 @@
   <a href=https://github.com/vkeshav300/cpm/actions/workflows/pages/pages-build-deployment><img src=https://github.com/vkeshav300/cpm/actions/workflows/codeql.yml/badge.svg></img></a><br>
   <img height=256 src=assets/CPM_LOGO.png></img>
   <p>CPM is a simple, yet useful tool for managing your C and C++ projects.</p><br>
-  <img width=720 src=assets/readme/1.png>
-  <img width=720 src=assets/readme/2.png>
+  <img src=assets/readme/1.png>
+  <img src=assets/readme/2.png>
 </div>
 
 ### Operating System Support

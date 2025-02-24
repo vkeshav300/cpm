@@ -1,9 +1,29 @@
+/**
+ * @file config_command.cpp
+ * @brief Adds functionality to config command
+ * @version 0.1
+ * @date 2025-02-23
+ * 
+ * @copyright Copyright (c) 2025
+ * 
+ */
 #include "commands/config_command.h"
 #include "data.h"
 #include "logger.h"
 
+/**
+ * @brief Construct a new Config_Command object
+ * 
+ */
 Config_Command::Config_Command() {}
 
+/**
+ * @brief Execute config command
+ * 
+ * @param args 
+ * @param flags 
+ * @return uint8_t 
+ */
 uint8_t Config_Command::execute(const std::vector<std::string> &args,
                                 const std::vector<std::string> &flags) const {
   if (args[0] == "set") {
@@ -25,12 +45,32 @@ uint8_t Config_Command::execute(const std::vector<std::string> &args,
   return 0;
 }
 
+/**
+ * @brief Gets description of command
+ * 
+ * @return std::string 
+ */
 std::string Config_Command::get_description() const {
   return "Allows access to configuration variables of CPM";
 }
 
+/**
+ * @brief Gets command arguments
+ * 
+ * @return std::string 
+ */
 std::string Config_Command::get_arguments() const { return ""; }
 
+/**
+ * @brief Gets command flags
+ * 
+ * @return std::string 
+ */
 std::string Config_Command::get_flags() const { return ""; }
 
+/**
+ * @brief Gets minimum arguments
+ * 
+ * @return uint16_t 
+ */
 uint16_t Config_Command::get_min_args() const { return 2; }

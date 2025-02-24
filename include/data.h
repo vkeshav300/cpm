@@ -1,25 +1,27 @@
 /**
  * @file data.h
- * @brief Defines Data_Handler singleton
+ * @brief Defines Data_Manager singleton
  * @version 0.1
  * @date 2024-09-15
  *
  * @copyright Copyright (c) 2024
  *
  */
+#pragma once
+
 #include <string>
 #include <unordered_map>
 
-class Data_Handler {
+class Data_Manager {
 private:
-  Data_Handler() {}
+  Data_Manager() {}
 
 public:
   std::unordered_map<std::string, std::string> config;
 
-  Data_Handler(const Data_Handler &obj) = delete;
+  Data_Manager(const Data_Manager &obj) = delete;
 
-  static Data_Handler &get();
+  static Data_Manager &get();
 
   void read();
 

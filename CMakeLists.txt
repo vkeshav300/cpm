@@ -9,16 +9,20 @@ project(
 set(CMAKE_CXX_STANDARD 23)
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-file(GLOB SOURCES "${SOURCE_DIR}/*.cpp")
+# Glob all the source files in src and commands directories
+file(GLOB SOURCES "${SOURCE_DIR}/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/src/commands/*.cpp")
 
+# Add the executable
 add_executable(
     ${PROJECT_NAME}
     ${SOURCES}
 )
 
+# Include the directories
 target_include_directories(
     ${PROJECT_NAME} PRIVATE 
     ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/commands
 )
 
 target_link_libraries(

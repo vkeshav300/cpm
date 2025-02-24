@@ -15,7 +15,6 @@
 #include <fstream>
 
 #ifdef _WIN32
-
 /**
  * @brief Ensures existance of valid store location for cpm config data and
  * returns it (WINDOWS ONLY)
@@ -25,7 +24,6 @@
 std::filesystem::path get_store_location() {
   return std::filesystem::absolute("");
 }
-
 #else
 /**
  * @brief Ensures existance of valid store location for cpm config data and
@@ -48,16 +46,15 @@ std::filesystem::path get_store_location() {
 
   return std::filesystem::absolute(home_loc);
 }
-
 #endif
 
 /**
- * @brief Get method for DATA_HANDLER singleton class
+ * @brief Get method for Data_Manager singleton class
  *
- * @return Data_Handler&
+ * @return Data_Manager&
  */
-Data_Handler &Data_Handler::get() {
-  static Data_Handler obj;
+Data_Manager &Data_Manager::get() {
+  static Data_Manager obj;
   return obj;
 }
 
@@ -65,7 +62,7 @@ Data_Handler &Data_Handler::get() {
  * @brief Reads config file and stores it in data
  *
  */
-void Data_Handler::read() {
+void Data_Manager::read() {
   std::string config_location = get_store_location();
 
   config_location += "/cpm.data";
@@ -122,7 +119,7 @@ void Data_Handler::read() {
  * @brief Writes to config from stored information
  *
  */
-void Data_Handler::write() {
+void Data_Manager::write() {
   std::string config_location = get_store_location();
 
   std::ofstream data_file(config_location + "/cpm.data");
@@ -147,7 +144,7 @@ void Data_Handler::write() {
  * @return true
  * @return false
  */
-bool Data_Handler::config_has_key(const std::string &key) {
+bool Data_Manager::config_has_key(const std::string &key) {
   if (config.find(key) != config.end())
     return true;
 

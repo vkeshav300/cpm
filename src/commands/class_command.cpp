@@ -1,3 +1,12 @@
+/**
+ * @file class_command.cpp
+ * @brief Adds functionality to class command
+ * @version 0.1
+ * @date 2025-02-24
+ *
+ * @copyright Copyright (c) 2025
+ *
+ */
 #include "commands/class_command.h"
 #include "commands/fpair_command.h"
 
@@ -8,8 +17,19 @@
 
 #include <filesystem>
 
+/**
+ * @brief Construct a new Class_Command object
+ *
+ */
 Class_Command::Class_Command() {}
 
+/**
+ * @brief Execute class command
+ *
+ * @param args
+ * @param flags
+ * @return uint8_t
+ */
 uint8_t Class_Command::execute(const std::vector<std::string> &args,
                                const std::vector<std::string> &flags) const {
   if (directory::get_extension() == ".c") {
@@ -176,12 +196,32 @@ uint8_t Class_Command::execute(const std::vector<std::string> &args,
   return 0;
 }
 
+/**
+ * @brief Get description
+ *
+ * @return std::string
+ */
 std::string Class_Command::get_description() const {
   return "Creates a class-based header-source file pair with many options";
 }
 
+/**
+ * @brief Get arguments
+ *
+ * @return std::string
+ */
 std::string Class_Command::get_arguments() const { return ""; }
 
+/**
+ * @brief Get flags
+ *
+ * @return std::string
+ */
 std::string Class_Command::get_flags() const { return ""; }
 
+/**
+ * @brief Get minimum arguments
+ *
+ * @return uint16_t
+ */
 uint16_t Class_Command::get_min_args() const { return 1; }

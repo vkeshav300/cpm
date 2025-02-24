@@ -38,10 +38,11 @@ public:
 
   static Logger &get();
 
-  void
-  set_colors(const std::unordered_map<std::string, std::string> &new_colors);
+  void set_colors(const std::unordered_map<std::string, std::string> &new_colors);
 
   void set_color(const std::string &k, const std::string &v);
+
+  void disable_coloring();
 
   void flush_buffer() const;
 

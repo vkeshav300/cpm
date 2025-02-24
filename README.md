@@ -7,12 +7,11 @@
   <img src=assets/readme/1.png>
   <img src=assets/readme/2.png>
 </div>
+[CPM wiki](https://github.com/vkeshav300/cpm/wiki).
 
-### Operating System Support
+### Operating Systems
 Currently supports the following operating systems:
 - All unix-based operating systems
-
-For more detailed information, check out the [CPM wiki on GitHub](https://github.com/vkeshav300/cpm/wiki).
 
 ### Building / Installing
 #### Unix-Based Operating Systems
@@ -30,6 +29,7 @@ cd build
 cmake ..
 sudo make install
 ```
+
 #### Arch Linux(AUR)
 See [aur.archlinux.org/packages/cpm-git](https://aur.archlinux.org/packages/cpm-git) for package details.
 Instalation command:
@@ -40,14 +40,14 @@ paru -S cpm-git
 ### Issues
 All bug reports, feature requests and other issues are monitored at the [GitHub issue tracker](https://github.com/vkeshav300/cpm/issues).
 
-### Other Information
+### Text Coloring
 The code uses 256-Color Mode [ANSI Escape Codes](https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797) to color text. Not all terminals support coloring text. To check if your terminal does, run: 
 ```
 echo -e "\x1b[38;5;196mTest\x1b[0m"
 ```
 This should print the text "Test" in a red-ish color. Most modern terminals support coloring using ANSI Escape Codes.
 
-Try to format the code using LLVM standards. If you have clang-format installed, you can do that with the following command:
+If your terminal does NOT support `256-Color Mode ANSI Escape Codes`, run the following command to disable text coloring:
 ```
-clang-format -i src/*.cpp include/*.h
+cpm config set text_coloring off
 ```

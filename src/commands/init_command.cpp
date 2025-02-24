@@ -1,3 +1,12 @@
+/**
+ * @file init_command.cpp
+ * @brief Adds functionality to init command
+ * @version 0.1
+ * @date 2025-02-23
+ * 
+ * @copyright Copyright (c) 2025
+ * 
+ */
 #include "commands/init_command.h"
 
 #include "directory.h"
@@ -6,8 +15,19 @@
 
 #include <fstream>
 
+/**
+ * @brief Construct a new Init_Command object
+ * 
+ */
 Init_Command::Init_Command() {}
 
+/**
+ * @brief Execute init command
+ * 
+ * @param args 
+ * @param flags 
+ * @return uint8_t 
+ */
 uint8_t Init_Command::execute(const std::vector<std::string> &args,
                               const std::vector<std::string> &flags) const {
   /* Language parsing */
@@ -156,12 +176,32 @@ uint8_t Init_Command::execute(const std::vector<std::string> &args,
   return 0;
 }
 
+/**
+ * @brief Gets description of command
+ * 
+ * @return std::string 
+ */
 std::string Init_Command::get_description() const {
   return "Initializes a new c/cpp project in working directory";
 }
 
+/**
+ * @brief Gets command arguments
+ * 
+ * @return std::string 
+ */
 std::string Init_Command::get_arguments() const { return ""; }
 
+/**
+ * @brief Gets command flags
+ * 
+ * @return std::string 
+ */
 std::string Init_Command::get_flags() const { return ""; }
 
+/**
+ * @brief Gets minimum arguments
+ * 
+ * @return uint16_t 
+ */
 uint16_t Init_Command::get_min_args() const { return 1; }

@@ -1,3 +1,12 @@
+/**
+ * @file struct_command.cpp
+ * @brief Adds functionality to struct command
+ * @version 0.1
+ * @date 2025-02-23
+ * 
+ * @copyright Copyright (c) 2025
+ * 
+ */
 #include "commands/struct_command.h"
 #include "commands/fpair_command.h"
 
@@ -7,8 +16,19 @@
 
 #include <filesystem>
 
+/**
+ * @brief Construct a new Struct_Command object
+ * 
+ */
 Struct_Command::Struct_Command() {}
 
+/**
+ * @brief Execute struct command
+ * 
+ * @param args 
+ * @param flags 
+ * @return uint8_t 
+ */
 uint8_t Struct_Command::execute(const std::vector<std::string> &args,
                                 const std::vector<std::string> &flags) const {
   /* Create file pairs */
@@ -95,12 +115,32 @@ uint8_t Struct_Command::execute(const std::vector<std::string> &args,
   return 0;
 }
 
+/**
+ * @brief Gets description of command
+ * 
+ * @return std::string 
+ */
 std::string Struct_Command::get_description() const {
   return "Creates a struct based header-source file pair";
 }
 
+/**
+ * @brief Gets command arguments
+ * 
+ * @return std::string 
+ */
 std::string Struct_Command::get_arguments() const { return ""; }
 
+/**
+ * @brief Gets command flags
+ * 
+ * @return std::string 
+ */
 std::string Struct_Command::get_flags() const { return ""; }
 
+/**
+ * @brief Gets minimum arguments
+ * 
+ * @return uint16_t 
+ */
 uint16_t Struct_Command::get_min_args() const { return 1; }

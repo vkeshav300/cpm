@@ -1,3 +1,12 @@
+/**
+ * @file class_command.cpp
+ * @brief Adds functionality to class command
+ * @version 0.1
+ * @date 2025-02-23
+ * 
+ * @copyright Copyright (c) 2025
+ * 
+ */
 #include "commands/class_command.h"
 #include "commands/fpair_command.h"
 
@@ -8,8 +17,19 @@
 
 #include <filesystem>
 
+/**
+ * @brief Construct a new Class_Command object
+ * 
+ */
 Class_Command::Class_Command() {}
 
+/**
+ * @brief Execute class command
+ * 
+ * @param args 
+ * @param flags 
+ * @return uint8_t 
+ */
 uint8_t Class_Command::execute(const std::vector<std::string> &args,
                                const std::vector<std::string> &flags) const {
   if (directory::get_extension() == ".c") {

@@ -1,3 +1,12 @@
+/**
+ * @file help_command.h
+ * @brief Outlines help_command
+ * @version 0.1
+ * @date 2025-02-23
+ * 
+ * @copyright Copyright (c) 2025
+ * 
+ */
 #pragma once
 
 #include "command.h"

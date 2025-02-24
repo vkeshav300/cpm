@@ -44,9 +44,13 @@ int main(int argc, char *argv[]) {
   data_manager.read();
 
   /* Overwrites colormap with config variables */
-  for (const auto &[k, v] : logger.colors) {
-    if (data_manager.config_has_key("color_" + k))
-      logger.set_color(k, logger.raw_colors[data_manager.config["color_" + k]]);
+  if (data_manager.config_has_key("text_coloring") && data_manager.config["text_coloring"] == "off") {
+    logger.disable_coloring();
+  } else {
+    for (const auto &[k, v] : logger.colors) {
+      if (data_manager.config_has_key("color_" + k))
+        logger.set_color(k, logger.raw_colors[data_manager.config["color_" + k]]);
+    }
   }
 
   /* Register commands */

@@ -3,9 +3,9 @@
  * @brief Adds functionality to init command
  * @version 0.1
  * @date 2025-02-23
- * 
+ *
  * @copyright Copyright (c) 2025
- * 
+ *
  */
 #include "commands/init_command.h"
 
@@ -17,16 +17,16 @@
 
 /**
  * @brief Construct a new Init_Command object
- * 
+ *
  */
 Init_Command::Init_Command() {}
 
 /**
  * @brief Execute init command
- * 
- * @param args 
- * @param flags 
- * @return uint8_t 
+ *
+ * @param args
+ * @param flags
+ * @return uint8_t
  */
 uint8_t Init_Command::execute(const std::vector<std::string> &args,
                               const std::vector<std::string> &flags) const {
@@ -178,8 +178,8 @@ uint8_t Init_Command::execute(const std::vector<std::string> &args,
 
 /**
  * @brief Gets description of command
- * 
- * @return std::string 
+ *
+ * @return std::string
  */
 std::string Init_Command::get_description() const {
   return "Initializes a new c/cpp project in working directory";
@@ -187,21 +187,23 @@ std::string Init_Command::get_description() const {
 
 /**
  * @brief Gets command arguments
- * 
- * @return std::string 
+ *
+ * @return std::string
  */
-std::string Init_Command::get_arguments() const { return ""; }
+std::string Init_Command::get_arguments() const {
+  return "[language] language project is based in";
+}
 
 /**
  * @brief Gets command flags
- * 
- * @return std::string 
+ *
+ * @return std::string
  */
-std::string Init_Command::get_flags() const { return ""; }
+std::string Init_Command::get_flags() const { return "None"; }
 
 /**
  * @brief Gets minimum arguments
- * 
- * @return uint16_t 
+ *
+ * @return uint16_t
  */
 uint16_t Init_Command::get_min_args() const { return 1; }

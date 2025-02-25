@@ -238,4 +238,24 @@ void set_relative_path(std::string &p, const std::filesystem::path &p1,
     p = p.substr(2);
   p += p2.filename().string();
 }
+
+/**
+ * @brief Replaces all instances if i1 with i2 in string s
+ *
+ * @param s
+ * @param i1
+ * @param i2
+ */
+void replace_string_instances(std::string &s, const std::string &i1,
+                              const std::string &i2) {
+  if (i1.empty() | i2.empty() | (i1 == i2))
+    return;
+
+  size_t pos = 0;
+
+  while ((pos = s.find(i1, pos)) != std::string::npos) {
+    s.replace(pos, i1.length(), i2);
+    pos += i2.length();
+  }
+}
 } // namespace misc

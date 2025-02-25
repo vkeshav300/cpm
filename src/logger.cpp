@@ -48,7 +48,7 @@ void Logger::set_color(const std::string &k, const std::string &v) {
 
 /**
  * @brief Disables text coloring for logger outputs
- * 
+ *
  */
 void Logger::disable_coloring() {
   for (auto &[k, v] : colors) {

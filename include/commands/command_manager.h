@@ -3,9 +3,9 @@
  * @brief Outlines command manager
  * @version 0.1
  * @date 2025-02-23
- * 
+ *
  * @copyright Copyright (c) 2025
- * 
+ *
  */
 #pragma once
 
@@ -27,4 +27,5 @@ public:
   uint8_t execute(const std::string &name, const std::vector<std::string> &args,
                   const std::vector<std::string> &flags) const;
   uint16_t get_min_args(const std::string &name) const;
+  uint8_t help_menu(const std::vector<std::string> &args) const;
 };

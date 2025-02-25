@@ -10,12 +10,12 @@
 #include "data.h"
 #include "directory.h"
 #include "logger.h"
+#include "misc.h"
 
 #include "commands/class_command.h"
 #include "commands/command_manager.h"
 #include "commands/config_command.h"
 #include "commands/fpair_command.h"
-#include "commands/help_command.h"
 #include "commands/init_command.h"
 #include "commands/struct_command.h"
 #include "commands/version_command.h"
@@ -44,12 +44,14 @@ int main(int argc, char *argv[]) {
   data_manager.read();
 
   /* Overwrites colormap with config variables */
-  if (data_manager.config_has_key("text_coloring") && data_manager.config["text_coloring"] == "off") {
+  if (data_manager.config_has_key("text_coloring") &&
+      data_manager.config["text_coloring"] == "off") {
     logger.disable_coloring();
   } else {
     for (const auto &[k, v] : logger.colors) {
       if (data_manager.config_has_key("color_" + k))
-        logger.set_color(k, logger.raw_colors[data_manager.config["color_" + k]]);
+        logger.set_color(k,
+                         logger.raw_colors[data_manager.config["color_" + k]]);
     }
   }
 
@@ -58,7 +60,6 @@ int main(int argc, char *argv[]) {
   manager.register_command("class", std::make_unique<Class_Command>());
   manager.register_command("config", std::make_unique<Config_Command>());
   manager.register_command("fpair", std::make_unique<Fpair_Command>());
-  manager.register_command("help", std::make_unique<Help_Command>());
   manager.register_command("init", std::make_unique<Init_Command>());
   manager.register_command("struct", std::make_unique<Struct_Command>());
   manager.register_command("version", std::make_unique<Version_Command>());
@@ -72,20 +73,20 @@ int main(int argc, char *argv[]) {
   }
 
   /* Parsing */
-  const std::string command = argv[1];
-  if (!manager.exists(command)) {
-    logger.error_q("command does not exist", command);
+  const std::string cmd = argv[1];
+  if (!manager.exists(cmd) & cmd != "--help") {
+    logger.error_q("command does not exist", cmd);
     return 1;
   }
 
-  std::vector<std::string> arguments;
+  std::vector<std::string> args;
   std::vector<std::string> flags;
 
   /* Flags */
   for (int i = 0; i < argc; i++) {
     std::string arg = argv[i];
     if (arg[0] == '-' & arg.size() > 1) {
-      uint32_t _start = 1;
+      uint8_t _start = 1;
       if (arg[1] == '-' & arg.size() > 2) // --flag
         _start = 2;
 
@@ -97,25 +98,43 @@ int main(int argc, char *argv[]) {
   for (int i = 2; i < argc; i++) {
     std::string arg = argv[i];
     if (arg[0] != '-')
-      arguments.push_back(arg);
+      args.push_back(arg);
   }
 
   logger.success("parsed command");
 
+  /* Determines if help menu needs to be displayed */
+  const bool help_menu = misc::vector_contains(flags, "help");
+
   /* Checks if minimum arguments requirement is met */
-  const uint16_t cmd_min_args = manager.get_min_args(command);
-  if (arguments.size() < cmd_min_args) {
-    logger.error_q("requires at least " + std::to_string(cmd_min_args) +
-                       " arguments",
-                   command);
-    return 1;
+  if (!help_menu) {
+    const uint16_t cmd_min_args = manager.get_min_args(cmd);
+    if (args.size() < cmd_min_args) {
+      logger.error_q("requires at least " + std::to_string(cmd_min_args) +
+                         " arguments",
+                     cmd);
+      return 1;
+    }
   }
 
   /* Command execution */
-  uint8_t result = manager.execute(command, arguments, flags);
+  uint8_t result;
+  if (help_menu) {
+    if (cmd != "--help") {
+      if (args.empty())
+        args.push_back(cmd);
+      else
+        args[0] = cmd;
+    }
+
+    result = manager.help_menu(args);
+  }
+
+  else
+    result = manager.execute(cmd, args, flags);
 
   /* Saving data */
-  if ((result == 0) & (command != "help") & (command != "version"))
+  if ((result == 0) & (cmd != "--help") & (cmd != "version"))
     data_manager.write();
 
   /* Artifact cleanup */
@@ -125,7 +144,7 @@ int main(int argc, char *argv[]) {
   const auto end = std::chrono::high_resolution_clock::now();
 
   logger.custom(
-      "command \'" + command + "\' with exit code " + std::to_string(result) +
+      "command \'" + cmd + "\' with exit code " + std::to_string(result) +
           " in " +
           std::to_string(
               std::chrono::duration_cast<std::chrono::milliseconds>(end - start)

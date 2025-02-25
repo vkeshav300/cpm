@@ -3,9 +3,9 @@
  * @brief Adds functionality to version command
  * @version 0.1
  * @date 2025-02-23
- * 
+ *
  * @copyright Copyright (c) 2025
- * 
+ *
  */
 #include "commands/version_command.h"
 
@@ -13,16 +13,16 @@
 
 /**
  * @brief Construct a new Version_Command object
- * 
+ *
  */
 Version_Command::Version_Command() {}
 
 /**
  * @brief Execute version command
- * 
- * @param args 
- * @param flags 
- * @return uint8_t 
+ *
+ * @param args
+ * @param flags
+ * @return uint8_t
  */
 uint8_t Version_Command::execute(const std::vector<std::string> &args,
                                  const std::vector<std::string> &flags) const {
@@ -32,8 +32,8 @@ uint8_t Version_Command::execute(const std::vector<std::string> &args,
 
 /**
  * @brief Gets description of command
- * 
- * @return std::string 
+ *
+ * @return std::string
  */
 std::string Version_Command::get_description() const {
   return "Logs installed version of CPM";
@@ -41,21 +41,21 @@ std::string Version_Command::get_description() const {
 
 /**
  * @brief Gets command arguments
- * 
- * @return std::string 
+ *
+ * @return std::string
  */
-std::string Version_Command::get_arguments() const { return ""; }
+std::string Version_Command::get_arguments() const { return "None"; }
 
 /**
  * @brief Gets command flags
- * 
- * @return std::string 
+ *
+ * @return std::string
  */
-std::string Version_Command::get_flags() const { return ""; }
+std::string Version_Command::get_flags() const { return "None"; }
 
 /**
  * @brief Gets minimum arguments
- * 
- * @return uint16_t 
+ *
+ * @return uint16_t
  */
 uint16_t Version_Command::get_min_args() const { return 0; }

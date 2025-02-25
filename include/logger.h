@@ -30,7 +30,7 @@ public:
   std::unordered_map<std::string, std::string> colors = {
       {"theme", raw_colors["blue"]},     {"success", raw_colors["green"]},
       {"error", raw_colors["red"]},      {"warn", raw_colors["orange"]},
-      {"count", raw_colors["white"]},    {"prompt", raw_colors["yellow"]},
+      {"count", raw_colors["white"]},    {"prompt", raw_colors["cyan"]},
       {"execute", raw_colors["orange"]}, {"reset", raw_colors["reset"]},
   };
 

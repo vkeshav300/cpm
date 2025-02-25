@@ -1,20 +1,26 @@
-# C/C++ Project Manager (CPM)
 <div align="center">
-  <a href=https://github.com/vkeshav300/cpm/actions/workflows/codeql.yml><img src=https://github.com/vkeshav300/cpm/actions/workflows/codeql.yml/badge.svg></img></a>
-  <a href=https://github.com/vkeshav300/cpm/actions/workflows/pages/pages-build-deployment><img src=https://github.com/vkeshav300/cpm/actions/workflows/pages/pages-build-deployment/badge.svg></img></a><br>
-  <img height=256 src=assets/CPM_LOGO.png></img>
-  <p>CPM is a simple, yet useful tool for managing your C and C++ projects.</p><br>
+  <img height=256 src=assets/CPM_LOGO.png><br>
+  <p>CPM is a simple, yet useful tool for managing your C and C++ projects.</p>
+  <br>
+  <a href=https://github.com/vkeshav300/cpm/actions/workflows/codeql.yml><img src=https://github.com/vkeshav300/cpm/actions/workflows/codeql.yml/badge.svg></a>
+  <a href=https://github.com/vkeshav300/cpm/actions/workflows/pages/pages-build-deployment><img src=https://github.com/vkeshav300/cpm/actions/workflows/pages/pages-build-deployment/badge.svg></a>
+  <br><br>
+  <h2>Quick Navigation</h2>
+  <a href="https://github.com/vkeshav300/cpm/releases/?include_prereleases&sort=semver"><img src="https://img.shields.io/github/tag/vkeshav300/cpm"></a>
+  <a href="github.com/vkeshav300/cpm/wiki"><img src="https://img.shields.io/badge/Wiki-grey"></a>
+  <a href="https://github.com/vkeshav300/cpm/issues"><img src="https://img.shields.io/badge/Issue_Tracker-grey"></a>
+  <a href="https://github.com/vkeshav300/cpm?tab=readme-ov-file#building--installing"><img src="https://img.shields.io/badge/Installation_/_Building-blue"></a>
+  <br><br>
+  <h2>Examples</h2>
   <img src=assets/readme/1.png>
-  <img src=assets/readme/2.png>
 </div>
-[CPM wiki](https://github.com/vkeshav300/cpm/wiki).
 
-### Operating Systems
-Currently supports the following operating systems:
+### Operating System Compatability
+CPM currently is compatable with the following operating systems:
 - All unix-based operating systems
 
 ### Building / Installing
-#### Unix-Based Operating Systems
+#### Unix-Based Operating Systems (build it yourself)
 For building project (you may need to use sudo if you are getting `access denied` or `permission not granted` errors):
 ```
 mkdir build
@@ -30,7 +36,7 @@ cmake ..
 sudo make install
 ```
 
-#### Arch Linux(AUR)
+#### AUR / Arch Linux (package installation)
 See [aur.archlinux.org/packages/cpm-git](https://aur.archlinux.org/packages/cpm-git) for package details.
 Instalation command:
 ```

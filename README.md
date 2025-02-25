@@ -7,7 +7,7 @@
   <br><br>
   <h2>Quick Navigation</h2>
   <a href="https://github.com/vkeshav300/cpm/releases/?include_prereleases&sort=semver"><img src="https://img.shields.io/github/tag/vkeshav300/cpm"></a>
-  <a href="github.com/vkeshav300/cpm/wiki"><img src="https://img.shields.io/badge/Wiki-grey"></a>
+  <a href="ghttps://github.com/vkeshav300/cpm/wiki"><img src="https://img.shields.io/badge/Wiki-grey"></a>
   <a href="https://github.com/vkeshav300/cpm/issues"><img src="https://img.shields.io/badge/Issue_Tracker-grey"></a>
   <a href="https://github.com/vkeshav300/cpm?tab=readme-ov-file#building--installing"><img src="https://img.shields.io/badge/Installation_/_Building-blue"></a>
   <br><br>

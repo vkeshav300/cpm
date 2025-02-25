@@ -39,7 +39,7 @@ sudo make install
 
 #### AUR / Arch Linux (package installation)
 See [aur.archlinux.org/packages/cpm-git](https://aur.archlinux.org/packages/cpm-git) for package details.
-Instalation command:
+Installation command:
 ```
 paru -S cpm-git
 ```

@@ -3,9 +3,9 @@
  * @brief Adds functionality to struct command
  * @version 0.1
  * @date 2025-02-23
- * 
+ *
  * @copyright Copyright (c) 2025
- * 
+ *
  */
 #include "commands/struct_command.h"
 #include "commands/fpair_command.h"
@@ -18,16 +18,16 @@
 
 /**
  * @brief Construct a new Struct_Command object
- * 
+ *
  */
 Struct_Command::Struct_Command() {}
 
 /**
  * @brief Execute struct command
- * 
- * @param args 
- * @param flags 
- * @return uint8_t 
+ *
+ * @param args
+ * @param flags
+ * @return uint8_t
  */
 uint8_t Struct_Command::execute(const std::vector<std::string> &args,
                                 const std::vector<std::string> &flags) const {
@@ -117,8 +117,8 @@ uint8_t Struct_Command::execute(const std::vector<std::string> &args,
 
 /**
  * @brief Gets description of command
- * 
- * @return std::string 
+ *
+ * @return std::string
  */
 std::string Struct_Command::get_description() const {
   return "Creates a struct based header-source file pair";
@@ -126,21 +126,25 @@ std::string Struct_Command::get_description() const {
 
 /**
  * @brief Gets command arguments
- * 
- * @return std::string 
+ *
+ * @return std::string
  */
-std::string Struct_Command::get_arguments() const { return ""; }
+std::string Struct_Command::get_arguments() const {
+  return "[names] names of files that will contain structs";
+}
 
 /**
  * @brief Gets command flags
- * 
- * @return std::string 
+ *
+ * @return std::string
  */
-std::string Struct_Command::get_flags() const { return ""; }
+std::string Struct_Command::get_flags() const {
+  return "-p=[parent file name] specifry parent file to inhert from";
+}
 
 /**
  * @brief Gets minimum arguments
- * 
- * @return uint16_t 
+ *
+ * @return uint16_t
  */
 uint16_t Struct_Command::get_min_args() const { return 1; }

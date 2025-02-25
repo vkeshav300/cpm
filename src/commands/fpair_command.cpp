@@ -3,9 +3,9 @@
  * @brief Adds functionality to fpair command
  * @version 0.1
  * @date 2025-02-23
- * 
+ *
  * @copyright Copyright (c) 2025
- * 
+ *
  */
 #include "commands/fpair_command.h"
 
@@ -15,16 +15,16 @@
 
 /**
  * @brief Construct a new Fpair_Command object
- * 
+ *
  */
 Fpair_Command::Fpair_Command() {}
 
 /**
  * @brief Execute fpair command
- * 
- * @param args 
- * @param flags 
- * @return uint8_t 
+ *
+ * @param args
+ * @param flags
+ * @return uint8_t
  */
 uint8_t Fpair_Command::execute(const std::vector<std::string> &args,
                                const std::vector<std::string> &flags) const {
@@ -70,8 +70,8 @@ uint8_t Fpair_Command::execute(const std::vector<std::string> &args,
 
 /**
  * @brief Gets description of command
- * 
- * @return std::string 
+ *
+ * @return std::string
  */
 std::string Fpair_Command::get_description() const {
   return "Creates a header-source file pair";
@@ -79,21 +79,24 @@ std::string Fpair_Command::get_description() const {
 
 /**
  * @brief Gets command arguments
- * 
- * @return std::string 
+ *
+ * @return std::string
  */
-std::string Fpair_Command::get_arguments() const { return ""; }
+std::string Fpair_Command::get_arguments() const {
+  return "[sub command] sub command of fpair to execute\t[file names] names of "
+         "file pairs to create (separated by spaces)";
+}
 
 /**
  * @brief Gets command flags
- * 
- * @return std::string 
+ *
+ * @return std::string
  */
-std::string Fpair_Command::get_flags() const { return ""; }
+std::string Fpair_Command::get_flags() const { return "None"; }
 
 /**
  * @brief Gets minimum arguments
- * 
- * @return uint16_t 
+ *
+ * @return uint16_t
  */
 uint16_t Fpair_Command::get_min_args() const { return 2; }

@@ -60,4 +60,7 @@ std::filesystem::path trim_path(const std::filesystem::path &p1,
 
 void set_relative_path(std::string &p, const std::filesystem::path &p1,
                        const std::filesystem::path &p2);
+
+void replace_string_instances(std::string &s, const std::string &i1,
+                              const std::string &i2);
 } // namespace misc

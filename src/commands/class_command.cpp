@@ -3,9 +3,9 @@
  * @brief Adds functionality to class command
  * @version 0.1
  * @date 2025-02-23
- * 
+ *
  * @copyright Copyright (c) 2025
- * 
+ *
  */
 #include "commands/class_command.h"
 #include "commands/fpair_command.h"
@@ -19,16 +19,16 @@
 
 /**
  * @brief Construct a new Class_Command object
- * 
+ *
  */
 Class_Command::Class_Command() {}
 
 /**
  * @brief Execute class command
- * 
- * @param args 
- * @param flags 
- * @return uint8_t 
+ *
+ * @param args
+ * @param flags
+ * @return uint8_t
  */
 uint8_t Class_Command::execute(const std::vector<std::string> &args,
                                const std::vector<std::string> &flags) const {
@@ -197,11 +197,20 @@ uint8_t Class_Command::execute(const std::vector<std::string> &args,
 }
 
 std::string Class_Command::get_description() const {
-  return "Creates a class-based header-source file pair with many options";
+  return "Creates a class-based header-source file pair with many options "
+         "(overrides existing headdr-source file pairs with same names)";
 }
 
-std::string Class_Command::get_arguments() const { return ""; }
+std::string Class_Command::get_arguments() const {
+  return "[names] names of files that will contain classes or names of pure "
+         "virtual functions (depending on flags)";
+}
 
-std::string Class_Command::get_flags() const { return ""; }
+std::string Class_Command::get_flags() const {
+  return "-p=[parent file name] specify a parent file to inhert "
+         "from\t--private use private inheritance\t--protected use protected "
+         "inheritance\t--singleton create singleton\t--interface create "
+         "interface";
+}
 
 uint16_t Class_Command::get_min_args() const { return 1; }

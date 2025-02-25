@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
   /* Parsing */
   const std::string cmd = argv[1];
   if (!manager.exists(cmd) & cmd != "--help") {
-    logger.error_q("command does not exist", cmd);
+    logger.error_q("command does not exist, try using cpm --help", cmd);
     return 1;
   }
 

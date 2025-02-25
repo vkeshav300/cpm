@@ -13,6 +13,7 @@
   <br><br>
   <h2>Examples</h2>
   <img src=assets/readme/1.png>
+  <img src=assets/readme/2.png>
 </div>
 
 ### Operating System Compatability

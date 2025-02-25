@@ -17,7 +17,7 @@
 
 const std::vector<std::string> supported_structures = {
     "executable",
-    "string",
+    "simple",
 };
 
 class Init_Command : public Command {

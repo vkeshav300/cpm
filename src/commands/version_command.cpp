@@ -9,7 +9,7 @@
  */
 #include "commands/version_command.h"
 
-#include "../config.h"
+#include "config.h"
 
 /**
  * @brief Construct a new Version_Command object

@@ -22,8 +22,11 @@ target_include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/lib
 )
 
+find_package(CURL REQUIRED)
+
 target_link_libraries(
     ${PROJECT_NAME} PRIVATE
+    CURL::libcurl
 )
 
 install(TARGETS ${PROJECT_NAME} DESTINATION /usr/local/bin) # Installs CPM - MacOS / Linux - sudo required (sudo make install)

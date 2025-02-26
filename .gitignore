@@ -1,5 +1,5 @@
 # CMake artifacts
-build
+build/*
 CMakeFiles/
 CMakeCache.txt
 CMakeScripts/
@@ -10,7 +10,7 @@ Makefile
 docs/output
 
 # Testing
-tests
+tests/*
 
 # Other
 .exe

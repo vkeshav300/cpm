@@ -81,14 +81,14 @@ uint8_t Class_Command::execute(const std::vector<std::string> &args,
           "\t" + class_name + "();",
           "",
           "public:",
-          "\t" + class_name + "(const " + class_name + " &obj) = delete;",
+          "\t" + class_name + "(const " + class_name + "& obj) = delete;",
           "",
-          "\tstatic " + class_name + " &get();",
+          "\tstatic " + class_name + "& get();",
           "};",
       });
 
       source.write({
-          class_name + " &" + prefix_a + "get() {",
+          class_name + "& " + prefix_a + "get() {",
           "\tstatic " + class_name + " obj;",
           "\treturn obj;",
           "}",

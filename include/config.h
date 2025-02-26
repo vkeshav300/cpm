@@ -1,7 +1,16 @@
+/**
+ * @file config.h
+ * @brief Contains configuration variables for CPM (baked in at compile time via constexpr char)
+ * @version 0.1
+ * @date 2025-02-26
+ * 
+ * @copyright Copyright (c) 2025
+ * 
+ */
 #pragma once
 
-#include <string>
+constexpr char version_string[6] = "1.1.0";
+constexpr char repo_link[60] = "https://api.github.com/repos/vkeshav300/cpm/releases/latest";
 
-const std::string version_string = "1.1.0";
-const std::string c_default_standard = "23";
-const std::string cpp_default_standard = "23";
+constexpr char c_default_standard[3] = "23";
+constexpr char cpp_default_standard[3] = "23";

@@ -43,6 +43,9 @@ Installation command:
 ```
 paru -S cpm-git
 ```
+May not update by default by `paru -Syu`
+to check for updates more accurately please run:
+``` paru -Sy cpm-git ```
 
 ### Issues
 All bug reports, feature requests and other issues are monitored at the [GitHub issue tracker](https://github.com/vkeshav300/cpm/issues).

@@ -43,7 +43,7 @@ Installation command:
 ```
 paru -S cpm-git
 ```
-May not update by default by `paru -Syu`
+May not update by default via `paru -Syu`
 to check for updates more accurately please run:
 ``` paru -Sy cpm-git ```
 

@@ -105,8 +105,7 @@ std::string Struct_Command::get_arguments() const {
  * @return std::string
  */
 std::string Struct_Command::get_flags() const {
-  return "-p=[parent file name] specifry parent file to inhert "
-         "from\t--ntypedef don't use typedef keyword";
+  return "--ntypedef don't use typedef keyword";
 }
 
 /**

@@ -86,11 +86,11 @@ int main(int argc, char *argv[]) {
   for (int i = 0; i < argc; i++) {
     std::string arg = argv[i];
     if (arg[0] == '-' & arg.size() > 1) {
-      uint8_t _start = 1;
-      if (arg[1] == '-' & arg.size() > 2) // --flag
-        _start = 2;
+      uint8_t _start = 1; // -f
+      if (arg[1] == '-' & arg.size() > 2)
+        _start = 2; // --flag
 
-      flags.push_back(arg.substr(_start, arg.size())); // -f
+      flags.push_back(arg.substr(_start, arg.size()));
     }
   }
 

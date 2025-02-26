@@ -10,6 +10,7 @@
 #include "commands/init_command.h"
 
 #include "directory.h"
+#include "config.h"
 #include "file.h"
 #include "misc.h"
 
@@ -41,6 +42,7 @@ uint8_t Init_Command::execute(const std::vector<std::string> &args,
     return 1;
   }
 
+  /* Prompt project name */
   const std::string project_name = logger.prompt("enter project name");
 
   /* Directory structure */
@@ -50,6 +52,7 @@ uint8_t Init_Command::execute(const std::vector<std::string> &args,
           : "executable";
   std::string structure;
 
+  /* Prompt structure */
   while (true) {
     structure =
         logger.prompt("enter project structure (hit enter for default '" +
@@ -70,7 +73,7 @@ uint8_t Init_Command::execute(const std::vector<std::string> &args,
   std::string main_path;
 
   if (structure == "executable") {
-    directory::create_folders({"src", "include", "build", "tests"});
+    directory::create_folders({"src", "include", "build", "tests", "lib"});
 
     main_path = "src/main";
     main_path += ((lang == "cpp") ? ".cpp" : ".c");
@@ -91,7 +94,7 @@ uint8_t Init_Command::execute(const std::vector<std::string> &args,
     /* Setup CMake variables / file */
     const std::string cmake_lang = (lang == "cpp") ? "CXX" : "C";
     const std::string lang_version =
-        (flags.size() > 0) ? misc::get_flag_value(flags[0]) : "23";
+        (flags.size() > 0) ? misc::get_flag_value(flags[0]) : ((lang == "cpp") ? cpp_default_standard : c_default_standard);
 
     File cmake_lists("CMakeLists.txt");
     cmake_lists.load({
@@ -105,7 +108,7 @@ uint8_t Init_Command::execute(const std::vector<std::string> &args,
         "set(CMAKE_" + cmake_lang + "_STANDARD " + lang_version + ")",
         "set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)",
         "",
-        "file(GLOB SOURCES \"${SOURCE_DIR}/*.cpp\")",
+        "file(GLOB_RECURSE SOURCES \"${SOURCE_DIR}/*.cpp\")",
         "",
         "add_executable(",
         "\t${PROJECT_NAME}",
@@ -121,15 +124,7 @@ uint8_t Init_Command::execute(const std::vector<std::string> &args,
         "\t${PROJECT_NAME} PRIVATE",
         ")",
         "",
-        "if (CMAKE_SYSTEM_NAME MATCHES \"Darwin\" OR CMAKE_SYSTEM_NAME "
-        "MATCHES "
-        "\"Linux\")",
-        "\tinstall(TARGETS ${PROJECT_NAME} DESTINATION /usr/local/bin) # "
-        "sudo "
-        "required",
-        "elseif (CMAKE_SYSTEM_NAME MATCHES \"Windows\")",
-        "\tinstall(TARGETS ${PROJECT_NAME} DESTINATION $ENV{ProgramFiles})",
-        "endif()",
+        "install(TARGETS ${PROJECT_NAME} DESTINATION /usr/local/bin)",
     });
   } else if (structure == "simple") {
     main_path = "main";
@@ -199,7 +194,7 @@ std::string Init_Command::get_arguments() const {
  *
  * @return std::string
  */
-std::string Init_Command::get_flags() const { return "None"; }
+std::string Init_Command::get_flags() const { return "-s=[language standard] specify a specific language standard to use instead of C" + c_default_standard + " or C++" + cpp_default_standard; }
 
 /**
  * @brief Gets minimum arguments

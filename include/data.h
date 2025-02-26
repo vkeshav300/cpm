@@ -19,13 +19,13 @@ private:
 public:
   std::unordered_map<std::string, std::string> config;
 
-  Data_Manager(const Data_Manager& obj) = delete;
+  Data_Manager(const Data_Manager &obj) = delete;
 
-  static Data_Manager& get();
+  static Data_Manager &get();
 
   void read();
 
   void write();
 
-  bool config_has_key(const std::string& key);
+  bool config_has_key(const std::string &key);
 };

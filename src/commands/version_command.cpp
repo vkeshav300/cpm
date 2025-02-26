@@ -24,7 +24,7 @@ Version_Command::Version_Command() {}
  * @param flags
  * @return uint8_t
  */
-uint8_t Version_Command::execute(const std::vector<std::string>& args,
+uint8_t Version_Command::execute(const std::vector<std::string> &args,
                                  const std::vector<std::string> &flags) const {
   logger.custom(version_string, "version", "theme");
   return 0;

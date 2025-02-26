@@ -30,8 +30,8 @@ Class_Command::Class_Command() {}
  * @param flags
  * @return uint8_t
  */
-uint8_t Class_Command::execute(const std::vector<std::string>& args,
-                               const std::vector<std::string>& flags) const {
+uint8_t Class_Command::execute(const std::vector<std::string> &args,
+                               const std::vector<std::string> &flags) const {
   if (directory::get_extension() == ".c") {
     logger.error("C programming language does not support classes");
     return 1;
@@ -61,7 +61,7 @@ uint8_t Class_Command::execute(const std::vector<std::string>& args,
   bool status = false;
   std::vector<std::string> split_arg;
 
-  for (const auto& arg : args) {
+  for (const auto &arg : args) {
     std::filesystem::path _arg(
         arg); // Turn 'arg' into filesystem::path for easier path handling
     class_name = std::filesystem::absolute(_arg).filename().string();
@@ -103,7 +103,7 @@ uint8_t Class_Command::execute(const std::vector<std::string>& args,
 
       /* For interfaces, all arguments after first are treated as virtual
        * functions */
-      for (const auto& arg :
+      for (const auto &arg :
            misc::sub_vector<std::string>(args, 1, args.size() - 1))
         header.write({"\tvirtual void " + arg + "() = 0;"});
 

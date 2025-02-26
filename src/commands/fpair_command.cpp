@@ -26,10 +26,10 @@ Fpair_Command::Fpair_Command() {}
  * @param flags
  * @return uint8_t
  */
-uint8_t Fpair_Command::execute(const std::vector<std::string>& args,
-                               const std::vector<std::string>& flags) const {
+uint8_t Fpair_Command::execute(const std::vector<std::string> &args,
+                               const std::vector<std::string> &flags) const {
   /* Determines path prefixes */
-  for (const auto& arg :
+  for (const auto &arg :
        misc::sub_vector<std::string>(args, 1, args.size() - 1)) {
     if (args[0] == "create") {
       const std::filesystem::path header_path(

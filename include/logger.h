@@ -34,14 +34,14 @@ public:
       {"execute", raw_colors["orange"]}, {"reset", raw_colors["reset"]},
   };
 
-  Logger(const Logger& obj) = delete;
+  Logger(const Logger &obj) = delete;
 
-  static Logger& get();
+  static Logger &get();
 
   void
-  set_colors(const std::unordered_map<std::string, std::string>& new_colors);
+  set_colors(const std::unordered_map<std::string, std::string> &new_colors);
 
-  void set_color(const std::string& k, const std::string& v);
+  void set_color(const std::string &k, const std::string &v);
 
   void disable_coloring();
 
@@ -49,25 +49,25 @@ public:
 
   void handle_logger_count();
 
-  void success(const std::string& message);
+  void success(const std::string &message);
 
-  void success_q(const std::string& message, const std::string& quote);
+  void success_q(const std::string &message, const std::string &quote);
 
-  void error(const std::string& message);
+  void error(const std::string &message);
 
-  void error_q(const std::string& message, const std::string& quote);
+  void error_q(const std::string &message, const std::string &quote);
 
-  void warn(const std::string& message);
+  void warn(const std::string &message);
 
-  void warn_q(const std::string& message, const std::string& quote);
+  void warn_q(const std::string &message, const std::string &quote);
 
-  void custom(const std::string& message, const std::string& mtype,
-              const std::string& color);
+  void custom(const std::string &message, const std::string &mtype,
+              const std::string &color);
 
-  std::string prompt(const std::string& message);
+  std::string prompt(const std::string &message);
 
-  bool prompt_yn(const std::string& message);
+  bool prompt_yn(const std::string &message);
 
-  bool execute(const std::string& command,
-               const bool& must_populate_file = true);
+  bool execute(const std::string &command,
+               const bool &must_populate_file = true);
 };

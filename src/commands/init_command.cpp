@@ -29,8 +29,8 @@ Init_Command::Init_Command() {}
  * @param flags
  * @return uint8_t
  */
-uint8_t Init_Command::execute(const std::vector<std::string>& args,
-                              const std::vector<std::string>& flags) const {
+uint8_t Init_Command::execute(const std::vector<std::string> &args,
+                              const std::vector<std::string> &flags) const {
   /* Language parsing */
   std::string lang = args[0];
 

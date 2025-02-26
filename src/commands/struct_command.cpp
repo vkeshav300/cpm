@@ -29,8 +29,8 @@ Struct_Command::Struct_Command() {}
  * @param flags
  * @return uint8_t
  */
-uint8_t Struct_Command::execute(const std::vector<std::string>& args,
-                                const std::vector<std::string>& flags) const {
+uint8_t Struct_Command::execute(const std::vector<std::string> &args,
+                                const std::vector<std::string> &flags) const {
   /* Create file pairs */
   std::vector<std::string> file_pair_args(args);
   file_pair_args.insert(file_pair_args.begin(), "create");
@@ -44,7 +44,7 @@ uint8_t Struct_Command::execute(const std::vector<std::string>& args,
   /* Open files */
   std::string struct_name, _struct_name;
 
-  for (const auto& arg : args) {
+  for (const auto &arg : args) {
     /* Open and write to files */
     std::filesystem::path _arg(arg);
 

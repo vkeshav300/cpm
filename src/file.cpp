@@ -17,7 +17,7 @@
  *
  * @param _path
  */
-File::File(const std::filesystem::path& _path)
+File::File(const std::filesystem::path &_path)
     : path(std::filesystem::absolute(_path)) {
   std::filesystem::create_directories(
       std::filesystem::absolute(path.parent_path()));
@@ -40,13 +40,13 @@ File::~File() {
  *
  * @param lines Lines to write
  */
-void File::write(const std::vector<std::string>& lines) {
+void File::write(const std::vector<std::string> &lines) {
   writer.open(path, std::ios::app);
 
   if (!misc::ofstream_open(writer))
     return;
 
-  for (const auto& line : lines)
+  for (const auto &line : lines)
     writer << "\n" << line;
 
   writer.close();
@@ -57,13 +57,13 @@ void File::write(const std::vector<std::string>& lines) {
  *
  * @param lines Lines to write
  */
-void File::load(const std::vector<std::string>& lines) {
+void File::load(const std::vector<std::string> &lines) {
   writer.open(path);
 
   if (!misc::ofstream_open(writer))
     return;
 
-  for (const auto& line : lines)
+  for (const auto &line : lines)
     writer << line << "\n";
 
   writer.close();
@@ -107,8 +107,8 @@ std::vector<std::string> File::read() {
  * @param token_f Text to find
  * @param token_r Text to replace with
  */
-void File::replace_first_with(const std::string& token_f,
-                              const std::string& token_r) {
+void File::replace_first_with(const std::string &token_f,
+                              const std::string &token_r) {
   const std::filesystem::path tmp_path(path.string() + ".tmp");
 
   writer.open(tmp_path);
@@ -151,7 +151,7 @@ void File::replace_first_with(const std::string& token_f,
  * @return true
  * @return false
  */
-bool File::exists(const std::string& token_f) {
+bool File::exists(const std::string &token_f) {
   reader.open(path);
 
   std::string current_token;
@@ -189,7 +189,7 @@ std::filesystem::path File::get_path() const { return path; }
  * @param _f Other file
  * @return char
  */
-char File::compare(const File& _f) const {
+char File::compare(const File &_f) const {
   return misc::compare_paths(path, _f.get_path());
 }
 
@@ -200,7 +200,7 @@ char File::compare(const File& _f) const {
  * @param _f Other file
  * @return std::filesystem::path
  */
-std::filesystem::path File::trim(const File& _f) const {
+std::filesystem::path File::trim(const File &_f) const {
   return misc::trim_path(path, _f.get_path());
 }
 

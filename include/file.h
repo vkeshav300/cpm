@@ -22,25 +22,25 @@ private:
   std::filesystem::path path;
 
 public:
-  File(const std::filesystem::path &_path);
+  File(const std::filesystem::path& _path);
   ~File();
 
-  void write(const std::vector<std::string> &lines);
+  void write(const std::vector<std::string>& lines);
 
-  void load(const std::vector<std::string> &lines);
+  void load(const std::vector<std::string>& lines);
 
   void remove();
 
   std::vector<std::string> read();
 
-  void replace_first_with(const std::string &token_f,
-                          const std::string &token_r);
+  void replace_first_with(const std::string& token_f,
+                          const std::string& token_r);
 
-  bool exists(const std::string &token_f);
+  bool exists(const std::string& token_f);
 
   std::filesystem::path get_path() const;
 
-  char compare(const File &_f) const;
+  char compare(const File& _f) const;
 
-  std::filesystem::path trim(const File &_f) const;
+  std::filesystem::path trim(const File& _f) const;
 };

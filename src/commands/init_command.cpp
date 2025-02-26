@@ -29,8 +29,8 @@ Init_Command::Init_Command() {}
  * @param flags
  * @return uint8_t
  */
-uint8_t Init_Command::execute(const std::vector<std::string> &args,
-                              const std::vector<std::string> &flags) const {
+uint8_t Init_Command::execute(const std::vector<std::string>& args,
+                              const std::vector<std::string>& flags) const {
   /* Language parsing */
   std::string lang = args[0];
 
@@ -110,7 +110,8 @@ uint8_t Init_Command::execute(const std::vector<std::string> &args,
         "set(CMAKE_" + cmake_lang + "_STANDARD " + lang_version + ")",
         "set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)",
         "",
-        "file(GLOB_RECURSE SOURCES \"${SOURCE_DIR}/*." + std::string((lang == "cpp") ? "cpp" : "c") + "\")",
+        "file(GLOB_RECURSE SOURCES \"${SOURCE_DIR}/*." +
+            std::string((lang == "cpp") ? "cpp" : "c") + "\")",
         "",
         "add_executable(",
         "\t${PROJECT_NAME}",

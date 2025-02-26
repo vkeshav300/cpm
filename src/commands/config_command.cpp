@@ -24,8 +24,8 @@ Config_Command::Config_Command() {}
  * @param flags
  * @return uint8_t
  */
-uint8_t Config_Command::execute(const std::vector<std::string> &args,
-                                const std::vector<std::string> &flags) const {
+uint8_t Config_Command::execute(const std::vector<std::string>& args,
+                                const std::vector<std::string>& flags) const {
   if (args[0] == "set") {
     if (args.size() < 3) {
       logger.error_q("sub-command requires at least 3 arguments", "set");

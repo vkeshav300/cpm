@@ -21,7 +21,7 @@ namespace directory {
  * @return true
  * @return false
  */
-bool has_folder(const std::filesystem::path &path) {
+bool has_folder(const std::filesystem::path& path) {
   return std::filesystem::is_directory(std::filesystem::absolute(path));
 }
 
@@ -32,7 +32,7 @@ bool has_folder(const std::filesystem::path &path) {
  * @return true
  * @return false
  */
-bool has_file(const std::filesystem::path &path) {
+bool has_file(const std::filesystem::path& path) {
   return std::filesystem::exists(std::filesystem::absolute(path));
 }
 
@@ -41,8 +41,8 @@ bool has_file(const std::filesystem::path &path) {
  *
  * @param paths Paths to folders to be created
  */
-void create_folders(const std::vector<std::filesystem::path> &paths) {
-  for (const auto &path : paths)
+void create_folders(const std::vector<std::filesystem::path>& paths) {
+  for (const auto& path : paths)
     std::filesystem::create_directories(std::filesystem::absolute(path));
 }
 
@@ -51,7 +51,7 @@ void create_folders(const std::vector<std::filesystem::path> &paths) {
  *
  * @param path Path to file to be created
  */
-void create_file(const std::filesystem::path &path) {
+void create_file(const std::filesystem::path& path) {
   if (has_file(path))
     return;
 
@@ -64,7 +64,7 @@ void create_file(const std::filesystem::path &path) {
  *
  * @param path Path to file to destroy.
  */
-void destroy_file(const std::filesystem::path &path) {
+void destroy_file(const std::filesystem::path& path) {
   if (!has_file(path))
     return;
 
@@ -97,12 +97,12 @@ std::string get_extension() {
   const std::filesystem::directory_iterator end;
 
   std::transform(start, end, std::back_inserter(files),
-                 [](const std::filesystem::directory_entry &entry) {
+                 [](const std::filesystem::directory_entry& entry) {
                    return entry.path().string();
                  });
 
   /* Check for file extentions */
-  for (const auto &v : files) {
+  for (const auto& v : files) {
     auto const pos = v.find_last_of(".");
     const std::string leaf = v.substr(pos + 1);
 
@@ -120,8 +120,8 @@ std::string get_extension() {
  * @param hpp If header extension is .hpp
  * @return std::filesystem::path
  */
-std::filesystem::path get_structured_header_path(const std::string &name,
-                                                 const bool &hpp) {
+std::filesystem::path get_structured_header_path(const std::string& name,
+                                                 const bool& hpp) {
   if (get_structure() == "executable")
     return "include/" + name + (hpp ? ".hpp" : ".h");
 
@@ -134,7 +134,7 @@ std::filesystem::path get_structured_header_path(const std::string &name,
  * @param name Name of source file
  * @return std::filesystem::path
  */
-std::filesystem::path get_structured_source_path(const std::string &name) {
+std::filesystem::path get_structured_source_path(const std::string& name) {
   if (get_structure() == "executable")
     return "src/" + name + get_extension();
 

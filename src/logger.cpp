@@ -19,7 +19,7 @@
  *
  * @return Logger*
  */
-Logger &Logger::get() {
+Logger& Logger::get() {
   static Logger logger;
   return logger;
 }
@@ -31,8 +31,8 @@ Logger &Logger::get() {
  * @param new_colors New color map(s)
  */
 void Logger::set_colors(
-    const std::unordered_map<std::string, std::string> &new_colors) {
-  for (const auto &[k, v] : new_colors)
+    const std::unordered_map<std::string, std::string>& new_colors) {
+  for (const auto& [k, v] : new_colors)
     colors[k] = v;
 }
 
@@ -42,7 +42,7 @@ void Logger::set_colors(
  * @param k Color type
  * @param v Raw color
  */
-void Logger::set_color(const std::string &k, const std::string &v) {
+void Logger::set_color(const std::string& k, const std::string& v) {
   colors[k] = v;
 }
 
@@ -51,7 +51,7 @@ void Logger::set_color(const std::string &k, const std::string &v) {
  *
  */
 void Logger::disable_coloring() {
-  for (auto &[k, v] : colors) {
+  for (auto& [k, v] : colors) {
     v = "";
   }
 }
@@ -84,7 +84,7 @@ void Logger::handle_logger_count() {
  *
  * @param message Text to be logged
  */
-void Logger::success(const std::string &message) {
+void Logger::success(const std::string& message) {
   handle_logger_count();
   std::cout << colors["success"] << "[success]: " << colors["reset"] << message
             << "\n";
@@ -96,7 +96,7 @@ void Logger::success(const std::string &message) {
  * @param message Text to be logged
  * @param quote Text in quote
  */
-void Logger::success_q(const std::string &message, const std::string &quote) {
+void Logger::success_q(const std::string& message, const std::string& quote) {
   success("\'" + quote + "\' " + message);
 }
 
@@ -105,7 +105,7 @@ void Logger::success_q(const std::string &message, const std::string &quote) {
  *
  * @param message Text to be logged
  */
-void Logger::error(const std::string &message) {
+void Logger::error(const std::string& message) {
   handle_logger_count();
   std::cerr << colors["error"] << "[error]: " << colors["reset"] << message
             << "\n";
@@ -117,7 +117,7 @@ void Logger::error(const std::string &message) {
  * @param message Text to be logged
  * @param quote Text in quote
  */
-void Logger::error_q(const std::string &message, const std::string &quote) {
+void Logger::error_q(const std::string& message, const std::string& quote) {
   error("\'" + quote + "\' " + message);
 }
 
@@ -126,7 +126,7 @@ void Logger::error_q(const std::string &message, const std::string &quote) {
  *
  * @param message Text to be logged
  */
-void Logger::warn(const std::string &message) {
+void Logger::warn(const std::string& message) {
   handle_logger_count();
   std::cout << colors["warn"] << "[warning]: " << colors["reset"] << message
             << "\n";
@@ -138,7 +138,7 @@ void Logger::warn(const std::string &message) {
  * @param message Text to be logged
  * @param quote Text in quote
  */
-void Logger::warn_q(const std::string &message, const std::string &quote) {
+void Logger::warn_q(const std::string& message, const std::string& quote) {
   warn("\'" + quote + "\' " + message);
 }
 
@@ -149,8 +149,8 @@ void Logger::warn_q(const std::string &message, const std::string &quote) {
  * @param mtype Message type
  * @param color Message color
  */
-void Logger::custom(const std::string &message, const std::string &mtype,
-                    const std::string &color) {
+void Logger::custom(const std::string& message, const std::string& mtype,
+                    const std::string& color) {
   handle_logger_count();
   std::cout << ((raw_colors.find(color) != raw_colors.end()) ? raw_colors[color]
                                                              : colors[color])
@@ -163,7 +163,7 @@ void Logger::custom(const std::string &message, const std::string &mtype,
  * @param message Prompt
  * @return std::string
  */
-std::string Logger::prompt(const std::string &message) {
+std::string Logger::prompt(const std::string& message) {
   handle_logger_count();
 
   std::cout << colors["prompt"] << "[prompt]: " << colors["reset"] << message
@@ -182,7 +182,7 @@ std::string Logger::prompt(const std::string &message) {
  * @return true
  * @return false
  */
-bool Logger::prompt_yn(const std::string &message) {
+bool Logger::prompt_yn(const std::string& message) {
   std::string response;
   while (true) {
     response = prompt(message + " [y/n]");
@@ -205,8 +205,8 @@ bool Logger::prompt_yn(const std::string &message) {
  * @return true
  * @return false
  */
-bool Logger::execute(const std::string &command,
-                     const bool &must_populate_file) {
+bool Logger::execute(const std::string& command,
+                     const bool& must_populate_file) {
   handle_logger_count();
 
   /* Prefix */

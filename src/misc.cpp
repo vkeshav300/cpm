@@ -15,7 +15,7 @@
 #include <filesystem>
 
 namespace misc {
-Logger &logger = Logger::get();
+Logger& logger = Logger::get();
 
 /**
  * @brief Checks if std::vector that contains std::strings has a specific
@@ -26,8 +26,8 @@ Logger &logger = Logger::get();
  * @return true
  * @return false
  */
-bool vector_contains(const std::vector<std::string> &vector,
-                     const std::string &content) {
+bool vector_contains(const std::vector<std::string>& vector,
+                     const std::string& content) {
   return (std::find(vector.begin(), vector.end(), content) == vector.end())
              ? false
              : true;
@@ -40,8 +40,8 @@ bool vector_contains(const std::vector<std::string> &vector,
  * @param delimeter String to split by
  * @return std::vector<std::string>
  */
-std::vector<std::string> split_string(const std::string &s,
-                                      const std::string &delimiter) {
+std::vector<std::string> split_string(const std::string& s,
+                                      const std::string& delimiter) {
 
   std::vector<std::string> tokens;
   size_t start = 0, end = 0;
@@ -68,7 +68,7 @@ std::vector<std::string> split_string(const std::string &s,
  * @param flag Raw flag
  * @return std::string
  */
-std::string get_flag_value(const std::string &flag) {
+std::string get_flag_value(const std::string& flag) {
   return (flag.find("=") != std::string::npos)
              ? flag.substr(flag.find("=") + 1, flag.length())
              : "";
@@ -81,7 +81,7 @@ std::string get_flag_value(const std::string &flag) {
  * @return true
  * @return false
  */
-bool ofstream_open(const std::ofstream &_ofstream) {
+bool ofstream_open(const std::ofstream& _ofstream) {
   if (!_ofstream.is_open()) {
     logger.custom("failed to open file", "ofs", "error");
     return false;
@@ -97,7 +97,7 @@ bool ofstream_open(const std::ofstream &_ofstream) {
  * @return true
  * @return false
  */
-bool ifstream_open(const std::ifstream &_ifstream) {
+bool ifstream_open(const std::ifstream& _ifstream) {
   if (!_ifstream.is_open()) {
     logger.custom("failed to open file", "ifs", "error");
     return false;
@@ -112,8 +112,8 @@ bool ifstream_open(const std::ifstream &_ifstream) {
  * @param vect Vector
  * @return std::string
  */
-std::string join_string_vector(const std::vector<std::string> &vect,
-                               const std::string &joiner) {
+std::string join_string_vector(const std::vector<std::string>& vect,
+                               const std::string& joiner) {
   std::string result;
 
   for (int i = 0; i < vect.size(); i++) {
@@ -132,10 +132,10 @@ std::string join_string_vector(const std::vector<std::string> &vect,
  *
  * @param str String
  */
-void auto_capitalize(std::string &str) {
+void auto_capitalize(std::string& str) {
   std::vector<std::string> split_str = split_string(str, "_");
 
-  for (auto &token : split_str)
+  for (auto& token : split_str)
     token[0] = std::toupper(token[0]);
 
   str = misc::join_string_vector(split_str, "_");
@@ -147,8 +147,8 @@ void auto_capitalize(std::string &str) {
  * @param p1
  * @param p2
  */
-char compare_paths(const std::filesystem::path &p1,
-                   const std::filesystem::path &p2) {
+char compare_paths(const std::filesystem::path& p1,
+                   const std::filesystem::path& p2) {
   const std::vector<std::string> t_split(split_string(p1.string(), "/")),
       o_split(split_string(p2.string(),
                            "/")); // t_split = this_split, o_split = other_split
@@ -179,8 +179,8 @@ char compare_paths(const std::filesystem::path &p1,
  * @param p2
  * @return std::filesystem::path
  */
-std::filesystem::path trim_path(const std::filesystem::path &p1,
-                                const std::filesystem::path &p2) {
+std::filesystem::path trim_path(const std::filesystem::path& p1,
+                                const std::filesystem::path& p2) {
   const std::vector<std::string> t_split(split_string(p1.string(), "/")),
       o_split(split_string(p2.string(),
                            "/")); // t_split = this_split, o_split = other_split
@@ -203,8 +203,8 @@ std::filesystem::path trim_path(const std::filesystem::path &p1,
  * @param p1
  * @param p2
  */
-void set_relative_path(std::string &p, const std::filesystem::path &p1,
-                       const std::filesystem::path &p2) {
+void set_relative_path(std::string& p, const std::filesystem::path& p1,
+                       const std::filesystem::path& p2) {
   /* Get relative path difference */
   const char path_diff(compare_paths(p1, p2));
 
@@ -246,8 +246,8 @@ void set_relative_path(std::string &p, const std::filesystem::path &p1,
  * @param i1
  * @param i2
  */
-void replace_string_instances(std::string &s, const std::string &i1,
-                              const std::string &i2) {
+void replace_string_instances(std::string& s, const std::string& i1,
+                              const std::string& i2) {
   if (i1.empty() | i2.empty() | (i1 == i2))
     return;
 

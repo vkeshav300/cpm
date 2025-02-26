@@ -13,7 +13,7 @@
 
 #include <iostream>
 
-Logger &logger = Logger::get();
+Logger& logger = Logger::get();
 
 /**
  * @brief Registers command
@@ -21,7 +21,7 @@ Logger &logger = Logger::get();
  * @param name
  * @param command
  */
-void Command_Manager::register_command(const std::string &name,
+void Command_Manager::register_command(const std::string& name,
                                        std::unique_ptr<Command> command) {
   commands[name] = std::move(command);
 }
@@ -33,7 +33,7 @@ void Command_Manager::register_command(const std::string &name,
  * @return true
  * @return false
  */
-bool Command_Manager::exists(const std::string &name) const {
+bool Command_Manager::exists(const std::string& name) const {
   if (commands.find(name) == commands.end())
     return false;
 
@@ -48,9 +48,9 @@ bool Command_Manager::exists(const std::string &name) const {
  * @param flags
  * @return uint8_t
  */
-uint8_t Command_Manager::execute(const std::string &name,
-                                 const std::vector<std::string> &args,
-                                 const std::vector<std::string> &flags) const {
+uint8_t Command_Manager::execute(const std::string& name,
+                                 const std::vector<std::string>& args,
+                                 const std::vector<std::string>& flags) const {
   auto cmd = commands.find(name);
 
   if (cmd == commands.end()) {
@@ -69,7 +69,7 @@ uint8_t Command_Manager::execute(const std::string &name,
  * @param name Command name
  * @return uint16_t
  */
-uint16_t Command_Manager::get_min_args(const std::string &name) const {
+uint16_t Command_Manager::get_min_args(const std::string& name) const {
   auto cmd = commands.find(name);
 
   return cmd->second->get_min_args();
@@ -81,7 +81,7 @@ uint16_t Command_Manager::get_min_args(const std::string &name) const {
  * @param args
  * @return uint8_t
  */
-uint8_t Command_Manager::help_menu(const std::vector<std::string> &args) const {
+uint8_t Command_Manager::help_menu(const std::vector<std::string>& args) const {
   if (args.empty()) {
     /* ASCII art */
     std::cout << "\n"
@@ -101,7 +101,7 @@ uint8_t Command_Manager::help_menu(const std::vector<std::string> &args) const {
 
     logger.custom("https://github.com/vkeshav300/cpm", "github page", "theme");
     std::cout << "\n" << logger.colors["theme"];
-    for (const auto &[name, cmd] : commands)
+    for (const auto& [name, cmd] : commands)
       std::cout << name << " command:\n"
                 << "\targuments: " << cmd->get_arguments()
                 << "\n\tflags: " << cmd->get_flags()

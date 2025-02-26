@@ -53,7 +53,7 @@ std::filesystem::path get_store_location() {
  *
  * @return Data_Manager&
  */
-Data_Manager &Data_Manager::get() {
+Data_Manager& Data_Manager::get() {
   static Data_Manager obj;
   return obj;
 }
@@ -127,7 +127,7 @@ void Data_Manager::write() {
   if (!misc::ofstream_open(data_file))
     return;
 
-  for (const auto &[k, v] : config) {
+  for (const auto& [k, v] : config) {
     if (k == "" | v == "")
       continue;
 
@@ -144,7 +144,7 @@ void Data_Manager::write() {
  * @return true
  * @return false
  */
-bool Data_Manager::config_has_key(const std::string &key) {
+bool Data_Manager::config_has_key(const std::string& key) {
   if (config.find(key) != config.end())
     return true;
 

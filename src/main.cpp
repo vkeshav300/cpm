@@ -38,8 +38,8 @@ int main(int argc, char *argv[]) {
   const auto start = std::chrono::high_resolution_clock::now();
 
   /* Singletons */
-  Logger &logger = Logger::get();
-  Data_Manager &data_manager = Data_Manager::get();
+  Logger& logger = Logger::get();
+  Data_Manager& data_manager = Data_Manager::get();
 
   data_manager.read();
 
@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
       data_manager.config["text_coloring"] == "off") {
     logger.disable_coloring();
   } else {
-    for (const auto &[k, v] : logger.colors) {
+    for (const auto& [k, v] : logger.colors) {
       if (data_manager.config_has_key("color_" + k))
         logger.set_color(k,
                          logger.raw_colors[data_manager.config["color_" + k]]);

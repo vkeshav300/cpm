@@ -57,21 +57,21 @@ uint8_t Struct_Command::execute(const std::vector<std::string> &args,
 
     if (!misc::vector_contains(flags, "ntypedef")) {
       header.write({"typedef struct {", "\t", "} " + struct_name + ";", "",
-                    struct_name + "* create_" + _struct_name + "();"});
+                    struct_name + " *create_" + _struct_name + "();"});
 
       source.write(
-          {struct_name + "* create_" + _struct_name + "() {", "\t", "}"});
+          {struct_name + " *create_" + _struct_name + "() {", "\t", "}"});
     } else {
       header.write({
           "struct " + struct_name + " {",
           "",
           "}",
           "",
-          "struct " + struct_name + "* create_" + _struct_name + "();",
+          "struct " + struct_name + " *create_" + _struct_name + "();",
       });
 
       source.write({
-          "struct " + struct_name + "* create_" + _struct_name + "() {",
+          "struct " + struct_name + " *create_" + _struct_name + "() {",
           "",
           "}",
       });

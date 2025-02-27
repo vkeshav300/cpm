@@ -48,6 +48,13 @@ May not update by default via `paru -Syu`. To check for updates more accurately 
 paru -Sy cpm-git
 ```
 
+### Updating
+By default, CPM checks for updates every time you run a valid command. This does cause lag, however, and to get rid of this lag you can run:
+```
+cpm config set update_scanning off
+```
+At the moment, CPM does not auto-update, and will only alert you when a newer version is availible.
+
 ### Issues
 All bug reports, feature requests and other issues are monitored at the [GitHub issue tracker](https://github.com/vkeshav300/cpm/issues).
 

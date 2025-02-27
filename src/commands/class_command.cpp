@@ -65,7 +65,7 @@ uint8_t Class_Command::execute(const std::vector<std::string> &args,
     std::filesystem::path _arg(
         arg); // Turn 'arg' into filesystem::path for easier path handling
     class_name = std::filesystem::absolute(_arg).filename().string();
-    
+
     if (!misc::vector_contains(flags, "n"))
       misc::auto_capitalize(class_name);
 

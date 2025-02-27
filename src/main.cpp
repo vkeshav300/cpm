@@ -7,12 +7,12 @@
  * @copyright Copyright (c) 2023
  *
  */
+#include "api.h"
 #include "data.h"
 #include "directory.h"
 #include "logger.h"
 #include "misc.h"
 #include "updates.h"
-#include "api.h"
 
 #include "commands/class_command.h"
 #include "commands/command_manager.h"
@@ -109,8 +109,10 @@ int main(int argc, char *argv[]) {
 
   logger.success("parsed command");
 
-  /* Update management (disable with cpm config set update_scanning off to reduce command lag) */
-  if (!data_manager.config_has_key("update_scanning") || !(data_manager.config["update_scanning"] == "off"))
+  /* Update management (disable with cpm config set update_scanning off to
+   * reduce command lag) */
+  if (!data_manager.config_has_key("update_scanning") ||
+      !(data_manager.config["update_scanning"] == "off"))
     updates::scan();
 
   /* Determines if help menu needs to be displayed */

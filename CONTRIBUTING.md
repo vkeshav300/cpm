@@ -7,3 +7,13 @@ Example:
 ```
 clang-format -i src/*.cpp include/*.h src/commands/*.cpp include/commands/*.h
 ```
+
+### Code documentation
+If possible, please include DOXYGEN style code documentation. To create a pdf with all the code documentation, run:
+```
+cd docs
+doxygen
+cd output/latex
+make
+open refman.pdf
+```

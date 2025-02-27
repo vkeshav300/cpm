@@ -200,7 +200,7 @@ std::string Init_Command::get_arguments() const {
 std::string Init_Command::get_flags() const {
   return "-s=[language standard] specify a specific language standard to use "
          "instead of C" +
-         c_default_standard + " or C++" + cpp_default_standard;
+         std::string(c_default_standard) + " or C++" + std::string(cpp_default_standard);
 }
 
 /**

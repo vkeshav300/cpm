@@ -55,7 +55,7 @@ uint8_t Struct_Command::execute(const std::vector<std::string> &args,
         arg, misc::vector_contains(flags, "hpp"))),
         source(directory::get_structured_source_path(arg));
 
-    if (!misc::vector_contains(flags, "ntypedef")) {
+    if (!misc::vector_contains(flags, "n")) {
       header.write({"typedef struct {", "\t", "} " + struct_name + ";", "",
                     struct_name + " *create_" + _struct_name + "();"});
 
@@ -105,7 +105,7 @@ std::string Struct_Command::get_arguments() const {
  * @return std::string
  */
 std::string Struct_Command::get_flags() const {
-  return "--ntypedef don't use typedef keyword";
+  return "-n don't use typedef keyword";
 }
 
 /**

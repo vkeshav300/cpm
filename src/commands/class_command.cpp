@@ -65,7 +65,9 @@ uint8_t Class_Command::execute(const std::vector<std::string> &args,
     std::filesystem::path _arg(
         arg); // Turn 'arg' into filesystem::path for easier path handling
     class_name = std::filesystem::absolute(_arg).filename().string();
-    misc::auto_capitalize(class_name);
+    
+    if (!misc::vector_contains(flags, "n"))
+      misc::auto_capitalize(class_name);
 
     /* Write to files */
     prefix_a = class_name + "::";
@@ -78,17 +80,17 @@ uint8_t Class_Command::execute(const std::vector<std::string> &args,
       header.write({
           "class " + class_name + " {",
           "private:",
-          "\t" + class_name + "();",
+          "\t" + class_name + "() {}",
           "",
           "public:",
-          "\t" + class_name + "(const " + class_name + "& obj) = delete;",
+          "\t" + class_name + "(const " + class_name + " &obj) = delete;",
           "",
-          "\tstatic " + class_name + "& get();",
+          "\tstatic " + class_name + " &get();",
           "};",
       });
 
       source.write({
-          class_name + "& " + prefix_a + "get() {",
+          class_name + " &" + prefix_a + "get() {",
           "\tstatic " + class_name + " obj;",
           "\treturn obj;",
           "}",
@@ -210,7 +212,7 @@ std::string Class_Command::get_flags() const {
   return "-p=[parent file name] specify a parent file to inhert "
          "from\t--private use private inheritance\t--protected use protected "
          "inheritance\t--singleton create singleton\t--interface create "
-         "interface";
+         "interface\t-n don't auto capitalize class names";
 }
 
 uint16_t Class_Command::get_min_args() const { return 1; }

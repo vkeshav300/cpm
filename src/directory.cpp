@@ -7,10 +7,7 @@
  * @copyright Copyright (c) 2023
  *
  */
-#include "directory.h"
-#include "logger.h"
-#include "misc.h"
-
+#include "../include/directory.h"
 #include <algorithm>
 
 namespace directory {

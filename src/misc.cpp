@@ -7,8 +7,8 @@
  * @copyright Copyright (c) 2023
  *
  */
-#include "misc.h"
-#include "logger.h"
+#include "../include/misc.h"
+#include "../include/logger.h"
 
 #include <algorithm>
 #include <cstdlib>

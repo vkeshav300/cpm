@@ -7,9 +7,9 @@
  * @copyright Copyright (c) 2024
  *
  */
-#include "data.h"
-#include "directory.h"
-#include "misc.h"
+#include "../include/data.h"
+#include "../include/directory.h"
+#include "../include/misc.h"
 
 #include <cstdlib>
 #include <fstream>

@@ -7,13 +7,13 @@
  * @copyright Copyright (c) 2025
  *
  */
-#include "commands/class_command.h"
-#include "commands/fpair_command.h"
+#include "../../include/commands/class_command.h"
+#include "../../include/commands/fpair_command.h"
 
-#include "directory.h"
-#include "file.h"
-#include "logger.h"
-#include "misc.h"
+#include "../../include/directory.h"
+#include "../../include/file.h"
+#include "../../include/logger.h"
+#include "../../include/misc.h"
 
 #include <filesystem>
 

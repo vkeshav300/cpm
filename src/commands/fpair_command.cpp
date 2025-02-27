@@ -7,11 +7,11 @@
  * @copyright Copyright (c) 2025
  *
  */
-#include "commands/fpair_command.h"
+#include "../../include/commands/fpair_command.h"
 
-#include "directory.h"
-#include "file.h"
-#include "misc.h"
+#include "../../include/directory.h"
+#include "../../include/file.h"
+#include "../../include/misc.h"
 
 /**
  * @brief Construct a new Fpair_Command object

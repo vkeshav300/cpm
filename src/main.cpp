@@ -7,22 +7,21 @@
  * @copyright Copyright (c) 2023
  *
  */
-#include "data.h"
-#include "directory.h"
-#include "logger.h"
-#include "misc.h"
+#include "../include/data.h"
+#include "../include/directory.h"
+#include "../include/logger.h"
+#include "../include/misc.h"
 
-#include "commands/class_command.h"
-#include "commands/command_manager.h"
-#include "commands/config_command.h"
-#include "commands/fpair_command.h"
-#include "commands/init_command.h"
-#include "commands/struct_command.h"
-#include "commands/version_command.h"
+#include "../include/commands/class_command.h"
+#include "../include/commands/command_manager.h"
+#include "../include/commands/config_command.h"
+#include "../include/commands/fpair_command.h"
+#include "../include/commands/init_command.h"
+#include "../include/commands/struct_command.h"
+#include "../include/commands/version_command.h"
 
 #include <chrono>
 #include <cstdint>
-#include <memory>
 #include <string>
 #include <vector>
 

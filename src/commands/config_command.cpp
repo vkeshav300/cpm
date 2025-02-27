@@ -7,9 +7,9 @@
  * @copyright Copyright (c) 2025
  *
  */
-#include "commands/config_command.h"
-#include "data.h"
-#include "logger.h"
+#include "../../include/commands/config_command.h"
+#include "../../include/data.h"
+#include "../../include/logger.h"
 
 /**
  * @brief Construct a new Config_Command object

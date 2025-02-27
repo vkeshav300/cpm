@@ -7,14 +7,12 @@
  * @copyright Copyright (c) 2025
  *
  */
-#include "commands/init_command.h"
+#include "../../include/commands/init_command.h"
 
-#include "config.h"
-#include "directory.h"
-#include "file.h"
-#include "misc.h"
-
-#include <fstream>
+#include "../../include/config.h"
+#include "../../include/directory.h"
+#include "../../include/file.h"
+#include "../../include/misc.h"
 
 /**
  * @brief Construct a new Init_Command object

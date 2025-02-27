@@ -7,9 +7,9 @@
  * @copyright Copyright (c) 2025
  *
  */
-#include "commands/command_manager.h"
-#include "logger.h"
-#include "misc.h"
+#include "../../include/commands/command_manager.h"
+#include "../../include/logger.h"
+#include "../../include/misc.h"
 
 #include <iostream>
 

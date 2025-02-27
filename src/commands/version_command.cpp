@@ -7,9 +7,9 @@
  * @copyright Copyright (c) 2025
  *
  */
-#include "commands/version_command.h"
+#include "../../include/commands/version_command.h"
 
-#include "config.h"
+#include "../../include/config.h"
 
 /**
  * @brief Construct a new Version_Command object

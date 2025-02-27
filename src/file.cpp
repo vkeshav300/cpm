@@ -8,9 +8,8 @@
  *
  */
 
-#include "file.h"
-#include "logger.h"
-#include "misc.h"
+#include "../include/file.h"
+#include "../include/misc.h"
 
 /**
  * @brief Construct a new File:: File object

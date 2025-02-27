@@ -52,7 +52,8 @@ uint8_t API::CURL_init() {
  *
  * @param url
  */
-void API::set_url(const std::string &url) {
+void API::set_url(const std::string &_url) {
+  url = _url;
   curl_easy_setopt(curl.get(), CURLOPT_URL, url.c_str());
 }
 
@@ -66,7 +67,7 @@ bool API::fetch() {
   res = curl_easy_perform(curl.get());
 
   if (res != CURLE_OK) {
-    logger.error("failed to fetch data from url");
+    logger.error("failed to fetch data from '" + url + "'");
     return false;
   }
 

@@ -28,6 +28,7 @@ private:
   static std::unique_ptr<CURL, decltype(&curl_easy_cleanup)> curl;
   CURLcode res;
   std::string response;
+  std::string url;
 
   API() {}
 
@@ -36,7 +37,7 @@ public:
 
   uint8_t CURL_init();
 
-  void set_url(const std::string &url);
+  void set_url(const std::string &_url);
 
   bool fetch();
 

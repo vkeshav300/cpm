@@ -80,7 +80,7 @@ uint8_t Class_Command::execute(const std::vector<std::string> &args,
       header.write({
           "class " + class_name + " {",
           "private:",
-          "\t" + class_name + "();",
+          "\t" + class_name + "() {}",
           "",
           "public:",
           "\t" + class_name + "(const " + class_name + " &obj) = delete;",

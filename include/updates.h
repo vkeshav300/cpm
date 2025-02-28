@@ -9,6 +9,8 @@
  */
 #pragma once
 
+#include <cstdint>
+
 namespace updates {
-void scan();
+uint8_t scan();
 } // namespace updates

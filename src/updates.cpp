@@ -66,7 +66,7 @@ uint8_t scan() {
 
   for (uint8_t i = 0; i < 3; i++) {
     if (std::stoi(split_tag[i]) > std::stoi(split_current_version[i])) {
-      logger.warn("newer version of CPM availible");
+      logger.warn("newer version of CPM availible (v" + tag + ")");
       return 1;
     }
   }

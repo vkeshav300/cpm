@@ -23,24 +23,33 @@ namespace updates {
 API &api = API::get();
 Logger &logger = Logger::get();
 
+bool scanned = false;
+
 /**
  * @brief Scan for updates to CPM
  * 
+ * @return uint8_t
  */
-void scan() {
+uint8_t scan() {
+  /* Limit to 1 scan / activation */
+  if (scanned == true)
+    return true;
+
+  scanned = true;
+
   /* Get latest version from github repo */
   api.set_url(repo_link);
   const uint8_t status = api.fetch();
 
   if (!status) // error message handled by fetch function
-    return;
+    return 2;
 
   /* Parse response */
   rapidjson::Document doc(api.get_response());
 
   if (!doc.HasMember("tag_name") || !doc["tag_name"].IsString()) {
     logger.error("failed to scan for updates (response parsing error)");
-    return;
+    return 2;
   }
 
   /* Compare versions */
@@ -58,8 +67,10 @@ void scan() {
   for (uint8_t i = 0; i < 3; i++) {
     if (std::stoi(split_tag[i]) > std::stoi(split_current_version[i])) {
       logger.warn("newer version of CPM availible");
-      break;
+      return 1;
     }
   }
+
+  return 0;
 }
 } // namespace updates

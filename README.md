@@ -49,11 +49,14 @@ paru -Sy cpm-git
 ```
 
 ### Updating
-By default, CPM checks for updates every time you run a valid command. This does cause lag, however, and to get rid of this lag you can run:
+To check for updates for CPM, run:
 ```
-cpm config set update_scanning off
+cpm scan
 ```
-which disables auto-update scanning. At the moment, CPM does not auto-update, and will only alert you when a newer version is availible.
+To automatically scan for updates every time you use CPM, run (at the expense of added runtime):
+```
+cpm config set auto_update_scanning on
+```
 
 ### Issues
 All bug reports, feature requests and other issues are monitored at the [GitHub issue tracker](https://github.com/vkeshav300/cpm/issues).

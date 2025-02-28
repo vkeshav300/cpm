@@ -7,7 +7,7 @@
   <br><br>
   <h2>Quick Navigation</h2>
   <a href="https://github.com/vkeshav300/cpm/releases/?include_prereleases&sort=semver"><img src="https://img.shields.io/github/tag/vkeshav300/cpm"></a>
-  <a href="ghttps://github.com/vkeshav300/cpm/wiki"><img src="https://img.shields.io/badge/Wiki-grey"></a>
+  <a href="https://github.com/vkeshav300/cpm?tab=readme-ov-file#updating"><img src="https://img.shields.io/badge/Updating-grey"></a>
   <a href="https://github.com/vkeshav300/cpm/issues"><img src="https://img.shields.io/badge/Issue_Tracker-grey"></a>
   <a href="https://github.com/vkeshav300/cpm?tab=readme-ov-file#building--installing"><img src="https://img.shields.io/badge/Installation_/_Building-blue"></a>
   <br><br>
@@ -53,7 +53,7 @@ By default, CPM checks for updates every time you run a valid command. This does
 ```
 cpm config set update_scanning off
 ```
-At the moment, CPM does not auto-update, and will only alert you when a newer version is availible.
+which disables auto-update scanning. At the moment, CPM does not auto-update, and will only alert you when a newer version is availible.
 
 ### Issues
 All bug reports, feature requests and other issues are monitored at the [GitHub issue tracker](https://github.com/vkeshav300/cpm/issues).

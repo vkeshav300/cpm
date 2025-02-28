@@ -21,6 +21,7 @@
 #include "commands/init_command.h"
 #include "commands/struct_command.h"
 #include "commands/version_command.h"
+#include "commands/scan_command.h"
 
 #include <chrono>
 #include <cstdint>
@@ -69,6 +70,7 @@ int main(int argc, char *argv[]) {
   manager.register_command("init", std::make_unique<Init_Command>());
   manager.register_command("struct", std::make_unique<Struct_Command>());
   manager.register_command("version", std::make_unique<Version_Command>());
+  manager.register_command("scan", std::make_unique<Scan_Command>());
 
   /* Checks if command was inputted */
   if (argc <= 1) {
@@ -108,12 +110,6 @@ int main(int argc, char *argv[]) {
   }
 
   logger.success("parsed command");
-
-  /* Update management (disable with cpm config set update_scanning off to
-   * reduce command lag) */
-  if (!data_manager.config_has_key("update_scanning") ||
-      !(data_manager.config["update_scanning"] == "off"))
-    updates::scan();
 
   /* Determines if help menu needs to be displayed */
   const bool help_menu = misc::vector_contains(flags, "help");
@@ -164,6 +160,12 @@ int main(int argc, char *argv[]) {
                   .count()) +
           " ms",
       "finished", "theme");
+
+  /* Update management (disable with cpm config set update_scanning off to
+   * reduce command lag) */
+   if (data_manager.config_has_key("auto_update_scanning") && data_manager.config["auto_update_scanning"] == "on")
+   updates::scan();
+
   logger.flush_buffer();
 
   return result;

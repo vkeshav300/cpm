@@ -23,15 +23,25 @@ namespace updates {
 API &api = API::get();
 Logger &logger = Logger::get();
 
+/**
+ * @brief Scan for updates to CPM
+ * 
+ */
 void scan() {
   /* Get latest version from github repo */
   api.set_url(repo_link);
-  api.fetch();
+  const uint8_t status = api.fetch();
 
+  if (!status) // error message handled by fetch function
+    return;
+
+  /* Parse response */
   rapidjson::Document doc(api.get_response());
 
-  if (!doc.HasMember("tag_name") || !doc["tag_name"].IsString())
-    logger.error("failed to scan for updates");
+  if (!doc.HasMember("tag_name") || !doc["tag_name"].IsString()) {
+    logger.error("failed to scan for updates (response parsing error)");
+    return;
+  }
 
   /* Compare versions */
   std::string tag(doc["tag_name"].GetString());

@@ -130,6 +130,7 @@ int main(int argc, char *argv[]) {
   }
 
   /* Command execution */
+  logger.custom(cmd, "executing", "theme");
   uint8_t result;
   if (help_menu) {
     if (cmd != "--help") {

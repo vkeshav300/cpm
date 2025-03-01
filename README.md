@@ -53,10 +53,19 @@ To check for updates for CPM, run:
 ```
 cpm scan
 ```
-To automatically scan for updates every time you use CPM, run (at the expense of added runtime):
+CPM automatically scans for updates occasionally when a command is run. To set the frequency of automatic update scanning run:
 ```
-cpm config set auto_update_scanning on
+cpm scan -f=[n]
 ```
+where n is after how many commands you want to run an update scan. To disable automatic update scanning run:
+```
+cpm scan --off
+```
+or to enable automatic update scanning run:
+```
+cpm scan --on
+```
+Scanning for updates will cause lag, which is why CPM doesn't automatically scan for updates every time it is used.
 
 ### Issues
 All bug reports, feature requests and other issues are monitored at the [GitHub issue tracker](https://github.com/vkeshav300/cpm/issues).

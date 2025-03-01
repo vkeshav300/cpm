@@ -13,6 +13,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <cstdint>
 
 namespace misc {
 bool vector_contains(const std::vector<std::string> &vector,
@@ -63,4 +64,6 @@ void set_relative_path(std::string &p, const std::filesystem::path &p1,
 
 void replace_string_instances(std::string &s, const std::string &i1,
                               const std::string &i2);
+
+bool string_to_uint16(const std::string &s, uint16_t &n);
 } // namespace misc

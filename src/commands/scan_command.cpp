@@ -11,6 +11,8 @@
 
 #include "updates.h"
 #include "config.h"
+#include "misc.h"
+#include "data.h"
 
 /**
  * @brief Construct a new Scan_Command object
@@ -35,6 +37,32 @@ to disable automatic update scanning, and remove any associated lag.
  * @return uint8_t 
  */
 uint8_t Scan_Command::execute(const std::vector<std::string> &args, const std::vector<std::string> &flags) const {
+    if (flags.size() > 0 && flags[0] == "off") {
+        data_manager.config["auto_usc"] = "off";
+        logger.success("disabled automatic update scanning (to enable run: cpm scan --on)");
+        return 0;
+    } else if (flags.size() > 0 && flags[0] == "on") {
+        data_manager.config["auto_usc"] = "on";
+        logger.success("enabled automatic update scanning (to disable run: cpm scan --off)");
+        return 0;
+    }
+
+    if ((!data_manager.config_has_key("auto_usc") || data_manager.config["auto_usc"] != "off") & (flags.size() > 0 && flags[0][0] == 'f')) {
+        uint16_t frequency;
+
+        if (!misc::string_to_uint16(misc::get_flag_value(flags[0]), frequency)) {
+            logger.error("invalid scan frequency (must be positive integer)");
+            return 1;
+        }
+
+        data_manager.config["auto_usc_freq"] = std::to_string(frequency);
+        data_manager.config["runs_since_last_scan"] = std::to_string(frequency);
+
+        logger.success("updates will now scan every " + std::to_string(frequency) + " command runs");
+
+        return 0;
+    }
+
     logger.success("scanning for updates (current version v" + std::string(version_string) + ")");
 
     const uint8_t result = updates::scan();
@@ -71,7 +99,7 @@ std::string Scan_Command::get_arguments() const {
  * @return std::string 
  */
 std::string Scan_Command::get_flags() const {
-    return "None";
+    return "-f=[n] set automatic update scanning to run every n commands\t--off disable automatic update scanning\t--on enable automatic update scanning";
 }
 
 /**

@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <filesystem>
+#include <sstream>
 
 namespace misc {
 Logger &logger = Logger::get();
@@ -257,5 +258,18 @@ void replace_string_instances(std::string &s, const std::string &i1,
     s.replace(pos, i1.length(), i2);
     pos += i2.length();
   }
+}
+
+/**
+ * @brief Allows std::string to uint16_t conversion & valadation in conditionals
+ * 
+ * @param s 
+ * @param n 
+ * @return true 
+ * @return false 
+ */
+bool string_to_uint16(const std::string &s, uint16_t &n) {
+  std::istringstream iss(s);
+  return (iss >> std::noskipws >> n) && iss.eof();
 }
 } // namespace misc

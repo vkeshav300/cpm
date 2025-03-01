@@ -142,13 +142,6 @@ int main(int argc, char *argv[]) {
   else
     result = manager.execute(cmd, args, flags);
 
-  /* Saving data */
-  if ((result == 0) & (cmd != "--help") & (cmd != "version"))
-    data_manager.write();
-
-  /* Artifact cleanup */
-  directory::destroy_file("cpm.tmp");
-
   /* Success message + time measurement */
   const auto end = std::chrono::high_resolution_clock::now();
 
@@ -161,10 +154,15 @@ int main(int argc, char *argv[]) {
           " ms",
       "finished", "theme");
 
-  /* Update management (disable with cpm config set update_scanning off to
-   * reduce command lag) */
-   if (data_manager.config_has_key("auto_update_scanning") && data_manager.config["auto_update_scanning"] == "on")
-   updates::scan();
+  /* Update management */
+  updates::auto_scan();
+
+  /* Saving data */
+  if (result == 0)
+    data_manager.write();
+
+  /* Artifact cleanup */
+  directory::destroy_file("cpm.tmp");
 
   logger.flush_buffer();
 

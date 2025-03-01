@@ -13,4 +13,6 @@
 
 namespace updates {
 uint8_t scan();
+
+void auto_scan();
 } // namespace updates

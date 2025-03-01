@@ -12,6 +12,7 @@
 #include "config.h"
 #include "logger.h"
 #include "misc.h"
+#include "data.h"
 
 #include <cstdint>
 #include <string>
@@ -22,6 +23,7 @@
 namespace updates {
 API &api = API::get();
 Logger &logger = Logger::get();
+Data_Manager &data_manager = Data_Manager::get();
 
 bool scanned = false;
 
@@ -48,7 +50,15 @@ uint8_t scan() {
   rapidjson::Document doc(api.get_response());
 
   if (!doc.HasMember("tag_name") || !doc["tag_name"].IsString()) {
-    logger.error("failed to scan for updates (response parsing error)");
+    if (doc.HasMember("message") && doc["message"].IsString()) {
+      // std::to_string(doc["message"]).substr(0, 22) == "API rate limit exceeded"
+      const std::string msg(doc["message"].GetString());
+
+      logger.error("failed to scan for updates (message: " + msg.substr(0, 23) + "...)");
+    } 
+    else
+      logger.error("failed to scan for updates (response parsing error)");
+
     return 2;
   }
 
@@ -72,5 +82,31 @@ uint8_t scan() {
   }
 
   return 0;
+}
+
+/**
+ * @brief Handles automatic update scanning
+ * 
+ */
+void auto_scan() {
+  /* Check if auto update scanning is disabled */
+  if (data_manager.config_has_key("auto_usc") && data_manager.config["auto_usc"] == "off")
+    return;
+
+  uint16_t runs;
+
+  /* Check validty of + set runs since last scan and check validty of auto update scanning frequency */
+  if ((!data_manager.config_has_key("runs_since_last_scan") || !misc::string_to_uint16(data_manager.config["runs_since_last_scan"], runs)) && ((!data_manager.config_has_key("auto_usc_freq") || !misc::string_to_uint16(data_manager.config["auto_usc_freq"], runs)))) {
+    runs = default_usc_freq;
+    data_manager.config["auto_usc_freq"] = std::to_string(default_usc_freq);
+  }
+
+  if (runs == 0) {
+    scan();
+
+    runs = std::stoi(data_manager.config["auto_usc_freq"]);
+  }
+
+  data_manager.config["runs_since_last_scan"] = std::to_string(--runs);
 }
 } // namespace updates

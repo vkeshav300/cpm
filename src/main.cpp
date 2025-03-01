@@ -19,9 +19,9 @@
 #include "commands/config_command.h"
 #include "commands/fpair_command.h"
 #include "commands/init_command.h"
+#include "commands/scan_command.h"
 #include "commands/struct_command.h"
 #include "commands/version_command.h"
-#include "commands/scan_command.h"
 
 #include <chrono>
 #include <cstdint>

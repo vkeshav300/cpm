@@ -11,6 +11,7 @@
 
 #include "../data.h"
 #include "../logger.h"
+#include "../api.h"
 
 #include <cstdint>
 #include <string>
@@ -20,6 +21,7 @@ class Command {
 protected:
   static Logger &logger;
   static Data_Manager &data_manager;
+  static API &api;
 
 public:
   virtual ~Command() = default;

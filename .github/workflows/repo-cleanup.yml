@@ -10,7 +10,7 @@ on:
 
 jobs:
     cleanup:
-        name: "Close Stale Issues"
+        name: "Close Stale Items"
         runs-on: ${{ matrix.os }}
         timeout-minutes: ${{ (matrix.language == 'swift' && 120) || 360 }}
         permissions:

@@ -3,6 +3,7 @@
   <p>CPM is a simple, yet useful tool for managing your C and C++ projects.</p>
   <br>
   <a href=https://github.com/vkeshav300/cpm/actions/workflows/codeql.yml><img src=https://github.com/vkeshav300/cpm/actions/workflows/codeql.yml/badge.svg></a>
+  <a href="https://github.com/vkeshav300/cpm/actions/workflows/repo-cleanup.yml"><img src="https://github.com/vkeshav300/cpm/actions/workflows/repo-cleanup.yml/badge.svg"></a>
   <a href=https://github.com/vkeshav300/cpm/actions/workflows/pages/pages-build-deployment><img src=https://github.com/vkeshav300/cpm/actions/workflows/pages/pages-build-deployment/badge.svg></a>
   <br><br>
   <h2>Quick Navigation</h2>

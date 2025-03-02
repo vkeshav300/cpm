@@ -269,6 +269,9 @@ void replace_string_instances(std::string &s, const std::string &i1,
  * @return false
  */
 bool string_to_uint16(const std::string &s, uint16_t &n) {
+  if (s.empty() || s.length() < 1 || s[0] == '-')
+    return false;
+  
   std::istringstream iss(s);
   return (iss >> std::noskipws >> n) && iss.eof();
 }

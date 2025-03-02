@@ -1,0 +1,45 @@
+name: "Github Repository Cleanup"
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+  schedule:
+    - cron: "42 6 * * 3"
+
+jobs:
+    cleanup:
+        name: "Close Stale Issues"
+        runs-on: ${{ matrix.os }}
+        timeout-minutes: ${{ (matrix.language == 'swift' && 120) || 360 }}
+        permissions:
+            actions: read
+            contents: read
+        
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [ubuntu-latest]
+                language: ["c-cpp"]
+
+        steps:
+            - name: "Close Stale Items"
+              uses: actions/stale@v9.1.0
+              with:
+                stale-issue-message: "Issue has been marked stale"
+                close-issue-message: "Issue has been closed due to inactivity"
+                stale-pr-message: "Pull request has been marked stale"
+                close-pr-message: "Pull request closed due to inactivity"
+                days-before-issue-stale: 15
+                days-before-issue-close: 30
+                days-before-pr-stale: 7
+                days-before-pr-close: 14
+                stale-issue-label: "stale"
+                close-issue-label: "inactive-closed"
+                exempt-issue-labels: "bug"
+                stale-pr-label: "stale"
+                close-pr-label: "inactive-closed"
+                remove-issue-stale-when-updated: true
+                remove-pr-stale-when-updated: true
+          

@@ -57,8 +57,8 @@ uint8_t Scan_Command::execute(const std::vector<std::string> &args,
       (flags.size() > 0 && flags[0][0] == 'f')) {
     uint16_t frequency;
 
-    if (!misc::string_to_uint16(misc::get_flag_value(flags[0]), frequency)) {
-      logger.error("invalid scan frequency (must be positive integer)");
+    if (!misc::string_to_uint16(misc::get_flag_value(flags[0]), frequency) || frequency == 0) {
+      logger.error("invalid scan frequency (must be positive integer greater than 1)");
       return 1;
     }
 

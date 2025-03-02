@@ -10,9 +10,9 @@
 #include "updates.h"
 #include "api.h"
 #include "config.h"
+#include "data.h"
 #include "logger.h"
 #include "misc.h"
-#include "data.h"
 
 #include <cstdint>
 #include <string>
@@ -29,7 +29,7 @@ bool scanned = false;
 
 /**
  * @brief Scan for updates to CPM
- * 
+ *
  * @return uint8_t
  */
 uint8_t scan() {
@@ -51,12 +51,13 @@ uint8_t scan() {
 
   if (!doc.HasMember("tag_name") || !doc["tag_name"].IsString()) {
     if (doc.HasMember("message") && doc["message"].IsString()) {
-      // std::to_string(doc["message"]).substr(0, 22) == "API rate limit exceeded"
+      // std::to_string(doc["message"]).substr(0, 22) == "API rate limit
+      // exceeded"
       const std::string msg(doc["message"].GetString());
 
-      logger.error("failed to scan for updates (message: " + msg.substr(0, 23) + "...)");
-    } 
-    else
+      logger.error("failed to scan for updates (message: " + msg.substr(0, 23) +
+                   "...)");
+    } else
       logger.error("failed to scan for updates (response parsing error)");
 
     return 2;
@@ -86,17 +87,23 @@ uint8_t scan() {
 
 /**
  * @brief Handles automatic update scanning
- * 
+ *
  */
 void auto_scan() {
   /* Check if auto update scanning is disabled */
-  if (data_manager.config_has_key("auto_usc") && data_manager.config["auto_usc"] == "off")
+  if (data_manager.config_has_key("auto_usc") &&
+      data_manager.config["auto_usc"] == "off")
     return;
 
   uint16_t runs;
 
-  /* Check validty of + set runs since last scan and check validty of auto update scanning frequency */
-  if ((!data_manager.config_has_key("runs_since_last_scan") || !misc::string_to_uint16(data_manager.config["runs_since_last_scan"], runs)) && ((!data_manager.config_has_key("auto_usc_freq") || !misc::string_to_uint16(data_manager.config["auto_usc_freq"], runs)))) {
+  /* Check validty of + set runs since last scan and check validty of auto
+   * update scanning frequency */
+  if ((!data_manager.config_has_key("runs_since_last_scan") ||
+       !misc::string_to_uint16(data_manager.config["runs_since_last_scan"],
+                               runs)) &&
+      ((!data_manager.config_has_key("auto_usc_freq") ||
+        !misc::string_to_uint16(data_manager.config["auto_usc_freq"], runs)))) {
     runs = default_usc_freq;
     data_manager.config["auto_usc_freq"] = std::to_string(default_usc_freq);
   }

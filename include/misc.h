@@ -9,11 +9,11 @@
  */
 #pragma once
 
+#include <cstdint>
 #include <filesystem>
 #include <fstream>
 #include <string>
 #include <vector>
-#include <cstdint>
 
 namespace misc {
 bool vector_contains(const std::vector<std::string> &vector,

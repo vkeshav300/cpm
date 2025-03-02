@@ -262,11 +262,11 @@ void replace_string_instances(std::string &s, const std::string &i1,
 
 /**
  * @brief Allows std::string to uint16_t conversion & valadation in conditionals
- * 
- * @param s 
- * @param n 
- * @return true 
- * @return false 
+ *
+ * @param s
+ * @param n
+ * @return true
+ * @return false
  */
 bool string_to_uint16(const std::string &s, uint16_t &n) {
   std::istringstream iss(s);

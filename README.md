@@ -22,20 +22,14 @@ CPM currently is compatable with the following operating systems:
 
 ### Building / Installing
 #### Unix-Based Operating Systems (build it yourself)
-For building project (you may need to use sudo if you are getting `access denied` or `permission not granted` errors):
+For installation in release mode, type the following commands in the project root directory:
 ```
 mkdir build
 cd build
-cmake ..
-make
-```
-For building project and installing:
-```
-mkdir build
-cd build
-cmake ..
+cmake .. -DCMAKE_BUILD_TYPE=Release
 sudo make install
 ```
+note that this will require the installation of cmake, make, and any other dependencies the project has.
 
 #### AUR / Arch Linux (package installation)
 See [aur.archlinux.org/packages/cpm-git](https://aur.archlinux.org/packages/cpm-git) for package details.

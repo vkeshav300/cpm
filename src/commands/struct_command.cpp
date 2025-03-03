@@ -81,36 +81,16 @@ uint8_t Struct_Command::execute(const std::vector<std::string> &args,
   return 0;
 }
 
-/**
- * @brief Gets description of command
- *
- * @return std::string
- */
 std::string Struct_Command::get_description() const {
   return "Creates a struct based header-source file pair";
 }
 
-/**
- * @brief Gets command arguments
- *
- * @return std::string
- */
 std::string Struct_Command::get_arguments() const {
   return "[names] names of files that will contain structs";
 }
 
-/**
- * @brief Gets command flags
- *
- * @return std::string
- */
 std::string Struct_Command::get_flags() const {
   return "-n don't use typedef keyword";
 }
 
-/**
- * @brief Gets minimum arguments
- *
- * @return uint16_t
- */
 uint16_t Struct_Command::get_min_args() const { return 1; }

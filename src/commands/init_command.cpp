@@ -174,29 +174,14 @@ uint8_t Init_Command::execute(const std::vector<std::string> &args,
   return 0;
 }
 
-/**
- * @brief Gets description of command
- *
- * @return std::string
- */
 std::string Init_Command::get_description() const {
   return "Initializes a new c/cpp project in working directory";
 }
 
-/**
- * @brief Gets command arguments
- *
- * @return std::string
- */
 std::string Init_Command::get_arguments() const {
   return "[language] language project is based in";
 }
 
-/**
- * @brief Gets command flags
- *
- * @return std::string
- */
 std::string Init_Command::get_flags() const {
   return "-s=[language standard] specify a specific language standard to use "
          "instead of C" +
@@ -204,9 +189,4 @@ std::string Init_Command::get_flags() const {
          std::string(cpp_default_standard);
 }
 
-/**
- * @brief Gets minimum arguments
- *
- * @return uint16_t
- */
 uint16_t Init_Command::get_min_args() const { return 1; }

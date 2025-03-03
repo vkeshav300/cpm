@@ -30,32 +30,12 @@ uint8_t Version_Command::execute(const std::vector<std::string> &args,
   return 0;
 }
 
-/**
- * @brief Gets description of command
- *
- * @return std::string
- */
 std::string Version_Command::get_description() const {
   return "Logs installed version of CPM";
 }
 
-/**
- * @brief Gets command arguments
- *
- * @return std::string
- */
 std::string Version_Command::get_arguments() const { return "None"; }
 
-/**
- * @brief Gets command flags
- *
- * @return std::string
- */
 std::string Version_Command::get_flags() const { return "None"; }
 
-/**
- * @brief Gets minimum arguments
- *
- * @return uint16_t
- */
 uint16_t Version_Command::get_min_args() const { return 0; }

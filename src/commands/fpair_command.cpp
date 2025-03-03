@@ -68,35 +68,15 @@ uint8_t Fpair_Command::execute(const std::vector<std::string> &args,
   return 0;
 }
 
-/**
- * @brief Gets description of command
- *
- * @return std::string
- */
 std::string Fpair_Command::get_description() const {
   return "Creates a header-source file pair";
 }
 
-/**
- * @brief Gets command arguments
- *
- * @return std::string
- */
 std::string Fpair_Command::get_arguments() const {
   return "[sub command] sub command of fpair to execute\t[file names] names of "
          "file pairs to create (separated by spaces)";
 }
 
-/**
- * @brief Gets command flags
- *
- * @return std::string
- */
 std::string Fpair_Command::get_flags() const { return "None"; }
 
-/**
- * @brief Gets minimum arguments
- *
- * @return uint16_t
- */
 uint16_t Fpair_Command::get_min_args() const { return 2; }

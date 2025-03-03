@@ -9,9 +9,9 @@
  */
 #pragma once
 
+#include "../api.h"
 #include "../data.h"
 #include "../logger.h"
-#include "../api.h"
 
 #include <cstdint>
 #include <string>

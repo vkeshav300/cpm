@@ -45,36 +45,16 @@ uint8_t Config_Command::execute(const std::vector<std::string> &args,
   return 0;
 }
 
-/**
- * @brief Gets description of command
- *
- * @return std::string
- */
 std::string Config_Command::get_description() const {
   return "Allows access to configuration variables of CPM";
 }
 
-/**
- * @brief Gets command arguments
- *
- * @return std::string
- */
 std::string Config_Command::get_arguments() const {
   return "[sub command] sub command of config to execute\t[key] configuration "
          "key to use\t[value] (only required for set sub command) value to set "
          "key to";
 }
 
-/**
- * @brief Gets command flags
- *
- * @return std::string
- */
 std::string Config_Command::get_flags() const { return "None"; }
 
-/**
- * @brief Gets minimum arguments
- *
- * @return uint16_t
- */
 uint16_t Config_Command::get_min_args() const { return 2; }

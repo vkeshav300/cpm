@@ -57,8 +57,10 @@ uint8_t Scan_Command::execute(const std::vector<std::string> &args,
       (flags.size() > 0 && flags[0][0] == 'f')) {
     uint16_t frequency;
 
-    if (!misc::string_to_uint16(misc::get_flag_value(flags[0]), frequency) || frequency == 0) {
-      logger.error("invalid scan frequency (must be positive integer greater than 1)");
+    if (!misc::string_to_uint16(misc::get_flag_value(flags[0]), frequency) ||
+        frequency == 0) {
+      logger.error(
+          "invalid scan frequency (must be positive integer greater than 1)");
       return 1;
     }
 
@@ -84,36 +86,16 @@ uint8_t Scan_Command::execute(const std::vector<std::string> &args,
   return result;
 }
 
-/**
- * @brief Get description for scan command
- *
- * @return std::string
- */
 std::string Scan_Command::get_description() const {
   return "scans for updates to CPM";
 }
 
-/**
- * @brief Get arguments for scan command
- *
- * @return std::string
- */
 std::string Scan_Command::get_arguments() const { return "None"; }
 
-/**
- * @brief Get flags for scan command
- *
- * @return std::string
- */
 std::string Scan_Command::get_flags() const {
   return "-f=[n] set automatic update scanning to run every n commands\t--off "
          "disable automatic update scanning\t--on enable automatic update "
          "scanning";
 }
 
-/**
- * @brief Get minimum arguments for scan command
- *
- * @return uint16_t
- */
 uint16_t Scan_Command::get_min_args() const { return 0; };

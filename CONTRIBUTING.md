@@ -27,3 +27,4 @@ Create a short summary for the release describing the changes at the very top of
 
 ### Creating commands
 CPM uses an object-oriented approach for managing commands. To create a command, create a new class file pair inside the `include/comands` and `src/commands` folders which inherits from the `Command` interface. Then add it to the command manager in `main.cpp`. Try your best to add DOXYGEN style code documentation to the new command.
+

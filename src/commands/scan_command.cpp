@@ -74,7 +74,7 @@ uint8_t Scan_Command::execute(const std::vector<std::string> &args,
   }
 
   logger.success("scanning for updates (current version v" +
-                 std::string(version_string) + ")");
+                 std::string(update_info.version) + ")");
 
   const uint8_t result = updates::scan();
 

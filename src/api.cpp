@@ -42,7 +42,7 @@ uint8_t API::CURL_init() {
 
   curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, write_callback);
   curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA, &response);
-  curl_easy_setopt(curl.get(), CURLOPT_USERAGENT, updates_useragent);
+  curl_easy_setopt(curl.get(), CURLOPT_USERAGENT, update_info.useragent);
 
   return 0;
 }

@@ -40,7 +40,7 @@ uint8_t scan() {
   scanned = true;
 
   /* Get latest version from github repo */
-  api.set_url(repo_link);
+  api.set_url(update_info.repo_link);
   const uint8_t status = api.fetch();
 
   if (!status) // error message handled by fetch function
@@ -65,7 +65,7 @@ uint8_t scan() {
 
   /* Compare versions */
   std::string tag(doc["tag_name"].GetString());
-  std::string current_version(version_string);
+  std::string current_version(update_info.version);
 
   /* Remove 'v' from 'vX.X.X' */
   tag = tag.substr(1, tag.size() - 1);
@@ -104,8 +104,8 @@ void auto_scan() {
                                runs)) &&
       ((!data_manager.config_has_key("auto_usc_freq") ||
         !misc::string_to_uint16(data_manager.config["auto_usc_freq"], runs)))) {
-    runs = default_usc_freq;
-    data_manager.config["auto_usc_freq"] = std::to_string(default_usc_freq);
+    runs = update_info.default_usc_freq;
+    data_manager.config["auto_usc_freq"] = std::to_string(runs);
   }
 
   if (runs == 0) {

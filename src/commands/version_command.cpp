@@ -26,7 +26,7 @@ Version_Command::Version_Command() {}
  */
 uint8_t Version_Command::execute(const std::vector<std::string> &args,
                                  const std::vector<std::string> &flags) const {
-  logger.custom(version_string, "version", "theme");
+  logger.custom(update_info.version, "version", "theme");
   return 0;
 }
 

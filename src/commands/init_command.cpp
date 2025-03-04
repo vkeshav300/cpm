@@ -96,7 +96,7 @@ uint8_t Init_Command::execute(const std::vector<std::string> &args,
     const std::string lang_version =
         (flags.size() > 0)
             ? misc::get_flag_value(flags[0])
-            : ((lang == "cpp") ? cpp_default_standard : c_default_standard);
+            : ((lang == "cpp") ? standards.cpp : standards.c);
 
     File cmake_lists("CMakeLists.txt");
     cmake_lists.load({
@@ -185,8 +185,8 @@ std::string Init_Command::get_arguments() const {
 std::string Init_Command::get_flags() const {
   return "-s=[language standard] specify a specific language standard to use "
          "instead of C" +
-         std::string(c_default_standard) + " or C++" +
-         std::string(cpp_default_standard);
+         std::string(standards.c) + " or C++" +
+         std::string(standards.cpp);
 }
 
 uint16_t Init_Command::get_min_args() const { return 1; }

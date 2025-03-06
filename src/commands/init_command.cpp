@@ -94,9 +94,8 @@ uint8_t Init_Command::execute(const std::vector<std::string> &args,
     /* Setup CMake variables / file */
     const std::string cmake_lang = (lang == "cpp") ? "CXX" : "C";
     const std::string lang_version =
-        (flags.size() > 0)
-            ? misc::get_flag_value(flags[0])
-            : ((lang == "cpp") ? standards.cpp : standards.c);
+        (flags.size() > 0) ? misc::get_flag_value(flags[0])
+                           : ((lang == "cpp") ? standards.cpp : standards.c);
 
     File cmake_lists("CMakeLists.txt");
     cmake_lists.load({
@@ -162,14 +161,25 @@ uint8_t Init_Command::execute(const std::vector<std::string> &args,
 
   File main_file(main_path);
 
-  main_file.load({
-      "#include <iostream>",
-      "",
-      "int main(int argc, char *argv[]) {",
-      "\tstd::cout << \"Hello World!\" << std::endl;",
-      "\treturn 0;",
-      "}",
-  });
+  if (lang == "cpp") {
+    main_file.load({
+        "#include <iostream>",
+        "",
+        "int main(int argc, char *argv[]) {",
+        "\tstd::cout << \"Hello World!\" << std::endl;",
+        "\treturn 0;",
+        "}",
+    });
+  } else {
+    main_file.load({
+        "#include <stdio.h>",
+        "",
+        "int main(int argc, char *argv[]) {",
+        "\tprintf(\"Hello World!\\n\");",
+        "\treturn 0;",
+        "}",
+    });
+  }
 
   return 0;
 }
@@ -185,8 +195,7 @@ std::string Init_Command::get_arguments() const {
 std::string Init_Command::get_flags() const {
   return "-s=[language standard] specify a specific language standard to use "
          "instead of C" +
-         std::string(standards.c) + " or C++" +
-         std::string(standards.cpp);
+         std::string(standards.c) + " or C++" + std::string(standards.cpp);
 }
 
 uint16_t Init_Command::get_min_args() const { return 1; }

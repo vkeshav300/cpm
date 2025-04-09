@@ -117,9 +117,11 @@ uint8_t Class_Command::execute(const std::vector<std::string> &args,
       source.remove();
 
       return 0;
-    } else if (flags.size() > 0 && flags[0][0] == 'p') { // inheritance
+    } else if (flags.size() > 0 &&
+               misc::vector_contains_definition(flags, "p")) { // inheritance
       // Set '_arg' to path of parent header file
-      _arg = misc::get_flag_value(flags[0]);
+      _arg = misc::get_flag_value(
+          flags[misc::get_position_of_definition(flags, "p")]);
       const std::filesystem::path header_p_path(
           std::filesystem::absolute(directory::get_structured_header_path(
               _arg, !directory::has_file(

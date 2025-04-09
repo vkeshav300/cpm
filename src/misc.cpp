@@ -64,6 +64,49 @@ std::vector<std::string> split_string(const std::string &s,
 }
 
 /**
+ * @brief Returns whether or whether not a vector contains a string definition
+ * in the format of definition=value
+ *
+ * @param vector
+ * @param definition
+ * @return true
+ * @return false
+ */
+bool vector_contains_definition(const std::vector<std::string> &vector,
+                                const std::string &definition) {
+  for (const auto &str : vector) {
+    if (str.size() <= definition.size())
+      continue;
+
+    if (str.substr(0, definition.size()) == definition &&
+        str[definition.size()] == '=')
+      return true;
+  }
+
+  return false;
+}
+
+/**
+ * Returns position of definition in the format definition=value in a vector
+ *
+ * @param vector
+ * @param definition
+ * @return size_t
+ */
+size_t get_position_of_definition(const std::vector<std::string> &vector,
+                                  const std::string &definition) {
+  const auto it = std::find_if(vector.begin(), vector.end(),
+                               [&definition](const std::string &str) {
+                                 return str.find(definition) == 0;
+                               });
+
+  if (it != vector.end())
+    return std::distance(vector.begin(), it);
+
+  return -1;
+}
+
+/**
  * @brief Gets the value of flags in the format of flag=value
  *
  * @param flag Raw flag

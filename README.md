@@ -33,7 +33,7 @@ sudo make install
 note that this will require the installation of cmake, make, and any other dependencies the project has.
 
 #### AUR / Arch Linux (package installation)
-See [aur.archlinux.org/packages/cpm-git](https://aur.archlinux.org/packages/cpm-git) for package details.
+See [aur.archlinux.org/packages/cpm-git](https://aur.archlinux.org/packages/cpm-git) for package details. This is maintained by [@OxidizedToast](https://github.com/OxidizedToast).
 Installation command:
 ```
 paru -S cpm-git

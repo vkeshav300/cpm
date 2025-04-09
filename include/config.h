@@ -13,7 +13,7 @@
 #include <cstdint>
 
 struct Update_Info {
-    constexpr static char version[6] = "1.3.1";
+    constexpr static char version[6] = "1.3.2";
     constexpr static char repo_link[60] = "https://api.github.com/repos/vkeshav300/cpm/releases/latest";
     constexpr static char useragent[12] = "Mozilla/5.0";
     constexpr static uint16_t default_usc_freq = 5; 

@@ -22,6 +22,10 @@ bool vector_contains(const std::vector<std::string> &vector,
 std::vector<std::string> split_string(const std::string &s,
                                       const std::string &delimiter);
 
+bool vector_contains_definition(const std::vector<std::string> &vector, const std::string &definition);
+
+size_t get_position_of_definition(const std::vector<std::string> &vector, const std::string &definition);
+
 std::string get_flag_value(const std::string &flag);
 
 bool ofstream_open(const std::ofstream &_ofstream);

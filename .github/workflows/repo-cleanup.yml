@@ -25,7 +25,7 @@ jobs:
 
         steps:
             - name: "Close Stale Items"
-              uses: actions/stale@v10.1.0
+              uses: actions/stale@v10.1.1
               with:
                 stale-issue-message: "Issue has been marked stale"
                 close-issue-message: "Issue has been closed due to inactivity"
